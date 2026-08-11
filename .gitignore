@@ -1,0 +1,40 @@
+# ==============================
+# TrustPCB - Git Ignore
+# ==============================
+
+# Conda environment
+.conda/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Dataset
+data/raw/
+data/processed/
+
+# YOLO / training outputs
+runs/
+*.pt
+*.pth
+*.ckpt
+
+# Large generated outputs
+outputs/predictions/
+
+# Temporary files
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+
+# IDE / editor
+.vscode/
+.idea/
+
+# Environment / secrets
+.env
+*.env
