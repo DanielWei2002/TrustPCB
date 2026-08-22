@@ -1,0 +1,12 @@
+train: /scr/user/danielw9199/TrustPCB/configs/datasets/supplied_train_images.txt
+val: /scr/user/danielw9199/TrustPCB/configs/datasets/supplied_val_images.txt
+names:
+  0: SH
+  1: SP
+  2: SC
+  3: OP
+  4: MB
+  5: HB
+  6: CS
+  7: CFO
+  8: BMFO

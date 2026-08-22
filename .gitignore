@@ -17,13 +17,14 @@ data/raw/
 data/processed/
 
 # YOLO / training outputs
-runs/
+runs/**/weights/
 *.pt
 *.pth
 *.ckpt
 
 # Large generated outputs
 outputs/predictions/
+outputs/*.tar.gz
 
 # Temporary files
 *.tmp
