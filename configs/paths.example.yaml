@@ -1,0 +1,9 @@
+# TrustPCB local path configuration example
+#
+# Copy this file to:
+# configs/local/paths.yaml
+#
+# Then replace the example paths with paths for your own environment.
+
+project_root: /path/to/TrustPCB
+dataset_root: /path/to/DsPCBSD_plus/Data_YOLO

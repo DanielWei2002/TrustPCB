@@ -39,3 +39,9 @@ Thumbs.db
 # Environment / secrets
 .env
 *.env
+
+# Local/private machine configuration
+configs/local/
+
+# Local project audit files
+project_structure.txt
