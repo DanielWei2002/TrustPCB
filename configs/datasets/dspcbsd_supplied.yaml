@@ -1,5 +1,5 @@
-train: /scr/user/danielw9199/TrustPCB/configs/datasets/supplied_train_images.txt
-val: /scr/user/danielw9199/TrustPCB/configs/datasets/supplied_val_images.txt
+train: supplied_train_images.txt
+val: supplied_val_images.txt
 names:
   0: SH
   1: SP

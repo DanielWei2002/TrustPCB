@@ -1,5 +1,5 @@
-train: /scr/user/danielw9199/TrustPCB/configs/datasets/similarity_aware_train_images.txt
-val: /scr/user/danielw9199/TrustPCB/configs/datasets/similarity_aware_val_images.txt
+train: similarity_aware_train_images.txt
+val: similarity_aware_val_images.txt
 names:
   0: SH
   1: SP

@@ -4,6 +4,17 @@
 # configs/local/paths.yaml
 #
 # Then replace the example paths with paths for your own environment.
+# Absolute paths are recommended (and compatible with notebook 02).
+# The notebook 03 helper resolves relative roots against the checkout containing
+# this configuration, not the current working directory. Use forward slashes
+# for Windows paths in YAML. Both roots must be existing directories.
+#
+# configs/datasets/ contains portable templates, not direct training inputs.
+# Notebook 03 generates absolute runtime copies in configs/local/datasets/.
+# To generate only configuration text from the repository root on DICC:
+#   PYTHONPATH=src python -m trustpcb.dataset_config
+# This reads manifests only; it does not scan images or execute experiments.
+# Regenerate after changing root settings. Do not commit configs/local/.
 
 project_root: /path/to/TrustPCB
 dataset_root: /path/to/DsPCBSD_plus/Data_YOLO
