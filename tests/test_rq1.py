@@ -235,7 +235,7 @@ class RQ1Tests(unittest.TestCase):
         self.assertNotIn("ultralytics", sys.modules)
         self.assertNotIn("torch", sys.modules)
 
-    def test_scoped_git_status_ignores_generated_artifacts(self):
+    def test_old_git_checks_ignore_generated_artifacts_and_detect_all_change_types(self):
         self.git_mock.stop()
         changes = {
             "runs/rq1/.runner.lock": "??", "runs/rq1/supplied/seed_24209199/results.csv": " M",
@@ -243,14 +243,26 @@ class RQ1Tests(unittest.TestCase):
             "configs/local/paths.yaml": "??", "configs/local/datasets/dspcbsd_supplied.yaml": "??",
         }
         def git(command, **kwargs):
-            if "status" in command:
-                self.assertIn("--untracked-files=all", command)
+            self.assertEqual(kwargs["cwd"], str(self.root))
+            self.assertNotIn("-C", command)
+            self.assertNotIn("status", command)
+            if command[1] in ("diff", "ls-files"):
+                self.assertIn("-z", command)
                 scopes = command[command.index("--") + 1:]
                 self.assertEqual(tuple(scopes), rq1.EXECUTION_INPUTS)
-                return "\n".join(f"{status} {name}" for name, status in changes.items()
-                                 if any(name == scope or name.startswith(scope.rstrip('/') + '/')
-                                        for scope in scopes))
-            return "a" * 40
+                if command[1] == "ls-files":
+                    self.assertEqual(command[1:command.index("--")],
+                                     ["ls-files", "--others", "--exclude-standard", "-z"])
+                    selected_status = "??"
+                else:
+                    self.assertIn("--name-only", command)
+                    selected_status = "M " if "--cached" in command else " M"
+                return "".join(name + "\0" for name, status in changes.items()
+                               if status == selected_status and
+                               any(name == scope or name.startswith(scope.rstrip('/') + '/')
+                                   for scope in scopes))
+            self.assertEqual(command, ["git", "rev-parse", "HEAD"])
+            return "a" * 40 + "\n"
         with patch.object(rq1.subprocess, "check_output", side_effect=git):
             self.assertFalse(rq1.require_clean_inputs(self.root)["git_dirty"])
             for name in ("src/trustpcb/rq1.py", "src/trustpcb/dataset_config.py",
@@ -261,6 +273,47 @@ class RQ1Tests(unittest.TestCase):
                         with self.assertRaisesRegex(RuntimeError, "committed and clean"):
                             rq1.require_clean_inputs(self.root)
                         del changes[name]
+
+    def test_git_command_failures_never_mean_clean(self):
+        self.git_mock.stop()
+        for failing_command in ("unstaged", "staged", "untracked"):
+            def git(command, **kwargs):
+                kind = ("untracked" if "ls-files" in command else
+                        "staged" if "--cached" in command else "unstaged")
+                if kind == failing_command:
+                    raise subprocess.CalledProcessError(129, command)
+                return ""
+            with self.subTest(command=failing_command), patch.object(
+                rq1.subprocess, "check_output", side_effect=git
+            ):
+                with self.assertRaises(subprocess.CalledProcessError):
+                    rq1.require_clean_inputs(self.root)
+
+    def test_notebooks_pretrained_file_resolves_with_hash_and_size(self):
+        notebook_model = self.root / "notebooks/yolov8n.pt"
+        notebook_model.parent.mkdir()
+        self.model_file.replace(notebook_model)
+        identity = rq1.model_provenance(self.root, "yolov8n.pt")
+        self.assertEqual(identity, {
+            "path": str(notebook_model.resolve()),
+            "sha256": hashlib.sha256(notebook_model.read_bytes()).hexdigest(),
+            "size_bytes": notebook_model.stat().st_size,
+        })
+        self.assertEqual(self.plans[0]["model"], "yolov8n.pt")
+
+    def test_multiple_approved_weight_locations_block_even_with_identical_bytes(self):
+        notebook_model = self.root / "notebooks/yolov8n.pt"
+        notebook_model.parent.mkdir()
+        notebook_model.write_bytes(self.model_file.read_bytes())
+        with self.assertRaisesRegex(RuntimeError, "Ambiguous pretrained model"):
+            rq1.run_sequential(self.root, self.plans, launch=lambda *a, **k: self.fail("must not launch"))
+
+    def test_unapproved_weight_location_is_not_searched(self):
+        other = self.root / "other/yolov8n.pt"
+        other.parent.mkdir()
+        self.model_file.replace(other)
+        with self.assertRaisesRegex(FileNotFoundError, "automatic download is disabled"):
+            rq1.model_provenance(self.root, "yolov8n.pt")
 
     def test_dirty_inputs_block_launch_and_direct_execution(self):
         dirty = {"git_commit": "a" * 40, "git_dirty": True,

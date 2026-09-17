@@ -76,10 +76,20 @@ def _read_json(path):
 def git_provenance(root):
     def git(*args):
         return subprocess.check_output(
-            ["git", "-C", str(root), *args], text=True, stderr=subprocess.PIPE
-        ).strip()
-    status = git("status", "--porcelain", "--untracked-files=all", "--", *EXECUTION_INPUTS)
-    return {"git_commit": git("rev-parse", "HEAD"),
+            ["git", *args], cwd=str(root), text=True, stderr=subprocess.PIPE
+        )
+    # Separate plumbing avoids older Git's limited `status` pathspec support.
+    # NUL-delimited names preserve whitespace/newlines; command failures propagate.
+    changes = []
+    for kind, command in (
+        ("unstaged", ("diff", "--name-only", "-z")),
+        ("staged", ("diff", "--cached", "--name-only", "-z")),
+        ("untracked", ("ls-files", "--others", "--exclude-standard", "-z")),
+    ):
+        names = git(*command, "--", *EXECUTION_INPUTS).split("\0")
+        changes.extend(f"{kind}: {name!r}" for name in names if name)
+    status = "\n".join(changes)
+    return {"git_commit": git("rev-parse", "HEAD").strip(),
             "git_dirty": bool(status), "git_input_status": status}
 
 
@@ -93,11 +103,25 @@ def require_clean_inputs(root):
     return info
 
 
+def resolve_pretrained_model(root, model):
+    """Accept exactly one approved local location, independent of process cwd."""
+    if model != "yolov8n.pt":
+        raise ValueError(f"Unapproved pretrained model basename: {model!r}")
+    root = Path(root).resolve()
+    candidates = (root / model, root / "notebooks" / model)
+    found = [path for path in candidates if path.is_file()]
+    if not found:
+        raise FileNotFoundError(
+            f"Required local pretrained model is missing; checked {candidates}; automatic download is disabled"
+        )
+    if len(found) != 1:
+        raise RuntimeError(f"Ambiguous pretrained model locations: {found}; refusing to choose")
+    return found[0].resolve()
+
+
 def model_provenance(root, model):
-    """Hash the local pretrained input as bytes, without loading a model."""
-    path = (Path(root) / model).resolve()
-    if not path.is_file():
-        raise FileNotFoundError(f"Required local pretrained model is missing: {path}; automatic download is disabled")
+    """Hash the uniquely resolved local input as bytes, without loading a model."""
+    path = resolve_pretrained_model(root, model)
     digest = hashlib.sha256()
     with path.open("rb") as file:
         before = os.fstat(file.fileno())

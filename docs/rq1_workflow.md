@@ -50,7 +50,18 @@ stop execution. The provenance `git_dirty` flag covers these inputs only;
 The Git commit hash is still recorded. Commit the reviewed implementation
 explicitly before DICC training; the runner does not commit anything itself.
 
-Place the exact pretrained `yolov8n.pt` at the project root before training.
+For older Git compatibility, cleanliness uses scoped `git diff --name-only -z`
+and `git diff --cached --name-only -z` for unstaged/staged tracked changes, and
+`git ls-files --others --exclude-standard -z` for untracked files. Git runs with
+the checkout as its working directory, without `git -C` or scoped `git status`.
+Any Git command failure stops the check rather than treating the inputs as clean.
+
+Keep the baseline setting `model: yolov8n.pt`. Exactly one approved local
+candidate must exist: `<project_root>/yolov8n.pt` or
+`<project_root>/notebooks/yolov8n.pt`. The existing DICC file in `notebooks/`
+is recognized without moving it. No recursive search or download is performed.
+If neither file exists, or both exist (even with identical contents), stop
+rather than choosing silently. Resolution is independent of the process cwd.
 The runner requires this local file, streams its bytes through SHA-256, and
 records its resolved path, hash, and byte size in each run's runtime provenance.
 `runs/rq1/pretrained_model.json` freezes that identity across separate commands,
