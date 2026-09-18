@@ -45,3 +45,6 @@ configs/local/
 
 # Local project audit files
 project_structure.txt
+
+# Raw RQ1 training artifacts
+runs/rq1/

@@ -1,0 +1,107 @@
+{
+  "artifacts": {
+    "args_sha256": "0088c5509d7e17db7607704314b8c2cf9d18230f3faae86d2f9518740ae063f7",
+    "best_checkpoint_bytes": 6263779,
+    "best_checkpoint_mtime_ns": 1789617354000000000,
+    "metrics": {
+      "best_epoch": 76,
+      "mAP@0.50": 0.84516,
+      "mAP@0.50:0.95": 0.50529,
+      "precision": 0.81872,
+      "recall": 0.79505
+    },
+    "results_sha256": "b6d21692a39d5a3da077d4d1bf9939e3b54cfc6226f4cb5ada9a198629b70ea9"
+  },
+  "completed_at": "2026-09-17T03:56:08.527800+00:00",
+  "environment": {
+    "CUDA_VISIBLE_DEVICES": "0",
+    "PYTHONHASHSEED": "24209199",
+    "packages": {
+      "PyYAML": "6.0.3",
+      "numpy": "2.4.6",
+      "torch": "2.6.0+cu124",
+      "ultralytics": "8.4.117"
+    },
+    "platform": "Linux-5.15.0-1045-nvidia-x86_64-with-glibc2.35",
+    "python": "3.11.13 (main, Jun  5 2025, 13:12:00) [GCC 11.2.0]"
+  },
+  "plan": {
+    "baseline_config": {
+      "amp": true,
+      "batch": 32,
+      "deterministic": true,
+      "device": 0,
+      "epochs": 100,
+      "imgsz": 640,
+      "model": "yolov8n.pt",
+      "patience": 100,
+      "plots": true,
+      "pretrained": true,
+      "save": true,
+      "seed": 24209199,
+      "val": true,
+      "workers": 2
+    },
+    "baseline_file": "configs/experiments/yolov8n_preliminary_baseline_v1.yaml",
+    "best_checkpoint": "runs/rq1/supplied/seed_24209199/weights/best.pt",
+    "experiment_id": "rq1_supplied_seed_24209199",
+    "git_commit": "05f467b8292bcb8ef852993fbdd615244bfbd872",
+    "git_dirty": false,
+    "git_input_status": "",
+    "input_hashes": {
+      "configs/datasets/dspcbsd_similarity_aware.yaml": "54d9ca11b4d86f295c3f1fb2c1514cf6e7229e2ff9fd34906282b7233cbf9307",
+      "configs/datasets/dspcbsd_supplied.yaml": "f46baea52f7847305c773bd1804eb72664bc258978f887729338dac907293b1e",
+      "configs/datasets/similarity_aware_train_images.txt": "981c4c2ff0be7394e5e85019c658fb343d74f739bcb34d92d84db74314bd18ab",
+      "configs/datasets/similarity_aware_val_images.txt": "a2f246bf5be60cad5fac7f985ed91888bddb43601b73331f39d02e180075bc8e",
+      "configs/datasets/supplied_train_images.txt": "709beb22033bc8230aedf56c6bb3461daf1fbe7ea72296f375d31ed3e89013f4",
+      "configs/datasets/supplied_val_images.txt": "7a6461f65c13c4fe94fd1485453ee40d5764f32ef126c5d00810f480f0178da8",
+      "configs/experiments/yolov8n_preliminary_baseline_v1.yaml": "27de039db2d7f9547a7c67b6b554c62b43f615bfadca69c3962ce6b121621c9a",
+      "data/splits/similarity_aware_split_manifest.csv": "6cc71e19ec5dd0ac22708ebe49180de7fb7da156c95de94ffa273a96960215c1",
+      "data/splits/similarity_aware_train.txt": "4d2b7b0fdac6a359d0b74e63659a2d6d0917d6556eddbe9b01bb04529ca500e3",
+      "data/splits/similarity_aware_val.txt": "1dba21457ad0451a5d0955d6179a334dbc3c649cd2662bb06b9b078564f34bd1",
+      "data/splits/supplied_train.txt": "e49ff7f012c51d3e30431cb06fbb4c270680fa622f3d2189b1ab4b76978c07fa",
+      "data/splits/supplied_val.txt": "2edadceb29e0029828483a04f0d3eca93cc6f7ea4ab4c2fe507eadd3f4e17a45",
+      "src/trustpcb/dataset_config.py": "56b16499626b9c2eca0f6e5dc8d4be3ce7cfa17999d16e8226df10d5422a0aa8",
+      "src/trustpcb/rq1.py": "45a1e568e3d845ab7b0067c047904c657ee8338e5dedec7af648963bfd0d6f86"
+    },
+    "metric_selection": "highest logged mAP50-95; first epoch on a CSV tie",
+    "model": "yolov8n.pt",
+    "output_dir": "runs/rq1/supplied/seed_24209199",
+    "pretrained_model": {
+      "path": "notebooks/yolov8n.pt",
+      "sha256": "f59b3d833e2ff32e194b5bb8e08d211dc7c5bdf144b90d2c8412c47ccfc83b36",
+      "size_bytes": 6549796
+    },
+    "runtime_dataset_yaml": "configs/local/datasets/dspcbsd_supplied.yaml",
+    "schema_version": 1,
+    "seed_label": "24209199",
+    "seed_value": 24209199,
+    "split": "supplied",
+    "train_kwargs": {
+      "amp": true,
+      "batch": 32,
+      "data": "configs/local/datasets/dspcbsd_supplied.yaml",
+      "deterministic": true,
+      "device": 0,
+      "epochs": 100,
+      "exist_ok": false,
+      "imgsz": 640,
+      "name": "seed_24209199",
+      "patience": 100,
+      "plots": true,
+      "pretrained": true,
+      "project": "runs/rq1/supplied",
+      "save": true,
+      "seed": 24209199,
+      "val": true,
+      "workers": 2
+    }
+  },
+  "runtime_hashes": {
+    "dspcbsd_supplied.yaml": "79fdc0420555cfb712fecb221efd68f1b886fe0756cdfaea5f0984e7a1d19e6c",
+    "supplied_train_images.txt": "f9fde4d5e26e0888ec7d27f3047187f37cc8ce1d650bd493f3bb7c57bcd2ad5b",
+    "supplied_val_images.txt": "68c232d9e4fa29bf8b012e5ddd397d853a6cba64fc1d29aaf4759bed245af50f"
+  },
+  "started_at": "2026-09-17T02:29:06.102352+00:00",
+  "status": "completed"
+}
