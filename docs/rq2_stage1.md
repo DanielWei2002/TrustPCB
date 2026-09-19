@@ -1,0 +1,76 @@
+# RQ2 Stage 1: detector-training/development membership
+
+Stage 1 partitions only the 8,207-image similarity-aware training pool, with
+seed **24209199** and a target of 821 development/calibration images (7,386
+detector-training images). Existing similarity-aware validation membership
+(2,052 images) is reserved for RQ2 test use and is never used for balancing.
+Only its membership is read to check disjointness and existing group boundaries.
+No reserved-test image, label, or model-performance information is read.
+
+## Inputs and method
+
+The generator cross-checks `configs/datasets/similarity_aware_*_images.txt`
+against `data/splits/similarity_aware_*.txt` and the scientific split CSV.
+It reconstructs connected components from
+`outputs/tables/cross_split_high_confidence_near_duplicates.csv`, the confirmed
+edge records used by notebook 02. Transitive links are joined before allocating
+groups; unknown endpoints or components crossing the existing pool/test boundary
+are errors. It does not rerun similarity detection or notebook 02 allocation.
+
+Per-image annotation counts come only from labels referenced by the source
+manifest. Physical `images/train` versus `images/val` storage is retained; an
+image moved scientifically may still live in its original physical folder.
+Images are never decoded. Label reading is dataset-wide source preprocessing,
+so real generation belongs on DICC under the repository compute boundary.
+
+Groups have a canonical order, then seeded tie ranks. A deterministic greedy
+heuristic considers rare-class groups first and adds whole groups when this
+improves normalized squared deficits for per-class image and annotation counts,
+plus a size term weighted by four. A final whole-group addition pass improves
+distance to 821 when possible. No group is split to hit the count. The method
+is a bounded heuristic, not a claim of globally optimal stratification.
+
+Output order is the original source manifest order restricted to each partition.
+The same source, labels, confirmed edges, implementation and seed reproduce the
+same membership/manifest bytes. Generation timestamps may differ.
+
+## Generation on DICC only
+
+Configure `configs/local/paths.yaml` for the existing DICC checkout and dataset.
+Then, from the checkout root:
+
+```bash
+PYTHONPATH=src python -B -m trustpcb.rq2_split --dicc
+```
+
+This command does not import YOLO/PyTorch or perform training, inference,
+calibration, transformations, scoring or evaluation. It reads source labels,
+generates membership and freezes these new files:
+
+- `data/splits/rq2_stage1/detector_train_images.txt`
+- `data/splits/rq2_stage1/development_calibration_images.txt`
+- `data/splits/rq2_stage1/verification_report.json`
+
+The report includes exact counts, per-class image and annotation counts for the
+source and both partitions, integrity assertions, group counts, source/group
+input hashes, a source-label inventory digest, generator hash, seed, Git commit,
+UTC timestamp, and both output manifest hashes. Paths in committed artifacts
+are portable. The original manifests, dataset and RQ1 outputs are not modified.
+An existing Stage 1 output directory is an error; there is no overwrite option.
+If output writing is interrupted, inspect the partial directory explicitly.
+
+## Local verification and current availability
+
+```bash
+PYTHONPATH=src python -B -m unittest discover -s tests -v
+```
+
+Tests use synthetic counts/labels, including a synthetic 8,207-image manifest;
+synthetic counts are not real RQ2 results.
+
+At implementation time this checkout had no configured dataset root or complete
+per-image class-count inventory. Consequently the real partition counts,
+per-class statistics and output hashes cannot yet be reported. Run the DICC
+generation command and return its three artifacts for review. Do not begin
+detector training until the membership has been reviewed/frozen and training
+is explicitly approved.
