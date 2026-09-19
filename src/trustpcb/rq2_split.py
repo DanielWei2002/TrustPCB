@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 import hashlib
 import io
 import json
+import math
 import os
 from pathlib import Path, PurePosixPath
 import random
@@ -21,7 +22,10 @@ SOURCE = "configs/datasets/similarity_aware_train_images.txt"
 RESERVED = "configs/datasets/similarity_aware_val_images.txt"
 PAIRS = "outputs/tables/cross_split_high_confidence_near_duplicates.csv"
 RECORDS = "data/splits/similarity_aware_split_manifest.csv"
-OUTPUT = "data/splits/rq2_stage1"
+REJECTED_OUTPUT = "data/splits/rq2_stage1"
+OUTPUT = "data/splits/rq2_stage1_v2"
+TARGET_FRACTION = 0.10
+MAX_SWAPS = 200
 
 
 def sha(data):
@@ -54,14 +58,98 @@ def _vector(group, counts, classes):
         sum(counts[n][c] for n in group) for c in range(classes)]
 
 
-def partition(names, edges, counts, target_dev=TARGET_DEV, seed=SEED):
-    """Bounded greedy class balancing; no image access and no group splitting.
+def _balance_score(vector, total):
+    """Mean squared percentage-point deviation from 10%, equal per feature."""
+    errors = [(100 * vector[i] / total[i] - 100 * TARGET_FRACTION) ** 2
+              for i in range(1, len(total)) if total[i] > 0]
+    return sum(errors) / len(errors) if errors else 0.0
 
-    Seeded ties and canonical components make input-edge ordering irrelevant.
-    Rare-class groups are considered first. Whole groups are added when they
-    reduce normalized squared class/image-count deficits. A final size pass
-    approaches the target only when whole-group additions improve the distance.
-    """
+
+def _allocate(groups, vectors, total, target_dev, seed, max_swaps, diagnostics):
+    # Components with identical feature vectors are interchangeable for scoring.
+    # Bucketing avoids scanning thousands of equivalent singleton candidates.
+    order = list(range(len(groups)))
+    random.Random(seed).shuffle(order)
+    buckets = {}
+    for index in order:
+        buckets.setdefault(tuple(vectors[index]), []).append(index)
+    features, members = list(buckets), list(buckets.values())
+    taken = [0] * len(features)
+    current = [0] * len(total)
+
+    # Global best feasible addition at every step, not a rare-class-first order.
+    while current[0] < target_dev:
+        best = None
+        for i, vector in enumerate(features):
+            if taken[i] == len(members[i]) or current[0] + vector[0] > target_dev:
+                continue
+            candidate = [a + b for a, b in zip(current, vector)]
+            option = (_balance_score(candidate, total), i, candidate)
+            if best is None or option[:2] < best[:2]:
+                best = option
+        if best is None:
+            break
+        _, index, current = best
+        taken[index] += 1
+
+    # If the target is not reachable by these additions, preserve atomic groups
+    # and allow a closer overshoot. Do not sacrifice an exact size for balance.
+    for i, vector in enumerate(features):
+        if taken[i] < len(members[i]) and current[0] + vector[0] < total[0]:
+            if abs(current[0] + vector[0] - target_dev) < abs(current[0] - target_dev):
+                current = [a + b for a, b in zip(current, vector)]
+                taken[i] += 1
+
+    initial_error = _balance_score(current, total)
+    history = [initial_error]
+    swaps = 0
+    converged = False
+    # Steepest deterministic whole-component exchange; size distance cannot grow.
+    # Each accepted exchange strictly improves balance (or improves size while
+    # preserving balance). A bounded search reports explicitly if it hits its cap.
+    for _ in range(max_swaps):
+        current_error = _balance_score(current, total)
+        current_distance = abs(current[0] - target_dev)
+        best = None
+        for outgoing, remove in enumerate(features):
+            if not taken[outgoing]:
+                continue
+            for incoming, add in enumerate(features):
+                if outgoing == incoming or taken[incoming] == len(members[incoming]):
+                    continue
+                count = current[0] - remove[0] + add[0]
+                distance = abs(count - target_dev)
+                if not 0 < count < total[0] or distance > current_distance:
+                    continue
+                candidate = [a - b + c for a, b, c in zip(current, remove, add)]
+                error = _balance_score(candidate, total)
+                if error > current_error + 1e-12:
+                    continue
+                if not (error < current_error - 1e-12 or distance < current_distance):
+                    continue
+                option = (distance, error, outgoing, incoming, candidate)
+                if best is None or option[:4] < best[:4]:
+                    best = option
+        if best is None:
+            converged = True
+            break
+        _, error, outgoing, incoming, current = best
+        taken[outgoing] -= 1
+        taken[incoming] += 1
+        swaps += 1
+        history.append(error)
+    diagnostics.update(initial_mean_squared_deviation_pp2=initial_error,
+                       final_mean_squared_deviation_pp2=_balance_score(current, total),
+                       accepted_swaps=swaps, max_swaps=max_swaps,
+                       local_optimum_reached=converged,
+                       improvement_limit_reached=not converged,
+                       balance_error_history_pp2=history,
+                       distinct_component_feature_vectors=len(features))
+    return {index for i, group_ids in enumerate(members) for index in group_ids[:taken[i]]}
+
+
+def partition(names, edges, counts, target_dev=TARGET_DEV, seed=SEED, diagnostics=None, max_swaps=MAX_SWAPS):
+    """Deterministic group-aware multilabel allocation using counts only."""
     if len(names) != len(set(names)) or set(counts) != set(names):
         raise ValueError("Source/count identities must be unique and match exactly")
     if not 0 < target_dev < len(names):
@@ -73,43 +161,41 @@ def partition(names, edges, counts, target_dev=TARGET_DEV, seed=SEED):
     groups = components(names, edges)
     vectors = [_vector(g, counts, classes) for g in groups]
     total = _vector(names, counts, classes)
-    target = [v * target_dev / len(names) for v in total]
-    active = [i for i, value in enumerate(target) if i and value > 0]
-
-    def score(vector):
-        class_error = sum(((vector[i] - target[i]) / max(target[i], 1)) ** 2 for i in active)
-        return 4 * ((vector[0] - target_dev) / target_dev) ** 2 + class_error / max(len(active), 1)
-
-    order = list(range(len(groups)))
-    random.Random(seed).shuffle(order)
-    rank = {index: i for i, index in enumerate(order)}
-    order.sort(key=lambda i: (min((total[1 + c] for c in range(classes)
-                                  if vectors[i][1 + c]), default=float("inf")), rank[i]))
-    selected = set()
-    current = [0] * len(total)
-    for index in order:
-        candidate = [a + b for a, b in zip(current, vectors[index])]
-        if candidate[0] <= target_dev and score(candidate) < score(current):
-            selected.add(index)
-            current = candidate
-    while current[0] != target_dev:
-        options = []
-        for index in order:
-            if index in selected:
-                continue
-            candidate = [a + b for a, b in zip(current, vectors[index])]
-            distance = abs(candidate[0] - target_dev)
-            if candidate[0] < len(names) and distance < abs(current[0] - target_dev):
-                options.append((distance, score(candidate), rank[index], index, candidate))
-        if not options:
-            break
-        _, _, _, index, current = min(options)
-        selected.add(index)
+    if max_swaps < 0:
+        raise ValueError("max_swaps must be nonnegative")
+    selected = _allocate(groups, vectors, total, target_dev, seed, max_swaps,
+                         diagnostics if diagnostics is not None else {})
     dev = {name for i in selected for name in groups[i]}
     train = [name for name in names if name not in dev]
     development = [name for name in names if name in dev]
     validate(names, train, development, groups)
     return train, development, groups
+
+
+def class_balance(source, dev, counts, names):
+    """Comparable class-balance report, independent of any model performance."""
+    total, selected = _vector(source, counts, len(names)), _vector(dev, counts, len(names))
+    rows, deviations = [], []
+    for c in range(len(names)):
+        row = {"class_id": c, "name": names[c]}
+        for feature, index in (("image", 1 + c), ("annotation", 1 + len(names) + c)):
+            percentage = 100 * selected[index] / total[index] if total[index] else None
+            deviation = abs(percentage - 100 * TARGET_FRACTION) if percentage is not None else None
+            row.update({f"source_{feature}_count": total[index], f"dev_{feature}_count": selected[index],
+                        f"dev_{feature}_percentage_of_source": percentage,
+                        f"absolute_{feature}_deviation_pp": deviation})
+            if deviation is not None:
+                deviations.append(deviation)
+        rows.append(row)
+    mse = sum(d * d for d in deviations) / len(deviations) if deviations else 0.0
+    return {"target_percentage_of_source": 100 * TARGET_FRACTION,
+            "dev_images": len(dev), "dev_image_percentage_of_source": 100 * len(dev) / len(source),
+            "classes": rows, "summary": {
+                "mean_absolute_deviation_pp": sum(deviations) / len(deviations) if deviations else 0.0,
+                "root_mean_squared_deviation_pp": math.sqrt(mse),
+                "mean_squared_deviation_pp2": mse, "max_absolute_deviation_pp": max(deviations, default=0.0),
+                "active_class_features": len(deviations),
+                "zero_source_count_policy": "percentage/deviation null; excluded from error"}}
 
 
 def validate(source, train, dev, groups):
@@ -194,7 +280,11 @@ def count_source_labels(source, dataset_root, classes=9):
 
 
 def freeze(root, source, edges, names, counts, inputs, label_hash, commit, target_dev=TARGET_DEV):
-    train, dev, groups = partition(source, edges, counts, target_dev)
+    destination = Path(root) / OUTPUT
+    if destination.exists():
+        raise FileExistsError(f"Frozen revision already exists: {OUTPUT}; no overwrite allowed")
+    diagnostics = {}
+    train, dev, groups = partition(source, edges, counts, target_dev, diagnostics=diagnostics)
     payloads = {
         "detector_train_images.txt": ("\n".join(train) + "\n").encode(),
         "development_calibration_images.txt": ("\n".join(dev) + "\n").encode(),
@@ -206,7 +296,7 @@ def freeze(root, source, edges, names, counts, inputs, label_hash, commit, targe
             {"class_id": c, "name": names[c], "image_count": vector[1 + c],
              "annotation_count": vector[1 + len(names) + c]} for c in range(len(names))]}
     report = {
-        "protocol": "rq2_stage1_v1", "algorithm": "seeded rare-class-first whole-group greedy; normalized image/annotation deficits; whole-group size correction",
+        "protocol": "rq2_stage1_v2", "algorithm": "global whole-component greedy plus deterministic size-preserving/improving component exchanges",
         "split_seed": SEED, "target_development_images": target_dev,
         "development_count_deviation": len(dev) - target_dev,
         "ordering": "source manifest subsequence, unchanged relative path spelling",
@@ -215,6 +305,8 @@ def freeze(root, source, edges, names, counts, inputs, label_hash, commit, targe
         "generator_sha256": sha(Path(__file__).read_bytes()),
         "manifest_sha256": {name: sha(data) for name, data in payloads.items()},
         "counts": statistics,
+        "class_balance": class_balance(source, dev, counts, names),
+        "optimisation": diagnostics,
         "integrity": {"all_source_images_exactly_once": True, "no_duplicate_membership": True,
                       "no_partition_overlap": True, "no_confirmed_group_crosses_partitions": True,
                       "reserved_test_labels_or_images_read": False,
@@ -222,9 +314,26 @@ def freeze(root, source, edges, names, counts, inputs, label_hash, commit, targe
                       "source_nonsingleton_components": sum(len(g) > 1 for g in groups)},
         "scope": "Frozen Stage 1 membership only; no model training, tuning or evaluation",
     }
+    rejected = Path(root) / REJECTED_OUTPUT
+    if rejected.exists():
+        old_train = (rejected / "detector_train_images.txt").read_bytes()
+        old_dev = (rejected / "development_calibration_images.txt").read_bytes()
+        old_train_names, old_dev_names = old_train.decode().splitlines(), old_dev.decode().splitlines()
+        validate(source, old_train_names, old_dev_names, groups)
+        previous_balance = class_balance(source, old_dev_names, counts, names)
+        report["rejected_split_comparison"] = {
+            "identity": REJECTED_OUTPUT, "status": "rejected; preserved unchanged",
+            "basis": "both partitions scored against the same current source-label inventory",
+            "manifest_sha256": {"detector_train_images.txt": sha(old_train),
+                                "development_calibration_images.txt": sha(old_dev)},
+            "class_balance": previous_balance,
+            "mean_squared_error_reduction_pp2": previous_balance["summary"]["mean_squared_deviation_pp2"]
+                - report["class_balance"]["summary"]["mean_squared_deviation_pp2"],
+        }
+    else:
+        report["rejected_split_comparison"] = {"status": "unavailable; rejected manifests not present"}
     payloads["verification_report.json"] = (json.dumps(report, indent=2, sort_keys=True) + "\n").encode()
     # Complete validation precedes output creation. Never overwrite a frozen split.
-    destination = Path(root) / OUTPUT
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.mkdir(exist_ok=False)
     for name, data in payloads.items():

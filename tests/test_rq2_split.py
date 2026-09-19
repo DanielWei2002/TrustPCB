@@ -3,6 +3,7 @@
 import hashlib
 import json
 from pathlib import Path
+import random
 import sys
 import tempfile
 import unittest
@@ -12,6 +13,76 @@ from trustpcb import rq2_split as split
 
 
 class RQ2SplitTests(unittest.TestCase):
+    def test_imbalanced_class_frequencies_keep_ten_percent_shares(self):
+        source, counts = [], {}
+        for c, size in enumerate((800, 200, 100, 100)):
+            for i in range(size):
+                name = f"images/train/c{c}_{i:04d}.jpg"
+                source.append(name)
+                vector = [0] * 4
+                vector[c] = 1 if i % 2 else 5
+                counts[name] = vector
+        train, dev, groups = split.partition(source, [], counts, target_dev=120)
+        split.validate(source, train, dev, groups)
+        self.assertEqual((len(train), len(dev)), (1080, 120))
+        balance = split.class_balance(source, dev, counts, dict(enumerate("ABCD")))
+        for row in balance["classes"]:
+            self.assertLessEqual(row["absolute_image_deviation_pp"], 1.0)
+            self.assertLessEqual(row["absolute_annotation_deviation_pp"], 1.0)
+
+    def test_multilabel_swaps_improve_greedy_allocation(self):
+        rng = random.Random(93)  # Fixed synthetic fixture, not an experimental split seed.
+        source = [str(i) for i in range(100)]
+        counts = {name: [rng.randrange(4) if rng.random() < 0.5 else 0 for _ in range(3)]
+                  for name in source}
+        diagnostics = {}
+        train, dev, groups = split.partition(source, [], counts, target_dev=10, diagnostics=diagnostics)
+        self.assertEqual((len(train), len(dev)), (90, 10))
+        self.assertGreater(diagnostics["accepted_swaps"], 0)
+        self.assertLess(diagnostics["final_mean_squared_deviation_pp2"],
+                        diagnostics["initial_mean_squared_deviation_pp2"])
+        history = diagnostics["balance_error_history_pp2"]
+        self.assertTrue(all(b <= a + 1e-12 for a, b in zip(history, history[1:])))
+        self.assertTrue(diagnostics["local_optimum_reached"])
+        self.assertEqual(split.partition(source, [], counts, target_dev=10), (train, dev, groups))
+
+    def test_balance_report_percentages_and_zero_count_policy(self):
+        source = ["a", "b", "c", "d"]
+        counts = {"a": [3, 0], "b": [1, 0], "c": [0, 0], "d": [0, 0]}
+        report = split.class_balance(source, ["a"], counts, {0: "A", 1: "absent"})
+        a, absent = report["classes"]
+        self.assertEqual(a["source_image_count"], 2)
+        self.assertEqual(a["dev_image_count"], 1)
+        self.assertEqual(a["dev_image_percentage_of_source"], 50)
+        self.assertEqual(a["dev_annotation_percentage_of_source"], 75)
+        self.assertEqual(a["absolute_image_deviation_pp"], 40)
+        self.assertEqual(a["absolute_annotation_deviation_pp"], 65)
+        self.assertIsNone(absent["dev_image_percentage_of_source"])
+        self.assertIsNone(absent["absolute_annotation_deviation_pp"])
+        self.assertEqual(report["summary"]["mean_squared_deviation_pp2"], (40**2 + 65**2) / 2)
+
+    def test_rejected_split_is_preserved_and_compared_using_same_error(self):
+        source = [f"images/train/{i:03d}.jpg" for i in range(200)]
+        counts = {name: ([1, 0] if i < 100 else [0, 3]) for i, name in enumerate(source)}
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            rejected = root / split.REJECTED_OUTPUT
+            rejected.mkdir(parents=True)
+            payloads = {"detector_train_images.txt": "\n".join(source[20:]) + "\n",
+                        "development_calibration_images.txt": "\n".join(source[:20]) + "\n",
+                        "verification_report.json": '{"status": "original"}\n'}
+            for name, contents in payloads.items():
+                (rejected / name).write_bytes(contents.encode())
+            report = split.freeze(root, source, [], {0: "A", 1: "B"}, counts, {}, "labels", "git", target_dev=20)
+            self.assertEqual(report["counts"]["detector_train"]["images"], 180)
+            self.assertEqual(report["counts"]["development_calibration"]["images"], 20)
+            comparison = report["rejected_split_comparison"]
+            self.assertGreater(comparison["mean_squared_error_reduction_pp2"], 0)
+            self.assertEqual(report["class_balance"]["summary"]["mean_squared_deviation_pp2"], 0)
+            for name, contents in payloads.items():
+                self.assertEqual((rejected / name).read_bytes(), contents.encode())
+            self.assertTrue((root / split.OUTPUT / "verification_report.json").is_file())
+
     def test_8207_synthetic_source_coverage_and_reproduction(self):
         source = [f"images/train/synthetic_{i:05d}.jpg" for i in range(8207)]
         counts = {name: [1, 0] for name in source}
