@@ -1,0 +1,670 @@
+{
+  "algorithm": "global whole-component greedy plus deterministic size-preserving/improving component exchanges",
+  "class_balance": {
+    "classes": [
+      {
+        "absolute_annotation_deviation_pp": 0.06711409395973078,
+        "absolute_image_deviation_pp": 0.06289308176100583,
+        "class_id": 0,
+        "dev_annotation_count": 75,
+        "dev_annotation_percentage_of_source": 10.06711409395973,
+        "dev_image_count": 48,
+        "dev_image_percentage_of_source": 10.062893081761006,
+        "name": "SH",
+        "source_annotation_count": 745,
+        "source_image_count": 477
+      },
+      {
+        "absolute_annotation_deviation_pp": 0.008212428141254335,
+        "absolute_image_deviation_pp": 0.011376564277588486,
+        "class_id": 1,
+        "dev_annotation_count": 365,
+        "dev_annotation_percentage_of_source": 9.991787571858746,
+        "dev_image_count": 176,
+        "dev_image_percentage_of_source": 10.011376564277588,
+        "name": "SP",
+        "source_annotation_count": 3653,
+        "source_image_count": 1758
+      },
+      {
+        "absolute_annotation_deviation_pp": 0.01529051987767538,
+        "absolute_image_deviation_pp": 0.01865671641790989,
+        "class_id": 2,
+        "dev_annotation_count": 131,
+        "dev_annotation_percentage_of_source": 10.015290519877675,
+        "dev_image_count": 107,
+        "dev_image_percentage_of_source": 9.98134328358209,
+        "name": "SC",
+        "source_annotation_count": 1308,
+        "source_image_count": 1072
+      },
+      {
+        "absolute_annotation_deviation_pp": 0.01396648044692661,
+        "absolute_image_deviation_pp": 0.03490401396160614,
+        "class_id": 3,
+        "dev_annotation_count": 143,
+        "dev_annotation_percentage_of_source": 9.986033519553073,
+        "dev_image_count": 115,
+        "dev_image_percentage_of_source": 10.034904013961606,
+        "name": "OP",
+        "source_annotation_count": 1432,
+        "source_image_count": 1146
+      },
+      {
+        "absolute_annotation_deviation_pp": 0.010090817356205761,
+        "absolute_image_deviation_pp": 0.0067521944631998565,
+        "class_id": 4,
+        "dev_annotation_count": 198,
+        "dev_annotation_percentage_of_source": 9.989909182643794,
+        "dev_image_count": 148,
+        "dev_image_percentage_of_source": 9.9932478055368,
+        "name": "MB",
+        "source_annotation_count": 1982,
+        "source_image_count": 1481
+      },
+      {
+        "absolute_annotation_deviation_pp": 0.01759014951627158,
+        "absolute_image_deviation_pp": 0.019646365422396173,
+        "class_id": 5,
+        "dev_annotation_count": 227,
+        "dev_annotation_percentage_of_source": 9.982409850483728,
+        "dev_image_count": 102,
+        "dev_image_percentage_of_source": 10.019646365422396,
+        "name": "HB",
+        "source_annotation_count": 2274,
+        "source_image_count": 1018
+      },
+      {
+        "absolute_annotation_deviation_pp": 0.0048995590396856414,
+        "absolute_image_deviation_pp": 0.02485501242750665,
+        "class_id": 6,
+        "dev_annotation_count": 204,
+        "dev_annotation_percentage_of_source": 9.995100440960314,
+        "dev_image_count": 121,
+        "dev_image_percentage_of_source": 10.024855012427507,
+        "name": "CS",
+        "source_annotation_count": 2041,
+        "source_image_count": 1207
+      },
+      {
+        "absolute_annotation_deviation_pp": 0.007097232079489757,
+        "absolute_image_deviation_pp": 0.06711409395973078,
+        "class_id": 7,
+        "dev_annotation_count": 141,
+        "dev_annotation_percentage_of_source": 10.00709723207949,
+        "dev_image_count": 105,
+        "dev_image_percentage_of_source": 10.06711409395973,
+        "name": "CFO",
+        "source_annotation_count": 1409,
+        "source_image_count": 1043
+      },
+      {
+        "absolute_annotation_deviation_pp": 0.02250562640660192,
+        "absolute_image_deviation_pp": 0.016977928692700317,
+        "class_id": 8,
+        "dev_annotation_count": 133,
+        "dev_annotation_percentage_of_source": 9.977494373593398,
+        "dev_image_count": 118,
+        "dev_image_percentage_of_source": 10.0169779286927,
+        "name": "BMFO",
+        "source_annotation_count": 1333,
+        "source_image_count": 1178
+      }
+    ],
+    "dev_image_percentage_of_source": 10.0036554161082,
+    "dev_images": 821,
+    "summary": {
+      "active_class_features": 18,
+      "max_absolute_deviation_pp": 0.06711409395973078,
+      "mean_absolute_deviation_pp": 0.02388571545597144,
+      "mean_squared_deviation_pp2": 0.0009714416688462556,
+      "root_mean_squared_deviation_pp": 0.03116795900995533,
+      "zero_source_count_policy": "percentage/deviation null; excluded from error"
+    },
+    "target_percentage_of_source": 10.0
+  },
+  "counts": {
+    "detector_train": {
+      "classes": [
+        {
+          "annotation_count": 670,
+          "class_id": 0,
+          "image_count": 429,
+          "name": "SH"
+        },
+        {
+          "annotation_count": 3288,
+          "class_id": 1,
+          "image_count": 1582,
+          "name": "SP"
+        },
+        {
+          "annotation_count": 1177,
+          "class_id": 2,
+          "image_count": 965,
+          "name": "SC"
+        },
+        {
+          "annotation_count": 1289,
+          "class_id": 3,
+          "image_count": 1031,
+          "name": "OP"
+        },
+        {
+          "annotation_count": 1784,
+          "class_id": 4,
+          "image_count": 1333,
+          "name": "MB"
+        },
+        {
+          "annotation_count": 2047,
+          "class_id": 5,
+          "image_count": 916,
+          "name": "HB"
+        },
+        {
+          "annotation_count": 1837,
+          "class_id": 6,
+          "image_count": 1086,
+          "name": "CS"
+        },
+        {
+          "annotation_count": 1268,
+          "class_id": 7,
+          "image_count": 938,
+          "name": "CFO"
+        },
+        {
+          "annotation_count": 1200,
+          "class_id": 8,
+          "image_count": 1060,
+          "name": "BMFO"
+        }
+      ],
+      "images": 7386
+    },
+    "development_calibration": {
+      "classes": [
+        {
+          "annotation_count": 75,
+          "class_id": 0,
+          "image_count": 48,
+          "name": "SH"
+        },
+        {
+          "annotation_count": 365,
+          "class_id": 1,
+          "image_count": 176,
+          "name": "SP"
+        },
+        {
+          "annotation_count": 131,
+          "class_id": 2,
+          "image_count": 107,
+          "name": "SC"
+        },
+        {
+          "annotation_count": 143,
+          "class_id": 3,
+          "image_count": 115,
+          "name": "OP"
+        },
+        {
+          "annotation_count": 198,
+          "class_id": 4,
+          "image_count": 148,
+          "name": "MB"
+        },
+        {
+          "annotation_count": 227,
+          "class_id": 5,
+          "image_count": 102,
+          "name": "HB"
+        },
+        {
+          "annotation_count": 204,
+          "class_id": 6,
+          "image_count": 121,
+          "name": "CS"
+        },
+        {
+          "annotation_count": 141,
+          "class_id": 7,
+          "image_count": 105,
+          "name": "CFO"
+        },
+        {
+          "annotation_count": 133,
+          "class_id": 8,
+          "image_count": 118,
+          "name": "BMFO"
+        }
+      ],
+      "images": 821
+    },
+    "source": {
+      "classes": [
+        {
+          "annotation_count": 745,
+          "class_id": 0,
+          "image_count": 477,
+          "name": "SH"
+        },
+        {
+          "annotation_count": 3653,
+          "class_id": 1,
+          "image_count": 1758,
+          "name": "SP"
+        },
+        {
+          "annotation_count": 1308,
+          "class_id": 2,
+          "image_count": 1072,
+          "name": "SC"
+        },
+        {
+          "annotation_count": 1432,
+          "class_id": 3,
+          "image_count": 1146,
+          "name": "OP"
+        },
+        {
+          "annotation_count": 1982,
+          "class_id": 4,
+          "image_count": 1481,
+          "name": "MB"
+        },
+        {
+          "annotation_count": 2274,
+          "class_id": 5,
+          "image_count": 1018,
+          "name": "HB"
+        },
+        {
+          "annotation_count": 2041,
+          "class_id": 6,
+          "image_count": 1207,
+          "name": "CS"
+        },
+        {
+          "annotation_count": 1409,
+          "class_id": 7,
+          "image_count": 1043,
+          "name": "CFO"
+        },
+        {
+          "annotation_count": 1333,
+          "class_id": 8,
+          "image_count": 1178,
+          "name": "BMFO"
+        }
+      ],
+      "images": 8207
+    }
+  },
+  "development_count_deviation": 0,
+  "generation_timestamp_utc": "2026-09-19T09:06:59.121870+00:00",
+  "generator_sha256": "24616792a5aa01b3fa4ec224fc930a84cba4fbd5a68d5a9e44fc5533423db2fa",
+  "git_commit": "625c18420f81fe0613382ee695a7efc46588dfdb",
+  "input_sha256": {
+    "configs/datasets/dspcbsd_similarity_aware.yaml": "54d9ca11b4d86f295c3f1fb2c1514cf6e7229e2ff9fd34906282b7233cbf9307",
+    "configs/datasets/similarity_aware_train_images.txt": "981c4c2ff0be7394e5e85019c658fb343d74f739bcb34d92d84db74314bd18ab",
+    "configs/datasets/similarity_aware_val_images.txt": "a2f246bf5be60cad5fac7f985ed91888bddb43601b73331f39d02e180075bc8e",
+    "data/splits/similarity_aware_split_manifest.csv": "6cc71e19ec5dd0ac22708ebe49180de7fb7da156c95de94ffa273a96960215c1",
+    "data/splits/similarity_aware_train.txt": "4d2b7b0fdac6a359d0b74e63659a2d6d0917d6556eddbe9b01bb04529ca500e3",
+    "data/splits/similarity_aware_val.txt": "1dba21457ad0451a5d0955d6179a334dbc3c649cd2662bb06b9b078564f34bd1",
+    "outputs/tables/cross_split_high_confidence_near_duplicates.csv": "135b6978b91d28c96ac97d0c32baac93fe79a7d64a940d12b3439678023df749"
+  },
+  "integrity": {
+    "all_source_images_exactly_once": true,
+    "no_confirmed_group_crosses_partitions": true,
+    "no_duplicate_membership": true,
+    "no_partition_overlap": true,
+    "reserved_test_labels_or_images_read": false,
+    "source_connected_components": 8198,
+    "source_nonsingleton_components": 9
+  },
+  "manifest_sha256": {
+    "detector_train_images.txt": "ec3f484e81364a1cd8619852578020aed9b9ce928eccf39cebc2613477155c06",
+    "development_calibration_images.txt": "1985f0d4097812462069be9c97cb672c4f6b3257ba8cf6a2d55243d3a7f3a6e1"
+  },
+  "optimisation": {
+    "accepted_swaps": 188,
+    "balance_error_history_pp2": [
+      14.911075469505063,
+      14.440965443874124,
+      13.976806948600467,
+      13.539266626181096,
+      13.12969480576662,
+      12.731489771603636,
+      12.370666687878208,
+      12.022203869886651,
+      11.695418063715492,
+      11.392810289903911,
+      11.1014767409932,
+      10.819843824465861,
+      10.54648816284385,
+      10.290466686988985,
+      10.050915140146355,
+      9.813175742235194,
+      9.580111811026633,
+      9.352964017428723,
+      9.132751124132923,
+      8.919455420567125,
+      8.711550016825221,
+      8.509442329027468,
+      8.319702937996563,
+      8.133185389590874,
+      7.949026081068179,
+      7.769121569198849,
+      7.5934481399061475,
+      7.4198613573640495,
+      7.249549402533952,
+      7.086151430163012,
+      6.924402387774599,
+      6.7655409783011065,
+      6.6101687524251815,
+      6.4577480742498645,
+      6.306147326277722,
+      6.156447331653306,
+      6.010705883092666,
+      5.870737583818642,
+      5.735209221845095,
+      5.601383597929516,
+      5.469100807230718,
+      5.340105718200074,
+      5.213685091188272,
+      5.088883726587773,
+      4.966004149523669,
+      4.845927280503967,
+      4.728681685713539,
+      4.612901888479913,
+      4.499832930338254,
+      4.390643412830918,
+      4.283458106123194,
+      4.176486929287977,
+      4.072971805458696,
+      3.9725134435196967,
+      3.872514766234614,
+      3.7766629377158782,
+      3.6816789957300307,
+      3.591095918700288,
+      3.501574978412874,
+      3.4134134429510423,
+      3.3281477714473193,
+      3.2446007997706015,
+      3.1615342971719884,
+      3.0819490283038675,
+      3.0034097635802097,
+      2.9246062372727546,
+      2.8497499522850442,
+      2.7758780388059123,
+      2.70373162076138,
+      2.6344173827494153,
+      2.565487152626515,
+      2.498095590203996,
+      2.4324799253887446,
+      2.368014752214812,
+      2.30579452241468,
+      2.2439773477975877,
+      2.184158157801437,
+      2.124017316755879,
+      2.0655811668587787,
+      2.0077384982256206,
+      1.9515538644509087,
+      1.897095696259854,
+      1.8433534910921463,
+      1.790970676712619,
+      1.7395308802469747,
+      1.6898180874990414,
+      1.6409383843676273,
+      1.5933132498817173,
+      1.547746314897128,
+      1.5028885886093173,
+      1.459475312168896,
+      1.4169567132298895,
+      1.3738948719013209,
+      1.3309406985091954,
+      1.290720857513645,
+      1.2524864774226847,
+      1.2154309013232907,
+      1.1783509398376342,
+      1.1410511137967767,
+      1.1053448505379821,
+      1.0699234556417947,
+      1.0360134016527338,
+      1.0047609595354996,
+      0.974483586976074,
+      0.9450847782754648,
+      0.9165992459759575,
+      0.8887651034296334,
+      0.8624767860945297,
+      0.8357022497762514,
+      0.8106752761662327,
+      0.7848862028560515,
+      0.7608290112148823,
+      0.7377960792491216,
+      0.7148094218782187,
+      0.6924139090980237,
+      0.6710524094785497,
+      0.6491176881768813,
+      0.6270578060112083,
+      0.6061828198625112,
+      0.5851857527816887,
+      0.5654675100212452,
+      0.5460892817381704,
+      0.5270999928989066,
+      0.5081965428300195,
+      0.49051183837651624,
+      0.4732461362593281,
+      0.45546150710636124,
+      0.4381376882686794,
+      0.4214489885119776,
+      0.40503963233071644,
+      0.3891226249508863,
+      0.37359591050702645,
+      0.358573750157136,
+      0.34347158752683943,
+      0.3293644319443686,
+      0.3150060057289745,
+      0.301575767049858,
+      0.2886195424618609,
+      0.27562533129105865,
+      0.2630328315139863,
+      0.25079346556126925,
+      0.2378502758592847,
+      0.22560051821734653,
+      0.21367451040979102,
+      0.20281056572383158,
+      0.19252209157045924,
+      0.18230000178167105,
+      0.17228762149019136,
+      0.16264955915341198,
+      0.1540209203732622,
+      0.14471213939918234,
+      0.13555711800580658,
+      0.12708205396180688,
+      0.11821775623310107,
+      0.10977386561562143,
+      0.10240916730192665,
+      0.09487669907550812,
+      0.08845475317743956,
+      0.0813941305808082,
+      0.0750038344554823,
+      0.06881780906819264,
+      0.06355796366188907,
+      0.05809365388369345,
+      0.05318547515235847,
+      0.047940559852914975,
+      0.04283404003224672,
+      0.037752105507220066,
+      0.03350632232860752,
+      0.029892429048468297,
+      0.02694347065780162,
+      0.024084941746890014,
+      0.02068455453661446,
+      0.018500657419898328,
+      0.015773271080841193,
+      0.013465142002714361,
+      0.011445553625886942,
+      0.009960657162719775,
+      0.0083525796465165,
+      0.006895593756866327,
+      0.005838210979706805,
+      0.004824006521155354,
+      0.0041211180736812295,
+      0.0032258006044420685,
+      0.002521194732695126,
+      0.0018472179669279238,
+      0.001585393526279706,
+      0.0013689066898159219,
+      0.0011694339367390677,
+      0.0009714416688462556
+    ],
+    "distinct_component_feature_vectors": 588,
+    "final_mean_squared_deviation_pp2": 0.0009714416688462556,
+    "improvement_limit_reached": false,
+    "initial_mean_squared_deviation_pp2": 14.911075469505063,
+    "local_optimum_reached": true,
+    "max_swaps": 200
+  },
+  "ordering": "source manifest subsequence, unchanged relative path spelling",
+  "protocol": "rq2_stage1_v2",
+  "rejected_split_comparison": {
+    "basis": "both partitions scored against the same current source-label inventory",
+    "class_balance": {
+      "classes": [
+        {
+          "absolute_annotation_deviation_pp": 25.167785234899327,
+          "absolute_image_deviation_pp": 29.62264150943396,
+          "class_id": 0,
+          "dev_annotation_count": 262,
+          "dev_annotation_percentage_of_source": 35.16778523489933,
+          "dev_image_count": 189,
+          "dev_image_percentage_of_source": 39.62264150943396,
+          "name": "SH",
+          "source_annotation_count": 745,
+          "source_image_count": 477
+        },
+        {
+          "absolute_annotation_deviation_pp": 2.565015056118259,
+          "absolute_image_deviation_pp": 1.6382252559726957,
+          "class_id": 1,
+          "dev_annotation_count": 459,
+          "dev_annotation_percentage_of_source": 12.56501505611826,
+          "dev_image_count": 147,
+          "dev_image_percentage_of_source": 8.361774744027304,
+          "name": "SP",
+          "source_annotation_count": 3653,
+          "source_image_count": 1758
+        },
+        {
+          "absolute_annotation_deviation_pp": 0.24464831804281317,
+          "absolute_image_deviation_pp": 0.07462686567164134,
+          "class_id": 2,
+          "dev_annotation_count": 134,
+          "dev_annotation_percentage_of_source": 10.244648318042813,
+          "dev_image_count": 108,
+          "dev_image_percentage_of_source": 10.074626865671641,
+          "name": "SC",
+          "source_annotation_count": 1308,
+          "source_image_count": 1072
+        },
+        {
+          "absolute_annotation_deviation_pp": 3.5754189944134076,
+          "absolute_image_deviation_pp": 4.4153577661431065,
+          "class_id": 3,
+          "dev_annotation_count": 92,
+          "dev_annotation_percentage_of_source": 6.424581005586592,
+          "dev_image_count": 64,
+          "dev_image_percentage_of_source": 5.5846422338568935,
+          "name": "OP",
+          "source_annotation_count": 1432,
+          "source_image_count": 1146
+        },
+        {
+          "absolute_annotation_deviation_pp": 0.6155398587285568,
+          "absolute_image_deviation_pp": 3.585415259959487,
+          "class_id": 4,
+          "dev_annotation_count": 186,
+          "dev_annotation_percentage_of_source": 9.384460141271443,
+          "dev_image_count": 95,
+          "dev_image_percentage_of_source": 6.414584740040513,
+          "name": "MB",
+          "source_annotation_count": 1982,
+          "source_image_count": 1481
+        },
+        {
+          "absolute_annotation_deviation_pp": 20.430958663148637,
+          "absolute_image_deviation_pp": 27.721021611001966,
+          "class_id": 5,
+          "dev_annotation_count": 692,
+          "dev_annotation_percentage_of_source": 30.430958663148637,
+          "dev_image_count": 384,
+          "dev_image_percentage_of_source": 37.721021611001966,
+          "name": "HB",
+          "source_annotation_count": 2274,
+          "source_image_count": 1018
+        },
+        {
+          "absolute_annotation_deviation_pp": 4.757471827535522,
+          "absolute_image_deviation_pp": 3.869096934548467,
+          "class_id": 6,
+          "dev_annotation_count": 107,
+          "dev_annotation_percentage_of_source": 5.242528172464478,
+          "dev_image_count": 74,
+          "dev_image_percentage_of_source": 6.130903065451533,
+          "name": "CS",
+          "source_annotation_count": 2041,
+          "source_image_count": 1207
+        },
+        {
+          "absolute_annotation_deviation_pp": 13.349893541518806,
+          "absolute_image_deviation_pp": 15.119846596356663,
+          "class_id": 7,
+          "dev_annotation_count": 329,
+          "dev_annotation_percentage_of_source": 23.349893541518806,
+          "dev_image_count": 262,
+          "dev_image_percentage_of_source": 25.119846596356663,
+          "name": "CFO",
+          "source_annotation_count": 1409,
+          "source_image_count": 1043
+        },
+        {
+          "absolute_annotation_deviation_pp": 5.723930982745687,
+          "absolute_image_deviation_pp": 6.519524617996604,
+          "class_id": 8,
+          "dev_annotation_count": 57,
+          "dev_annotation_percentage_of_source": 4.276069017254313,
+          "dev_image_count": 41,
+          "dev_image_percentage_of_source": 3.480475382003396,
+          "name": "BMFO",
+          "source_annotation_count": 1333,
+          "source_image_count": 1178
+        }
+      ],
+      "dev_image_percentage_of_source": 10.0036554161082,
+      "dev_images": 821,
+      "summary": {
+        "active_class_features": 18,
+        "max_absolute_deviation_pp": 29.62264150943396,
+        "mean_absolute_deviation_pp": 9.388689938568644,
+        "mean_squared_deviation_pp2": 181.74108183633112,
+        "root_mean_squared_deviation_pp": 13.481138002273068,
+        "zero_source_count_policy": "percentage/deviation null; excluded from error"
+      },
+      "target_percentage_of_source": 10.0
+    },
+    "identity": "data/splits/rq2_stage1",
+    "manifest_sha256": {
+      "detector_train_images.txt": "86dc29a66307a12ba841c7e7b6c61a4e8cdb0d141a2d5f619943447d3eaa0989",
+      "development_calibration_images.txt": "177480beafa631b4ba0a60bde6d7367f8741d67bf622a4a5b305c13eea525252"
+    },
+    "mean_squared_error_reduction_pp2": 181.74011039466228,
+    "status": "rejected; preserved unchanged"
+  },
+  "scope": "Frozen Stage 1 membership only; no model training, tuning or evaluation",
+  "source_label_inventory_sha256": "1bb76c294229e4b1318c35dbcd0d065f7f5392a35ed9b40daaf899940d0fd64d",
+  "split_seed": 24209199,
+  "target_development_images": 821
+}
