@@ -93,6 +93,13 @@ The adapter checks callback order, CSV completeness, actual training arguments a
 output paths and fails closed on mismatches. Actual DICC integration has not been
 executed locally; record and review the installed package versions in provenance.
 
+Ultralytics 8.4.117 calls `parse_device` before the pre-fit callback and before
+saving `args.yaml`: the requested integer `0` becomes the string `"0"`. The
+pre-fit and saved-argument checks accept exactly these two representations of
+device 0; other devices, automatic selection, booleans and floating-point zero
+are rejected. Other argument comparisons are unchanged. The requested config
+remains integer `0`, and provenance preserves the actual serialized string.
+
 ## Provenance and restart policy
 
 The sidecar records current Git commit, frozen Stage 1 commit/manifests/hashes,
@@ -108,6 +115,26 @@ locks require explicit manual inspection; no automatic resume, deletion or
 overwrite is provided. A completed run is reused only if the plan, input identities,
 selected checkpoint, CSV selection and artifact hashes all match. A different Git
 commit also blocks reuse. A partial or failed run is not an approved detector.
+
+### Pre-fit failure with only `args.yaml`
+
+A directory containing only `args.yaml` has no checkpoint to resume. It is still
+an occupied run directory and is **not reused automatically**. The runner neither
+overwrites it nor automatically archives/renames it.
+
+After confirming the failed process has exited and inspecting the artifacts,
+manually archive `runs/rq2/stage2/seed_24209199/` to a distinct unused location.
+Also archive the adjacent `runs/rq2/stage2/seed_24209199.provenance.json`, if present:
+it is outside the run directory and independently blocks retry. Keep both for
+diagnosis. Manual deletion of a verified failed attempt is an alternative, but
+is not required if it has been archived out of these original paths. Never clear
+a completed run to bypass its identity checks. Inspect any stale `.runner.lock`
+and remove it only after confirming no launcher/worker remains active.
+
+Fix the underlying pre-fit error before starting a fresh attempt with the same
+documented DICC command. The `args.yaml`-only state by itself does not identify
+that error. `git status` showing `?? runs/rq2/` is expected for untracked runtime
+artifacts and does not dirty the scoped execution/scientific input check.
 
 ## CPU-safe tests
 

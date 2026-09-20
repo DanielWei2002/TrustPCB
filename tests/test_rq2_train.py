@@ -201,6 +201,23 @@ class Stage2Tests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             stage2.execute(self.plan, lambda *_: self.fail("must block"))
 
+    def test_args_only_prefit_failure_requires_manual_archive(self):
+        output = Path(self.plan["output_dir"])
+        output.mkdir(parents=True)
+        args = output / "args.yaml"
+        args.write_bytes(b"model: synthetic-prefit-fixture\n")
+        sidecar = output.with_name(output.name + ".provenance.json")
+        for has_sidecar in (False, True):
+            with self.subTest(has_sidecar=has_sidecar):
+                if has_sidecar:
+                    rq1._write_json(sidecar, {"status": "incomplete", "plan": self.plan})
+                before = {p: p.read_bytes() for p in output.parent.rglob("*") if p.is_file()}
+                with self.assertRaisesRegex(RuntimeError, "args.yaml-only"):
+                    stage2.execute(self.plan, lambda *_: self.fail("must not launch training"))
+                after = {p: p.read_bytes() for p in output.parent.rglob("*") if p.is_file()}
+                self.assertEqual(after, before)
+                self.assertEqual(list(output.iterdir()), [args])
+
     def test_missing_callbacks_fail_closed(self):
         selector = stage2.CheckpointSelector(self.root)
         self.write_csv(self.root, ["0.5", "0.6"])
@@ -213,6 +230,52 @@ class Stage2Tests(unittest.TestCase):
         with patch.object(stage2, "find_project_root", return_value=self.root), patch.object(os, "name", "nt"):
             with self.assertRaises(RuntimeError):
                 stage2.main(["train", "--dicc"])
+
+    def test_ultralytics_84117_string_device_passes_prefit_guard(self):
+        expected = self.plan["train_kwargs"]["device"]
+        self.assertIs(type(expected), int)
+        self.assertEqual(expected, 0)
+        args = {"model": self.plan["pretrained_model"]["path"], **self.plan["train_kwargs"]}
+        # BaseTrainer stores parse_device(0) == '0' before this callback.
+        args["device"] = "0"
+        self.assertIs(type(args["device"]), str)
+        self.assertNotEqual(args["device"], expected)  # reproduces the old failure
+        trainer = SimpleNamespace(save_dir=self.plan["output_dir"], args=SimpleNamespace(**args))
+        stage2.guard_before_fit(self.plan, trainer)
+        self.assertEqual(self.plan["train_kwargs"]["device"], 0)
+
+    def test_device_guard_rejects_other_devices_and_types(self):
+        args = {"model": self.plan["pretrained_model"]["path"], **self.plan["train_kwargs"]}
+        for device in (1, "1", "cpu", "mps", "", None, -1, "-1", "0,1", [0], False, 0.0, "cuda:0"):
+            with self.subTest(device=device):
+                trainer = SimpleNamespace(save_dir=self.plan["output_dir"],
+                                          args=SimpleNamespace(**{**args, "device": device}))
+                with self.assertRaisesRegex(RuntimeError, "before fitting: device"):
+                    stage2.guard_before_fit(self.plan, trainer)
+        self.assertFalse(stage2._argument_matches("device", "0", 1))
+        self.assertFalse(stage2._argument_matches("device", "0", "0"))
+
+    def test_device_normalization_does_not_relax_other_arguments(self):
+        args = {"model": self.plan["pretrained_model"]["path"], **self.plan["train_kwargs"], "device": "0"}
+        for key, changed in (("seed", 1), ("batch", "32"), ("epochs", 99),
+                             ("data", "forbidden-test.yaml"), ("resume", True)):
+            with self.subTest(key=key):
+                trainer = SimpleNamespace(save_dir=self.plan["output_dir"],
+                                          args=SimpleNamespace(**{**args, key: changed}))
+                with self.assertRaisesRegex(RuntimeError, f"before fitting: {key}"):
+                    stage2.guard_before_fit(self.plan, trainer)
+
+    def test_serialized_string_device_passes_completion_and_reuse(self):
+        def serialized_training(plan, selector):
+            self.fake_training(plan, selector)
+            path = Path(plan["output_dir"]) / "args.yaml"
+            args = yaml.safe_load(path.read_text())
+            args["device"] = "0"  # BaseTrainer serializes the canonical string.
+            path.write_text(yaml.safe_dump(args))
+        receipt = stage2.execute(self.plan, serialized_training)
+        self.assertEqual(receipt["actual_training_config"]["device"], "0")
+        self.assertIs(type(receipt["plan"]["train_kwargs"]["device"]), int)
+        self.assertEqual(stage2.execute(self.plan, lambda *_: self.fail("must reuse")), receipt)
 
 
 if __name__ == "__main__":

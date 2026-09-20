@@ -218,6 +218,27 @@ def verify_inputs(plan):
         raise RuntimeError("Runtime train/dev hashes changed")
 
 
+def _argument_matches(key, actual, expected):
+    if key == "device":
+        # Ultralytics 8.4.117 BaseTrainer calls parse_device before callbacks
+        # and args.yaml serialization: requested int 0 becomes canonical str '0'.
+        # Accept only these two forms, not bool/float zero, auto, CPU or multi-GPU.
+        return (type(expected) is int and expected == 0
+                and ((type(actual) is int and actual == 0)
+                     or (type(actual) is str and actual == "0")))
+    return actual == expected
+
+
+def guard_before_fit(plan, trainer):
+    """Validate the trainer without importing ML packages (also used by CPU tests)."""
+    if Path(trainer.save_dir).resolve() != Path(plan["output_dir"]):
+        raise RuntimeError("Ultralytics changed the output directory")
+    for key, value in {"model": plan["pretrained_model"]["path"], **plan["train_kwargs"]}.items():
+        if not _argument_matches(key, getattr(trainer.args, key, None), value):
+            raise RuntimeError(f"Unexpected training argument before fitting: {key}")
+    verify_inputs(plan)
+
+
 def execute(plan, train_call):
     """Injectable training adapter for synthetic tests; fail closed after interruption."""
     verify_inputs(plan)
@@ -226,7 +247,12 @@ def execute(plan, train_call):
     if sidecar.exists():
         receipt = rq1._read_json(sidecar)
         if receipt.get("plan") != plan or receipt.get("status") != "complete":
-            raise RuntimeError("Existing run is incomplete or different; no automatic restart/overwrite")
+            raise RuntimeError(
+                "Existing run is incomplete or different; no automatic restart/overwrite. "
+                "Even an args.yaml-only pre-fit failure requires manual inspection. "
+                f"Before a fresh retry, manually archive the failed directory {output} "
+                f"and its sidecar {sidecar}; never clear a completed run to bypass verification."
+            )
         chosen = receipt["selected"]
         expected_checkpoint = output / "weights/selected.pt"
         if (chosen["checkpoint"]["path"] != str(expected_checkpoint.resolve())
@@ -237,7 +263,11 @@ def execute(plan, train_call):
             raise RuntimeError("Frozen completed-run artifacts changed; refusing reuse")
         return receipt
     if output.exists():
-        raise RuntimeError("Run directory already exists without complete provenance; inspect manually")
+        raise RuntimeError(
+            "Run directory already exists without complete provenance; inspect manually. "
+            f"An args.yaml-only pre-fit directory must be manually archived before retry: {output}. "
+            "No automatic reuse, rename or overwrite is permitted."
+        )
     receipt = {"status": "running", "plan": plan, "environment": rq1._environment(),
                "started_utc": datetime.now(timezone.utc).isoformat()}
     rq1._write_json(sidecar, receipt, exclusive=True)
@@ -247,7 +277,7 @@ def execute(plan, train_call):
         verify_inputs(plan)
         args = yaml.safe_load((output / "args.yaml").read_text(encoding="utf-8"))
         for key, value in {"model": plan["pretrained_model"]["path"], **plan["train_kwargs"]}.items():
-            if args.get(key) != value:
+            if not _argument_matches(key, args.get(key), value):
                 raise RuntimeError(f"Actual training argument changed: {key}")
         receipt.update(status="complete", selected=selector.freeze(100),
                        actual_training_config=args,
@@ -267,12 +297,7 @@ def _train(plan, selector):
     from ultralytics import YOLO
 
     def guard(trainer):
-        if Path(trainer.save_dir).resolve() != Path(plan["output_dir"]):
-            raise RuntimeError("Ultralytics changed the output directory")
-        for key, value in {"model": plan["pretrained_model"]["path"], **plan["train_kwargs"]}.items():
-            if getattr(trainer.args, key, None) != value:
-                raise RuntimeError(f"Unexpected training argument before fitting: {key}")
-        verify_inputs(plan)
+        guard_before_fit(plan, trainer)
 
     model = YOLO(plan["pretrained_model"]["path"])
     model.add_callback("on_pretrain_routine_start", guard)
