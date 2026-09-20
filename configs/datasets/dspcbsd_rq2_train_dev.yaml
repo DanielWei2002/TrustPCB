@@ -1,0 +1,13 @@
+# Portable template; trustpcb.rq2_train resolves these against the repository.
+train: data/splits/rq2_stage1_v2/detector_train_images.txt
+val: data/splits/rq2_stage1_v2/development_calibration_images.txt
+names:
+  0: SH
+  1: SP
+  2: SC
+  3: OP
+  4: MB
+  5: HB
+  6: CS
+  7: CFO
+  8: BMFO

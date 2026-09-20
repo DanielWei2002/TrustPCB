@@ -1,0 +1,219 @@
+"""Text-only Stage 2 tests. Checkpoints are tiny inert byte strings; no ML imports."""
+
+import csv
+import contextlib
+import io
+import json
+import os
+from pathlib import Path
+import shutil
+import sys
+import tempfile
+from types import SimpleNamespace
+import unittest
+from unittest.mock import patch
+
+import yaml
+
+REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "src"))
+from trustpcb import rq1, rq2_train as stage2
+
+
+class Stage2Tests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name).resolve()
+        for relative in (stage2.TEMPLATE, rq1.BASELINE_FILE, "src/trustpcb/rq2_train.py",
+                         "src/trustpcb/rq1.py", "src/trustpcb/dataset_config.py",
+                         *(spec[0] for spec in stage2.MANIFESTS.values())):
+            target = self.root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(REPO / relative, target)
+        self.info = {"git_commit": "a" * 40, "git_dirty": False, "git_input_status": ""}
+        self.git = patch.object(rq1, "git_provenance", return_value=self.info)
+        self.git_mock = self.git.start()
+        self.addCleanup(self.git.stop)
+        self.plan = stage2.build_plan(self.root)
+        dataset = self.root / "empty synthetic dataset"
+        dataset.mkdir()
+        local = self.root / "configs/local/paths.yaml"
+        local.parent.mkdir(parents=True)
+        local.write_text(yaml.safe_dump({"project_root": str(self.root), "dataset_root": str(dataset)}))
+        self.plan["dataset_root"] = str(dataset)
+        self.plan["runtime_hashes"] = stage2.prepare_runtime(self.plan, dataset)
+        model = self.root / "notebooks/yolov8n.pt"
+        model.parent.mkdir()
+        model.write_bytes(b"synthetic original weights")
+        self.plan["pretrained_model"] = rq1.bind_pretrained_model(self.root, "yolov8n.pt")
+
+    def write_csv(self, output, scores):
+        with (output / "results.csv").open("w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(("epoch", stage2.METRIC))
+            writer.writerows(enumerate(scores, 1))
+
+    def fake_training(self, plan, selector):
+        output = Path(plan["output_dir"])
+        (output / "weights").mkdir(parents=True)
+        (output / "args.yaml").write_text(yaml.safe_dump(
+            {"model": plan["pretrained_model"]["path"], **plan["train_kwargs"]}))
+        scores = []
+        for epoch in range(1, 101):
+            scores.append("0.8" if epoch in (37, 38) else "0.2")
+            self.write_csv(output, scores)
+            last = output / "weights/last.pt"
+            last.write_bytes(f"synthetic epoch {epoch}".encode())
+            selector.on_model_save(SimpleNamespace(save_dir=output, last=last, epoch=epoch - 1))
+
+    def test_frozen_config_and_manifest_wiring(self):
+        self.assertEqual(self.plan["baseline_config"], rq1.APPROVED_BASELINE)
+        lists = stage2.frozen_inputs(self.root)
+        self.assertEqual([len(lists[k]) for k in ("train", "val")], [7386, 821])
+        self.assertFalse(set(lists["train"]) & set(lists["val"]))
+        config = yaml.safe_load(Path(self.plan["runtime_dataset_yaml"]).read_text())
+        self.assertEqual(set(config), {"train", "val", "names"})
+        for key in ("train", "val"):
+            actual = Path(config[key]).read_text().splitlines()
+            relative = [Path(p).relative_to(self.plan["dataset_root"]).as_posix() for p in actual]
+            self.assertEqual(relative, lists[key])
+        self.assertNotIn("torch", sys.modules)
+        self.assertNotIn("ultralytics", sys.modules)
+
+    def test_test_set_template_redirect_rejected(self):
+        path = self.root / stage2.TEMPLATE
+        config = yaml.safe_load(path.read_text())
+        config["val"] = "configs/datasets/similarity_aware_val_images.txt"
+        path.write_text(yaml.safe_dump(config))
+        with self.assertRaises(ValueError):
+            stage2.build_plan(self.root)
+
+    def test_manifest_mutation_and_configuration_drift_rejected(self):
+        path = self.root / stage2.MANIFESTS["train"][0]
+        original = path.read_bytes()
+        path.write_bytes(original + b"images/train/extra.jpg\n")
+        with self.assertRaises(ValueError):
+            stage2.build_plan(self.root)
+        path.write_bytes(original)
+        baseline = self.root / rq1.BASELINE_FILE
+        config = yaml.safe_load(baseline.read_text())
+        config["seed"] = 1
+        baseline.write_text(yaml.safe_dump(config))
+        with self.assertRaises(ValueError):
+            stage2.build_plan(self.root)
+
+    def test_lf_crlf_manifest_identity(self):
+        before = stage2.frozen_inputs(self.root)
+        for relative, _, _ in stage2.MANIFESTS.values():
+            path = self.root / relative
+            path.write_bytes(path.read_bytes().replace(b"\r\n", b"\n").replace(b"\n", b"\r\n"))
+        self.assertEqual(stage2.frozen_inputs(self.root), before)
+
+    def test_earliest_exact_tie_and_decimal_precision(self):
+        self.write_csv(self.root, ["0.2", "0.800", "0.8"])
+        self.assertEqual(stage2.selected_epoch(self.root / "results.csv", 3)["epoch"], 2)
+        self.write_csv(self.root, ["0.80000000000000000001", "0.80000000000000000002"])
+        self.assertEqual(stage2.selected_epoch(self.root / "results.csv", 2)["epoch"], 2)
+
+    def test_invalid_or_incomplete_csv_rejected(self):
+        for scores in (["NaN"], ["Infinity"], ["1.01"], ["-0.1"], ["bad"]):
+            self.write_csv(self.root, scores)
+            with self.assertRaises(ValueError):
+                stage2.selected_epoch(self.root / "results.csv", 1)
+        self.write_csv(self.root, ["0.5"])
+        with self.assertRaises(ValueError):
+            stage2.selected_epoch(self.root / "results.csv", 100)
+        (self.root / "results.csv").write_text(f"epoch,{stage2.METRIC}\n2,0.5\n")
+        with self.assertRaises(ValueError):
+            stage2.selected_epoch(self.root / "results.csv", 1)
+
+    def test_exact_epoch_checkpoint_freeze_and_completed_reuse(self):
+        receipt = stage2.execute(self.plan, self.fake_training)
+        self.assertEqual(receipt["selected"]["epoch"], 37)
+        self.assertEqual(Path(receipt["selected"]["checkpoint"]["path"]).read_bytes(), b"synthetic epoch 37")
+        self.assertEqual(receipt["plan"]["pretrained_model"]["size_bytes"], 26)
+        self.assertIn("environment", receipt)
+        self.assertEqual(stage2.execute(self.plan, lambda *_: self.fail("must reuse")), receipt)
+        Path(receipt["selected"]["checkpoint"]["path"]).write_bytes(b"changed")
+        with self.assertRaises(RuntimeError):
+            stage2.execute(self.plan, lambda *_: self.fail("must block"))
+
+    def test_missing_or_changed_original_weights_block(self):
+        binding = self.root / "runs/rq1/pretrained_model.json"
+        original = binding.read_bytes()
+        binding.unlink()
+        with self.assertRaises(FileNotFoundError):
+            stage2.execute(self.plan, lambda *_: self.fail("must block"))
+        binding.write_bytes(original)
+        Path(self.plan["pretrained_model"]["path"]).write_bytes(b"changed")
+        with self.assertRaises(RuntimeError):
+            stage2.execute(self.plan, lambda *_: self.fail("must block"))
+
+    def test_weights_changed_after_completion_block_reuse(self):
+        stage2.execute(self.plan, self.fake_training)
+        Path(self.plan["pretrained_model"]["path"]).write_bytes(b"changed original")
+        with self.assertRaises(RuntimeError):
+            stage2.execute(self.plan, lambda *_: self.fail("must block"))
+
+    def test_candidate_tampering_blocks_completion(self):
+        def tamper(plan, selector):
+            self.fake_training(plan, selector)
+            selector.candidate.write_bytes(b"changed candidate")
+        with self.assertRaises(RuntimeError):
+            stage2.execute(self.plan, tamper)
+
+    def test_dicc_launcher_startup_seed_and_parent_verification(self):
+        def fake_worker(command, *, cwd, env, check):
+            self.assertEqual(env["PYTHONHASHSEED"], "24209199")
+            self.assertEqual(env["TRUSTPCB_RQ2_WORKER"], "1")
+            self.assertEqual(command[-2:], ["_worker", "--dicc"])
+            stage2.execute(json.loads(env["TRUSTPCB_RQ2_PLAN"]), self.fake_training)
+        with patch.object(stage2, "find_project_root", return_value=self.root), \
+                patch.object(stage2, "os", SimpleNamespace(
+                    name="posix", environ=os.environ, getpid=os.getpid, fstat=os.fstat)), \
+                patch.object(stage2.subprocess, "run", side_effect=fake_worker), \
+                contextlib.redirect_stdout(io.StringIO()):
+            stage2.main(["train", "--dicc"])
+        self.assertFalse((Path(self.plan["output_dir"]).parent / ".runner.lock").exists())
+
+    def test_runtime_redirect_and_dirty_inputs_block(self):
+        self.git_mock.return_value = {**self.info, "git_dirty": True}
+        with self.assertRaises(RuntimeError):
+            stage2.execute(self.plan, lambda *_: self.fail("must block"))
+        self.git_mock.return_value = self.info
+        Path(self.plan["runtime_dataset_yaml"]).write_text("val: forbidden-test.txt")
+        with self.assertRaises(RuntimeError):
+            stage2.execute(self.plan, lambda *_: self.fail("must block"))
+        with self.assertRaises(RuntimeError):
+            stage2.prepare_runtime(self.plan, self.plan["dataset_root"])
+
+    def test_incomplete_run_cannot_restart(self):
+        def interrupted(*_):
+            raise RuntimeError("synthetic interruption")
+        with self.assertRaises(RuntimeError):
+            stage2.execute(self.plan, interrupted)
+        with self.assertRaises(RuntimeError):
+            stage2.execute(self.plan, lambda *_: self.fail("must block"))
+
+    def test_existing_output_cannot_overwrite(self):
+        Path(self.plan["output_dir"]).mkdir(parents=True)
+        with self.assertRaises(RuntimeError):
+            stage2.execute(self.plan, lambda *_: self.fail("must block"))
+
+    def test_missing_callbacks_fail_closed(self):
+        selector = stage2.CheckpointSelector(self.root)
+        self.write_csv(self.root, ["0.5", "0.6"])
+        with self.assertRaises(RuntimeError):
+            selector.on_model_save(SimpleNamespace(save_dir=self.root, epoch=1))
+        with self.assertRaises(RuntimeError):
+            selector.freeze(2)
+
+    def test_local_training_prohibited(self):
+        with patch.object(stage2, "find_project_root", return_value=self.root), patch.object(os, "name", "nt"):
+            with self.assertRaises(RuntimeError):
+                stage2.main(["train", "--dicc"])
+
+
+if __name__ == "__main__":
+    unittest.main()
