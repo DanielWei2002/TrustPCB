@@ -1,4 +1,4 @@
-"""RQ2 Stage 2 preparation and guarded DICC-only execution. No ML imports at import time."""
+"""RQ2 Detector training preparation and guarded DICC-only execution. No ML imports at import time."""
 
 import argparse
 import csv
@@ -14,14 +14,15 @@ import sys
 import yaml
 
 from trustpcb import rq1
+from trustpcb.rq2_artifact_paths import reject_historical_output
 from trustpcb.dataset_config import find_project_root, load_paths
 
-STAGE1_COMMIT = "aaed8091323cac90ae5ae565719ce4b48a926335"
+PARTITION_COMMIT = "aaed8091323cac90ae5ae565719ce4b48a926335"
 TEMPLATE = "configs/datasets/dspcbsd_rq2_train_dev.yaml"
 MANIFESTS = {
-    "train": ("data/splits/rq2_stage1_v2/detector_train_images.txt", 7386,
+    "train": ("data/splits/rq2_train_development_split/detector_train_images.txt", 7386,
               "ec3f484e81364a1cd8619852578020aed9b9ce928eccf39cebc2613477155c06"),
-    "val": ("data/splits/rq2_stage1_v2/development_calibration_images.txt", 821,
+    "val": ("data/splits/rq2_train_development_split/development_calibration_images.txt", 821,
             "1985f0d4097812462069be9c97cb672c4f6b3257ba8cf6a2d55243d3a7f3a6e1"),
 }
 NAMES = dict(enumerate(("SH", "SP", "SC", "OP", "MB", "HB", "CS", "CFO", "BMFO")))
@@ -40,7 +41,7 @@ def frozen_inputs(root):
     for key, (relative, count, digest) in MANIFESTS.items():
         raw = (root / relative).read_bytes().replace(b"\r\n", b"\n")
         if hashlib.sha256(raw).hexdigest() != digest:
-            raise ValueError(f"Frozen Stage 1 manifest hash changed: {relative}")
+            raise ValueError(f"Frozen Data partition manifest hash changed: {relative}")
         lines = raw.decode("utf-8").splitlines()
         if len(lines) != count or len(set(lines)) != count:
             raise ValueError(f"Invalid frozen manifest count/duplicates: {relative}")
@@ -62,17 +63,17 @@ def build_plan(root, git_info=None):
     config = yaml.safe_load((root / rq1.BASELINE_FILE).read_text(encoding="utf-8"))
     if rq1._json(config) != rq1._json(rq1.APPROVED_BASELINE):
         raise ValueError("Training configuration differs from the frozen baseline")
-    output = root / "runs/rq2/stage2/seed_24209199"
-    data = root / "configs/local/datasets/rq2_stage2/dspcbsd_rq2_train_dev.yaml"
+    output = root / "runs/rq2/detector_training/seed_24209199"
+    data = root / "configs/local/datasets/rq2_detector_training/dspcbsd_rq2_train_dev.yaml"
     kwargs = {key: value for key, value in config.items() if key != "model"}
     kwargs.update(data=str(data), project=str(output.parent), name=output.name,
                   exist_ok=False, resume=False, split="val")
-    inputs = [TEMPLATE, rq1.BASELINE_FILE, "src/trustpcb/rq2_train.py",
+    inputs = [TEMPLATE, rq1.BASELINE_FILE, "src/trustpcb/rq2_detector_training.py",
               "src/trustpcb/rq1.py", "src/trustpcb/dataset_config.py"]
     return {
-        "schema_version": 1, "stage": "rq2_stage2", "project_root": str(root),
+        "schema_version": 1, "experiment": "rq2_detector_training", "project_root": str(root),
         **(rq1.git_provenance(root) if git_info is None else git_info),
-        "stage1_commit": STAGE1_COMMIT,
+        "partition_commit": PARTITION_COMMIT,
         "frozen_manifests": {key: {"path": spec[0], "count": spec[1],
                                     "sha256_lf": spec[2]} for key, spec in MANIFESTS.items()},
         "input_hashes": {p: rq1._sha(root / p) for p in inputs},
@@ -241,6 +242,7 @@ def guard_before_fit(plan, trainer):
 
 def execute(plan, train_call):
     """Injectable training adapter for synthetic tests; fail closed after interruption."""
+    reject_historical_output(plan["project_root"], "runs/rq2/detector_training/seed_24209199")
     verify_inputs(plan)
     output = Path(plan["output_dir"])
     sidecar = output.with_name(output.name + ".provenance.json")
@@ -327,6 +329,7 @@ def main(argv=None):
     if info["git_dirty"]:
         raise RuntimeError("Commit/resolve RQ2 execution inputs before training:\n" + info["git_input_status"])
     plan = build_plan(root, info)
+    reject_historical_output(root, "runs/rq2/detector_training/seed_24209199")
     plan["pretrained_model"] = pretrained_identity(root)
     paths = load_paths(root)
     if paths.project_root != root:
@@ -342,7 +345,7 @@ def main(argv=None):
         verify_inputs(plan)
         env = dict(os.environ, PYTHONHASHSEED="24209199", TRUSTPCB_RQ2_WORKER="1",
                    TRUSTPCB_RQ2_PLAN=rq1._json(plan), PYTHONPATH=str(root / "src"))
-        subprocess.run([sys.executable, "-B", "-m", "trustpcb.rq2_train", "_worker", "--dicc"],
+        subprocess.run([sys.executable, "-B", "-m", "trustpcb.rq2_detector_training", "_worker", "--dicc"],
                        cwd=root, env=env, check=True)
         def require_completed(*_):
             raise RuntimeError("Worker returned without a verified completed run")

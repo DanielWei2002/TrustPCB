@@ -1,4 +1,4 @@
-"""Stage 3B1 tests: text and tiny synthetic predictions only, no ML imports."""
+"""Confidence distribution tests: text and tiny synthetic predictions only, no ML imports."""
 
 import hashlib
 import json
@@ -12,7 +12,7 @@ from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
-from trustpcb import rq2_confidence as confidence
+from trustpcb import rq2_confidence_distribution as confidence
 
 
 def row(image, score):
@@ -83,7 +83,7 @@ class ConfidenceTests(unittest.TestCase):
 
     def test_frozen_real_development_text_and_partition_substitution(self):
         # Restore constants for this read-only check of committed manifest TEXT.
-        from trustpcb.rq2_train import MANIFESTS
+        from trustpcb.rq2_detector_training import MANIFESTS
         with patch.object(confidence, "IMAGE_COUNT", 821), patch.object(confidence, "MANIFEST_SHA", MANIFESTS["val"][2]):
             self.assertEqual(len(confidence.development_images(REPO)), 821)
         manifest = self.root / confidence.DEVELOPMENT

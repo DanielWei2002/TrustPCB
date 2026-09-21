@@ -1,4 +1,4 @@
-"""Stage 3B1: development-only raw confidence extraction; real inference is DICC-only."""
+"""Confidence distribution: development-only raw confidence extraction; real inference is DICC-only."""
 
 import argparse
 import csv
@@ -10,15 +10,16 @@ import os
 from pathlib import Path, PurePosixPath
 import statistics
 
-from trustpcb import rq1, rq2_train
+from trustpcb import rq1, rq2_detector_training
+from trustpcb.rq2_artifact_paths import resolve_input, reject_historical_output
 from trustpcb.dataset_config import find_project_root, load_paths
 
-DEVELOPMENT, IMAGE_COUNT, MANIFEST_SHA = rq2_train.MANIFESTS["val"]
-CHECKPOINT = "runs/rq2/stage2/seed_24209199/weights/selected.pt"
+DEVELOPMENT, IMAGE_COUNT, MANIFEST_SHA = rq2_detector_training.MANIFESTS["val"]
+CHECKPOINT = "runs/rq2/detector_training/seed_24209199/weights/selected.pt"
 CHECKPOINT_SHA = "793992d25ef671c45c820dc1b5a61bca5837af0d3726cd3830b2f2c656a6a85f"
 EPOCH = 72
 VERSION = "8.4.117"
-OUTPUT = "runs/rq2/stage3b1/raw_confidence"
+OUTPUT = "runs/rq2/confidence_distribution"
 SETTINGS = {"conf": 0.001, "iou": 0.7, "max_det": 300, "imgsz": 640,
             "device": 0, "batch": 1, "rect": True, "augment": False,
             "agnostic_nms": False, "classes": None, "quantize": None,
@@ -47,7 +48,7 @@ def development_images(root):
 
 
 def checkpoint_identity(root):
-    identity = rq2_train.file_identity(Path(root) / CHECKPOINT)
+    identity = rq2_detector_training.file_identity(resolve_input(root, CHECKPOINT))
     if identity["sha256"] != CHECKPOINT_SHA:
         raise ValueError("Checkpoint differs from the frozen epoch-72 selected.pt")
     return {"relative_path": CHECKPOINT, "epoch": EPOCH,
@@ -56,7 +57,7 @@ def checkpoint_identity(root):
 
 def plan(root):
     development_images(root)
-    return {"stage": "rq2_stage3b1", "development_manifest": DEVELOPMENT,
+    return {"experiment": "rq2_confidence_distribution", "development_manifest": DEVELOPMENT,
             "manifest_sha256_lf": MANIFEST_SHA, "development_images": IMAGE_COUNT,
             "checkpoint": CHECKPOINT, "checkpoint_epoch": EPOCH,
             "checkpoint_sha256": CHECKPOINT_SHA, "prediction_settings": SETTINGS,
@@ -69,9 +70,9 @@ def validate_row(row, allowed):
     if row["image"] not in allowed:
         raise ValueError("Prediction outside the frozen development set")
     class_id = row["class_id"]
-    if type(class_id) is not int or class_id not in rq2_train.NAMES:
+    if type(class_id) is not int or class_id not in rq2_detector_training.NAMES:
         raise ValueError("Invalid predicted class ID")
-    if row["class_name"] != rq2_train.NAMES[class_id]:
+    if row["class_name"] != rq2_detector_training.NAMES[class_id]:
         raise ValueError("Predicted class mapping differs")
     c = row["confidence"]
     coords = [row[k] for k in ("x1", "y1", "x2", "y2")]
@@ -86,7 +87,7 @@ def summarize(images, rows):
     counts = dict.fromkeys(images, 0)
     if not counts or len(counts) != len(images):
         raise ValueError("Expected nonempty unique image identifiers")
-    classes = dict.fromkeys(rq2_train.NAMES, 0)
+    classes = dict.fromkeys(rq2_detector_training.NAMES, 0)
     confidences = []
     bins = [0] * (len(EDGES) - 1)
     for row in rows:
@@ -109,7 +110,7 @@ def summarize(images, rows):
         "image_count": len(images), "total_predictions": total,
         "images_with_predictions": sum(n > 0 for n in counts.values()),
         "predictions_per_image": stats(list(counts.values())), "confidence": stats(confidences),
-        "per_class": [{"class_id": k, "class_name": rq2_train.NAMES[k], "count": v}
+        "per_class": [{"class_id": k, "class_name": rq2_detector_training.NAMES[k], "count": v}
                       for k, v in classes.items()],
         "confidence_intervals": [{"lower_inclusive": low, "upper": high,
                                   "upper_inclusive": i == len(bins) - 1,
@@ -141,8 +142,8 @@ def histogram(rows, target):
 def _predict(root, dataset, images, metadata):
     """DICC-only adapter; receives exactly the validated development image IDs."""
     from ultralytics import YOLO
-    model = YOLO(str(Path(root) / CHECKPOINT))
-    if model.names != rq2_train.NAMES:
+    model = YOLO(str(resolve_input(root, CHECKPOINT)))
+    if model.names != rq2_detector_training.NAMES:
         raise ValueError("Frozen detector class mapping differs")
     for image in images:
         source = (dataset / image).resolve()
@@ -153,7 +154,7 @@ def _predict(root, dataset, images, metadata):
             raise RuntimeError("Unexpected prediction source/coverage")
         effective = {k: getattr(model.predictor.args, k) for k in SETTINGS}
         for key, expected in SETTINGS.items():
-            if not rq2_train._argument_matches(key, effective[key], expected):
+            if not rq2_detector_training._argument_matches(key, effective[key], expected):
                 raise RuntimeError(f"Unexpected prediction setting: {key}")
         metadata["effective_prediction_settings"] = effective
         metadata["resolved_device"] = str(model.predictor.device)
@@ -163,7 +164,7 @@ def _predict(root, dataset, images, metadata):
             for coords, confidence, cls in zip(boxes.xyxy.cpu().tolist(),
                                                boxes.conf.cpu().tolist(), boxes.cls.cpu().tolist()):
                 class_id = int(cls)
-                rows.append(dict(zip(FIELDS, (image, class_id, rq2_train.NAMES[class_id],
+                rows.append(dict(zip(FIELDS, (image, class_id, rq2_detector_training.NAMES[class_id],
                                               confidence, *coords))))
         yield image, rows
 
@@ -171,6 +172,7 @@ def _predict(root, dataset, images, metadata):
 def extract(root, dataset, predictor, plotter=histogram):
     """Exclusive output reservation; injectable adapters for tiny CPU fixtures."""
     root, dataset = Path(root).resolve(), Path(dataset).resolve()
+    reject_historical_output(root, OUTPUT)
     info = plan(root)
     if info["git_dirty"]:
         raise RuntimeError("Commit/resolve execution/scientific inputs before DICC extraction")

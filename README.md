@@ -37,6 +37,16 @@ Raw and processed dataset files are not stored in this GitHub repository. Some g
 - `outputs/` - generated figures, tables and predictions
 - `docs/` - project and research documentation
 
+## Research workflow naming
+
+Name files, folders and experiment identifiers by scientific or computational
+purpose, rather than conversational workflow numbering. See
+[naming and historical artifact compatibility](docs/research_naming.md).
+
+- [Data partition](docs/rq2_data_partition.md)
+- [Detector training](docs/rq2_detector_training.md)
+- [Confidence distribution](docs/rq2_confidence_distribution.md)
+
 ## Environment
 
 Main development environment:

@@ -1,4 +1,4 @@
-# RQ2 Stage 3B1: raw development confidence
+# RQ2 Confidence distribution: raw development confidence
 
 Preparation only; execute the real 821-image extraction on DICC. No calibration,
 correctness matching, test evaluation, threshold recommendation, transformations,
@@ -6,9 +6,9 @@ stability/risk scoring or referral analysis is implemented here.
 
 ## Frozen inputs and scope
 
-- Epoch 72: `runs/rq2/stage2/seed_24209199/weights/selected.pt`.
+- Epoch 72: `runs/rq2/detector_training/seed_24209199/weights/selected.pt`.
 - SHA-256: `793992d25ef671c45c820dc1b5a61bca5837af0d3726cd3830b2f2c656a6a85f`.
-- Development: `data/splits/rq2_stage1_v2/development_calibration_images.txt`,
+- Development: `data/splits/rq2_train_development_split/development_calibration_images.txt`,
   821 images, LF-canonical SHA-256
   `1985f0d4097812462069be9c97cb672c4f6b3257ba8cf6a2d55243d3a7f3a6e1`.
 
@@ -44,15 +44,15 @@ requires clean execution/scientific sources. Configure ignored
 
 ```sh
 # Text-only plan, safe locally; no checkpoint load/hash or image access.
-PYTHONPATH=src python -B -m trustpcb.rq2_confidence plan
+PYTHONPATH=src python -B -m trustpcb.rq2_confidence_distribution plan
 
 # DICC ONLY; GPU 0 is recommended and fixed for reproducibility.
-PYTHONPATH=src python -B -m trustpcb.rq2_confidence extract --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2_confidence_distribution extract --dicc
 ```
 
 ## Outputs
 
-Under `runs/rq2/stage3b1/raw_confidence/`:
+Under `runs/rq2/confidence_distribution/`:
 
 - `predictions.csv`: portable image ID, predicted class ID/name, raw confidence,
   x1/y1/x2/y2 in original-image pixel coordinates. No rounding of confidence and
@@ -73,8 +73,8 @@ Under `runs/rq2/stage3b1/raw_confidence/`:
 The output directory is created exclusively. Both partial and completed output
 directories block retry; nothing is automatically deleted, resumed or overwritten.
 Inspect failures and manually archive partial artifacts before a fresh attempt.
-Stage 2 files are never modified. The checkpoint hash is the binding evidence for
-the accepted epoch; this stage does not load optimizer state or rerun selection.
+Detector training files are never modified. The checkpoint hash is the binding evidence for
+the accepted epoch; this analysis does not load optimizer state or rerun selection.
 
 Local tests use tiny synthetic predictions and inert checkpoint bytes. Actual
 Ultralytics inference and the real confidence population remain unverified until

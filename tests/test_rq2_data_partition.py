@@ -1,4 +1,4 @@
-"""Synthetic Stage 1 logic tests only; no real dataset labels or images."""
+"""Synthetic Data partition logic tests only; no real dataset labels or images."""
 
 import hashlib
 import json
@@ -9,7 +9,7 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from trustpcb import rq2_split as split
+from trustpcb import rq2_data_partition as split
 
 
 class RQ2SplitTests(unittest.TestCase):

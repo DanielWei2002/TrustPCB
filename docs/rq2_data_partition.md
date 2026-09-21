@@ -1,6 +1,6 @@
-# RQ2 Stage 1: detector-training/development membership
+# RQ2 Data partition: detector-training/development membership
 
-Stage 1 partitions only the 8,207-image similarity-aware training pool, with
+Data partition partitions only the 8,207-image similarity-aware training pool, with
 seed **24209199** and a target of 821 development/calibration images (7,386
 detector-training images). Existing similarity-aware validation membership
 (2,052 images) is reserved for RQ2 test use and is never used for balancing.
@@ -61,23 +61,23 @@ Configure `configs/local/paths.yaml` for the existing DICC checkout and dataset.
 Then, from the checkout root:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq2_split --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2_data_partition --dicc
 ```
 
 This command does not import YOLO/PyTorch or perform training, inference,
 calibration, transformations, scoring or evaluation. It reads source labels,
 generates membership and freezes these new files:
 
-- `data/splits/rq2_stage1_v2/detector_train_images.txt`
-- `data/splits/rq2_stage1_v2/development_calibration_images.txt`
-- `data/splits/rq2_stage1_v2/verification_report.json`
+- `data/splits/rq2_train_development_split/detector_train_images.txt`
+- `data/splits/rq2_train_development_split/development_calibration_images.txt`
+- `data/splits/rq2_train_development_split/verification_report.json`
 
 The report includes exact counts, per-class image and annotation counts for the
 source and both partitions, integrity assertions, group counts, source/group
 input hashes, a source-label inventory digest, generator hash, seed, Git commit,
 UTC timestamp, and both output manifest hashes. Paths in committed artifacts
 are portable. The original manifests, dataset and RQ1 outputs are not modified.
-The rejected `data/splits/rq2_stage1/` files are preserved byte-for-byte. When
+The rejected `data/splits/rq2_rejected_train_development_split/` files are preserved byte-for-byte. When
 present, their membership is validated and scored with the same current source
 counts and error definition; the revised report includes the rejected per-class
 table and error reduction. It does not read test labels or performance results.

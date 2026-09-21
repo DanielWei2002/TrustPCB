@@ -1,14 +1,14 @@
-# RQ2 Stage 2: fresh detector and development checkpoint selection
+# RQ2 Detector training: fresh detector and development checkpoint selection
 
 This prepares one DICC training run. Do not execute training on the local Windows
 machine. No calibration, transformations, risk scoring, test inference or final
-test evaluation is part of this stage. Do not retrain on train + development.
+test evaluation is part of this analysis. Do not retrain on train + development.
 
 ## Frozen inputs
 
-Stage 1 commit: `aaed8091323cac90ae5ae565719ce4b48a926335`.
+Data partition commit: `aaed8091323cac90ae5ae565719ce4b48a926335`.
 
-| Role | Manifest under `data/splits/rq2_stage1_v2/` | Images | SHA-256 (LF canonical bytes) |
+| Role | Manifest under `data/splits/rq2_train_development_split/` | Images | SHA-256 (LF canonical bytes) |
 | --- | --- | ---: | --- |
 | Fitting | `detector_train_images.txt` | 7,386 | `ec3f484e81364a1cd8619852578020aed9b9ce928eccf39cebc2613477155c06` |
 | Development selection | `development_calibration_images.txt` | 821 | `1985f0d4097812462069be9c97cb672c4f6b3257ba8cf6a2d55243d3a7f3a6e1` |
@@ -44,21 +44,21 @@ From the repository root, with the intended DICC Python environment activated:
 
 ```sh
 # CPU-safe, text-only plan; does not create runtime files or load models.
-PYTHONPATH=src python -B -m trustpcb.rq2_train plan
+PYTHONPATH=src python -B -m trustpcb.rq2_detector_training plan
 
 # DICC ONLY: launches the fresh GPU training worker.
-PYTHONPATH=src python -B -m trustpcb.rq2_train train --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2_detector_training train --dicc
 ```
 
 The launcher sets `PYTHONHASHSEED=24209199` before the fresh worker starts.
 Absolute train/dev manifests and YAML are generated under the ignored
-`configs/local/datasets/rq2_stage2/`. It only constructs path strings at this
+`configs/local/datasets/rq2_detector_training/`. It only constructs path strings at this
 step; it does not scan images or labels.
 
 Expected output:
 
 ```text
-runs/rq2/stage2/
+runs/rq2/detector_training/
   seed_24209199.provenance.json
   seed_24209199/
     args.yaml
@@ -81,7 +81,7 @@ can differ from the stored-score rule.
 After normal return, all 100 contiguous epoch records and checkpoint callbacks
 must be present. The runner independently selects the earliest maximum from the
 complete CSV, checks the retained candidate identity, and exclusively creates
-`weights/selected.pt`. This is the checkpoint frozen for later RQ2 stages.
+`weights/selected.pt`. This is the checkpoint frozen for subsequent RQ2 analyses.
 The copy retains the epoch's serialized checkpoint, including its EMA weights;
 no additional model loading or evaluation is used to select it. Normal training
 validation (including Ultralytics' end-of-training validation) uses development
@@ -102,7 +102,7 @@ remains integer `0`, and provenance preserves the actual serialized string.
 
 ## Provenance and restart policy
 
-The sidecar records current Git commit, frozen Stage 1 commit/manifests/hashes,
+The sidecar records current Git commit, frozen Data partition commit/manifests/hashes,
 source/config hashes, seed, requested and actual full training configuration,
 runtime input hashes, original pretrained path/hash/size, Python/package versions,
 timestamps, selected epoch/stored score/checkpoint path/hash/size, and CSV/args
@@ -123,8 +123,8 @@ an occupied run directory and is **not reused automatically**. The runner neithe
 overwrites it nor automatically archives/renames it.
 
 After confirming the failed process has exited and inspecting the artifacts,
-manually archive `runs/rq2/stage2/seed_24209199/` to a distinct unused location.
-Also archive the adjacent `runs/rq2/stage2/seed_24209199.provenance.json`, if present:
+manually archive `runs/rq2/detector_training/seed_24209199/` to a distinct unused location.
+Also archive the adjacent `runs/rq2/detector_training/seed_24209199.provenance.json`, if present:
 it is outside the run directory and independently blocks retry. Keep both for
 diagnosis. Manual deletion of a verified failed attempt is an alternative, but
 is not required if it has been archived out of these original paths. Never clear
@@ -142,5 +142,5 @@ artifacts and does not dirty the scoped execution/scientific input check.
 PYTHONPATH=src python -B -m unittest discover -s tests -v
 ```
 
-Stage 2 tests use empty temporary dataset roots, committed manifest text and tiny
+Detector training tests use empty temporary dataset roots, committed manifest text and tiny
 synthetic checkpoint bytes. They do not import PyTorch/Ultralytics or run models.

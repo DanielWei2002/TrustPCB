@@ -1,4 +1,4 @@
-"""RQ2 Stage 1 only: freeze a group-preserving train/development split."""
+"""RQ2 Data partition only: freeze a group-preserving train/development split."""
 
 import argparse
 import csv
@@ -22,8 +22,8 @@ SOURCE = "configs/datasets/similarity_aware_train_images.txt"
 RESERVED = "configs/datasets/similarity_aware_val_images.txt"
 PAIRS = "outputs/tables/cross_split_high_confidence_near_duplicates.csv"
 RECORDS = "data/splits/similarity_aware_split_manifest.csv"
-REJECTED_OUTPUT = "data/splits/rq2_stage1"
-OUTPUT = "data/splits/rq2_stage1_v2"
+REJECTED_OUTPUT = "data/splits/rq2_rejected_train_development_split"
+OUTPUT = "data/splits/rq2_train_development_split"
 TARGET_FRACTION = 0.10
 MAX_SWAPS = 200
 
@@ -280,6 +280,8 @@ def count_source_labels(source, dataset_root, classes=9):
 
 
 def freeze(root, source, edges, names, counts, inputs, label_hash, commit, target_dev=TARGET_DEV):
+    from trustpcb.rq2_artifact_paths import reject_historical_output, resolve_input
+    reject_historical_output(root, OUTPUT)
     destination = Path(root) / OUTPUT
     if destination.exists():
         raise FileExistsError(f"Frozen revision already exists: {OUTPUT}; no overwrite allowed")
@@ -296,7 +298,7 @@ def freeze(root, source, edges, names, counts, inputs, label_hash, commit, targe
             {"class_id": c, "name": names[c], "image_count": vector[1 + c],
              "annotation_count": vector[1 + len(names) + c]} for c in range(len(names))]}
     report = {
-        "protocol": "rq2_stage1_v2", "algorithm": "global whole-component greedy plus deterministic size-preserving/improving component exchanges",
+        "protocol": "rq2_train_development_split", "algorithm": "global whole-component greedy plus deterministic size-preserving/improving component exchanges",
         "split_seed": SEED, "target_development_images": target_dev,
         "development_count_deviation": len(dev) - target_dev,
         "ordering": "source manifest subsequence, unchanged relative path spelling",
@@ -312,9 +314,9 @@ def freeze(root, source, edges, names, counts, inputs, label_hash, commit, targe
                       "reserved_test_labels_or_images_read": False,
                       "source_connected_components": len(groups),
                       "source_nonsingleton_components": sum(len(g) > 1 for g in groups)},
-        "scope": "Frozen Stage 1 membership only; no model training, tuning or evaluation",
+        "scope": "Frozen Data partition membership only; no model training, tuning or evaluation",
     }
-    rejected = Path(root) / REJECTED_OUTPUT
+    rejected = resolve_input(root, REJECTED_OUTPUT, required=False)
     if rejected.exists():
         old_train = (rejected / "detector_train_images.txt").read_bytes()
         old_dev = (rejected / "development_calibration_images.txt").read_bytes()
@@ -351,6 +353,8 @@ def main(argv=None):
     paths = load_paths(root)
     if paths.project_root != root:
         raise ValueError("Configured project_root must identify this checkout")
+    from trustpcb.rq2_artifact_paths import reject_historical_output
+    reject_historical_output(root, OUTPUT)
     if (root / OUTPUT).exists():
         raise FileExistsError(f"Frozen output already exists: {OUTPUT}; inspect it rather than overwriting")
     source, edges, names, inputs = load_inputs(root)
