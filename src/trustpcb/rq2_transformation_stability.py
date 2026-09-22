@@ -278,7 +278,7 @@ def _predict(root, dataset, images, metadata):
                 if not raw.rq2_detector_training._argument_matches(key, effective.get(key), value):
                     raise RuntimeError(f"Unexpected inference argument: {key}")
             # Source arrays are large; record their type, not pixels, in full effective args.
-            effective["source"] = "in-memory uint8 BGR transformed development image"
+            effective["source"] = f"in-memory uint8 BGR transformed {metadata.get('population_role', 'development')} image"
             effective = json.loads(json.dumps(effective, default=str))
             if "effective_prediction_settings" in metadata and metadata["effective_prediction_settings"] != effective:
                 raise RuntimeError("Effective inference settings changed between views")

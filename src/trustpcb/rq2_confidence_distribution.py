@@ -139,9 +139,10 @@ def histogram(rows, target):
     plt.close(fig)
 
 
-def _predict(root, dataset, images, metadata):
-    """DICC-only adapter; receives exactly the validated development image IDs."""
+def _predict(root, dataset, images, metadata, *, settings=None, record_image_hashes=False):
+    """DICC-only adapter; caller supplies the validated population and settings."""
     from ultralytics import YOLO
+    settings = SETTINGS if settings is None else settings
     model = YOLO(str(resolve_input(root, CHECKPOINT)))
     if model.names != rq2_detector_training.NAMES:
         raise ValueError("Frozen detector class mapping differs")
@@ -149,11 +150,12 @@ def _predict(root, dataset, images, metadata):
         source = (dataset / image).resolve()
         if not source.is_relative_to(dataset) or not source.is_file():
             raise ValueError(f"Missing/escaped development image: {image}")
-        results = model.predict(source=str(source), **SETTINGS)
+        image_hash = rq1._sha(source) if record_image_hashes else None
+        results = model.predict(source=str(source), **settings)
         if len(results) != 1 or Path(results[0].path).resolve() != source:
             raise RuntimeError("Unexpected prediction source/coverage")
-        effective = {k: getattr(model.predictor.args, k) for k in SETTINGS}
-        for key, expected in SETTINGS.items():
+        effective = {k: getattr(model.predictor.args, k) for k in settings}
+        for key, expected in settings.items():
             if not rq2_detector_training._argument_matches(key, effective[key], expected):
                 raise RuntimeError(f"Unexpected prediction setting: {key}")
         metadata["effective_prediction_settings"] = effective
@@ -166,6 +168,16 @@ def _predict(root, dataset, images, metadata):
                 class_id = int(cls)
                 rows.append(dict(zip(FIELDS, (image, class_id, rq2_detector_training.NAMES[class_id],
                                               confidence, *coords))))
+        if record_image_hashes:
+            if rq1._sha(source) != image_hash:
+                raise RuntimeError("Image changed during original inference")
+            metadata.setdefault("source_image_sha256", {})[image] = image_hash
+            full_args = vars(model.predictor.args).copy()
+            full_args["source"] = "one validated original final-test image"
+            # Runtime provenance may contain resolved local paths; never image bytes.
+            metadata["all_effective_prediction_settings"] = {
+                k: v if v is None or isinstance(v, (str, int, float, bool, list, dict)) else str(v)
+                for k, v in full_args.items()}
         yield image, rows
 
 
