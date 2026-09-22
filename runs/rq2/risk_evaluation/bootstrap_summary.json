@@ -1,0 +1,68 @@
+{
+  "draw_indices_sha256": "f4812819f1214a2808572de037fc9b8214476d2c613ec723df9febd66f8524c4",
+  "percentile_method": "linear",
+  "redraw_invalid": false,
+  "replicates": 10000,
+  "rng": "PCG64",
+  "sampled_images_per_replicate": 821,
+  "sampling_unit": "development image",
+  "seed": 24209199,
+  "validity_by_method": [
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "raw_confidence_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "calibrated_confidence_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "class_consistency_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "localisation_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "calibrated_plus_class_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "calibrated_plus_localisation_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "class_plus_localisation_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "trustpcb_risk"
+    }
+  ]
+}
