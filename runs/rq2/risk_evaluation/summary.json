@@ -1,0 +1,21 @@
+{
+  "auprc_reference_level": 0.7878277941382695,
+  "correct": 1513,
+  "development_images": 821,
+  "incorrect": 5618,
+  "incorrect_prevalence": 0.7878277941382695,
+  "interpretation": "development-set diagnostics; not held-out test generalisation evidence",
+  "metric_definitions": {
+    "auprc": "non-interpolated average precision: sum(delta_recall * precision) at distinct descending score groups",
+    "auroc": "P(risk_incorrect > risk_correct) + 0.5 * P(tied risks); prediction-weighted",
+    "descriptives": "population standard deviation ddof=0; median/Q1/Q3 use linear quantiles",
+    "interval": "paired image-cluster bootstrap; percentile 2.5/97.5 with linear interpolation; omit undefined replicates without redrawing",
+    "spearman": "Pearson correlation of average tied ranks; undefined for a constant signal or fewer than two predictions",
+    "target": "incorrect_prediction = 1 - correct_iou50",
+    "undefined": "AUROC undefined without both target classes; AUPRC undefined without positives; empty population undefined for both"
+  },
+  "per_class_diagnostics_available": true,
+  "prediction_count": 7131,
+  "threshold_selected": false,
+  "weights_tuned": false
+}
