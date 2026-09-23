@@ -1,0 +1,4 @@
+analysis_label,method,auroc,auprc,prediction_count,incorrect,incorrect_prevalence
+Secondary IoU>=0.75 sensitivity analysis,calibrated_confidence_risk,0.9321208193443491,0.9851034986239191,7131,6126,0.8590660496424064
+Secondary IoU>=0.75 sensitivity analysis,equal_weight_trustpcb_risk,0.9325481635245256,0.9863384871985983,7131,6126,0.8590660496424064
+Secondary IoU>=0.75 sensitivity analysis,selected_weighted_trustpcb_risk,0.9357133691646241,0.9876242207629319,7131,6126,0.8590660496424064

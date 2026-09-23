@@ -1,0 +1,4 @@
+analysis_label,method,auroc,auprc,prediction_count,incorrect,incorrect_prevalence
+Development IoU>=0.50 reporting after weight selection,calibrated_confidence_risk,0.9521473678811168,0.9834347680465737,7131,5618,0.7878277941382695
+Development IoU>=0.50 reporting after weight selection,equal_weight_trustpcb_risk,0.9473179754339807,0.980441456375942,7131,5618,0.7878277941382695
+Development IoU>=0.50 reporting after weight selection,selected_weighted_trustpcb_risk,0.9536065385150224,0.9848187185839743,7131,5618,0.7878277941382695

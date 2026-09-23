@@ -1,0 +1,37 @@
+{
+  "candidate_count": 5151,
+  "development_images": 821,
+  "equal_weight_results_replaced": false,
+  "fold_image_counts": {
+    "0": 164,
+    "1": 164,
+    "2": 165,
+    "3": 164,
+    "4": 164
+  },
+  "prediction_count": 7131,
+  "purpose": "Proposal-specified weighted fusion; selection on frozen RQ2 development signals only",
+  "scope": "development selection and descriptive reporting, not independent final-test evidence",
+  "selected_weights": {
+    "distance_tie_tolerance": 0,
+    "equal_weight_distance": 0.6847383928674269,
+    "integer_percentages": {
+      "class_percent": 1,
+      "conf_percent": 89,
+      "localisation_percent": 10
+    },
+    "iou75_used_for_selection": false,
+    "mean_fold_auprc": 0.9849852962144414,
+    "mean_fold_auroc": 0.9539459171469851,
+    "selection_hierarchy": "maximum mean fold AUPRC; AUROC within absolute 1e-12 AUPRC tie set; exact minimum equal-weight distance; descending conf, localisation, class",
+    "selection_target": "incorrect_iou50 = 1 - correct_iou50",
+    "tie_absolute_tolerance": 1e-12,
+    "tie_relative_tolerance": 0,
+    "weights": {
+      "w_class": 0.01,
+      "w_conf": 0.89,
+      "w_localisation": 0.1
+    }
+  },
+  "threshold_selected": false
+}
