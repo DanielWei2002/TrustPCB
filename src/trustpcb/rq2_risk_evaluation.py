@@ -171,16 +171,19 @@ def interval(values):
             "valid_replicates": len(valid), "invalid_replicates": len(values) - len(valid)}
 
 
-def bootstrap(images, rows, scores, *, replicates=REPLICATES, seed=SEED):
+def bootstrap(images, rows, scores, *, replicates=REPLICATES, seed=SEED, methods=None):
     if not images or len(set(images)) != len(images) or replicates < 1:
         raise ValueError("Invalid bootstrap image inventory/replicates")
+    method_names = METHODS if methods is None else tuple(methods)
+    if not method_names or len(set(method_names)) != len(method_names):
+        raise ValueError("Expected nonempty unique bootstrap method names")
     lookup = {image: i for i, image in enumerate(images)}
     ids = np.array([lookup[r["image"]] for r in rows], dtype=int)
     y = np.array([r["incorrect_prediction"] for r in rows])
-    plans = {method: ranking_plan(scores[method], y) for method in METHODS}
+    plans = {method: ranking_plan(scores[method], y) for method in method_names}
     rng = np.random.Generator(np.random.PCG64(seed))
     digest = hashlib.sha256()
-    samples = np.empty((replicates, len(METHODS), 2))
+    samples = np.empty((replicates, len(method_names), 2))
     for start in range(0, replicates, 64):
         size = min(64, replicates - start)
         draws = rng.integers(0, len(images), size=(size, len(images)), dtype=np.int64)
@@ -188,7 +191,7 @@ def bootstrap(images, rows, scores, *, replicates=REPLICATES, seed=SEED):
         multiplicity = np.zeros((size, len(images)), dtype=np.int64)
         np.add.at(multiplicity, (np.arange(size)[:, None], draws), 1)
         weights = multiplicity[:, ids]  # all predictions of an image share its draw multiplicity
-        for index, method in enumerate(METHODS):
+        for index, method in enumerate(method_names):
             samples[start:start + size, index] = weighted_metrics(plans[method], weights)
     return samples, {"seed": seed, "replicates": replicates, "rng": "PCG64", "sampling_unit": "development image",
                      "sampled_images_per_replicate": len(images), "draw_indices_sha256": digest.hexdigest(),
