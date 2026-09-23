@@ -1,0 +1,6 @@
+analysis_label,method_A,method_B,observed_delta_auroc,bootstrap_mean,lower_95,upper_95,valid_replicates,invalid_replicates
+Primary IoU>=0.50 final-test evaluation,trustpcb_risk,raw_confidence_risk,-0.006753806489895209,-0.006749725739210609,-0.00985890392054147,-0.0037284712437342,10000,0
+Primary IoU>=0.50 final-test evaluation,trustpcb_risk,calibrated_confidence_risk,-0.006753806489895209,-0.006749725739210609,-0.00985890392054147,-0.0037284712437342,10000,0
+Primary IoU>=0.50 final-test evaluation,calibrated_plus_class_risk,calibrated_confidence_risk,-0.0065171662038671085,-0.006513443798557213,-0.00958442326603715,-0.0035892645032292543,10000,0
+Primary IoU>=0.50 final-test evaluation,calibrated_plus_localisation_risk,calibrated_confidence_risk,-1.264454328686604e-06,-5.985167197468955e-06,-0.0020413858566019987,0.002039339698416637,10000,0
+Primary IoU>=0.50 final-test evaluation,class_plus_localisation_risk,calibrated_confidence_risk,-0.0878722045420286,-0.08786509638852029,-0.09481969128346378,-0.0810552527783804,10000,0

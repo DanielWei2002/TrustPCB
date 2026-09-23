@@ -1,0 +1,4 @@
+signal_A,signal_B,count,spearman_rho,status
+calibrated_confidence,class_consistency,17840,0.33531512924606377,defined
+calibrated_confidence,localisation_stability,17840,0.5987939647311067,defined
+class_consistency,localisation_stability,17840,0.5939810634259078,defined

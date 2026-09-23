@@ -1,0 +1,69 @@
+{
+  "analysis_label": "Secondary IoU>=0.75 sensitivity analysis",
+  "draw_indices_sha256": "c3b71a9e22ce7bec6586a9bbdb960d1b43c4287e24a27a1ea1a7b7738a0ba303",
+  "percentile_method": "linear",
+  "redraw_invalid": false,
+  "replicates": 10000,
+  "rng": "PCG64",
+  "sampled_images_per_replicate": 2052,
+  "sampling_unit": "development image",
+  "seed": 24209199,
+  "validity_by_method": [
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "raw_confidence_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "calibrated_confidence_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "class_consistency_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "localisation_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "calibrated_plus_class_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "calibrated_plus_localisation_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "class_plus_localisation_risk"
+    },
+    {
+      "auprc_invalid_replicates": 0,
+      "auprc_valid_replicates": 10000,
+      "auroc_invalid_replicates": 0,
+      "auroc_valid_replicates": 10000,
+      "method": "trustpcb_risk"
+    }
+  ]
+}

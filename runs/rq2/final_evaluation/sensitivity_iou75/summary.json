@@ -1,0 +1,14 @@
+{
+  "analysis_label": "Secondary IoU>=0.75 sensitivity analysis",
+  "auprc_reference_level": 0.8554372197309417,
+  "correct": 2579,
+  "incorrect": 15261,
+  "incorrect_prevalence": 0.8554372197309417,
+  "interpretation": "Secondary cannot replace primary; no test-driven revision of development decisions.",
+  "prediction_count": 17840,
+  "primary_composite": "trustpcb_risk",
+  "test_images": 2052,
+  "test_role": "held out from RQ2 training and development, previously used for RQ1 validation",
+  "threshold_selected": false,
+  "weights_tuned": false
+}

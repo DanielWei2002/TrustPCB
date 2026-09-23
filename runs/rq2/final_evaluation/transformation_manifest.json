@@ -1,0 +1,74 @@
+{
+  "rules": {
+    "affine_border": "constant per-original-image channel-wise median; grid-constant bilinear interpolation",
+    "aggregation": "mean within evaluable family, then equal mean across evaluable families",
+    "blur": "scipy gaussian_filter sigma=(0.6,0.6,0), reflect boundary, truncate=4.0; no channel mixing",
+    "contrast": "single scalar mean over all original pixels and channels",
+    "coordinates": "xy edge coordinates; pixel centres (column+0.5,row+0.5); image bounds [0,width] x [0,height]",
+    "matching": "class-agnostic IoU>=0.50; maximise cardinality then total polygon IoU",
+    "quantisation": "float64 operations, clip [0,255], round-to-nearest-even, uint8",
+    "rotation": "positive counterclockwise visually, centre (width/2,height/2); unchanged canvas",
+    "ties": "source reference order; transformed detections sorted by xyxy then detector index; deterministic SciPy assignment; no class/confidence tie weights"
+  },
+  "specifications": [
+    {
+      "factor": 0.9,
+      "family": "brightness",
+      "id": "brightness_0.90"
+    },
+    {
+      "factor": 1.1,
+      "family": "brightness",
+      "id": "brightness_1.10"
+    },
+    {
+      "factor": 0.9,
+      "family": "contrast",
+      "id": "contrast_0.90"
+    },
+    {
+      "factor": 1.1,
+      "family": "contrast",
+      "id": "contrast_1.10"
+    },
+    {
+      "family": "blur",
+      "id": "blur_0.6",
+      "sigma": 0.6
+    },
+    {
+      "degrees": -2,
+      "family": "rotation",
+      "id": "rotation_-2"
+    },
+    {
+      "degrees": 2,
+      "family": "rotation",
+      "id": "rotation_+2"
+    },
+    {
+      "axis": "x",
+      "family": "translation",
+      "fraction": -0.02,
+      "id": "translation_x_-0.02"
+    },
+    {
+      "axis": "x",
+      "family": "translation",
+      "fraction": 0.02,
+      "id": "translation_x_+0.02"
+    },
+    {
+      "axis": "y",
+      "family": "translation",
+      "fraction": -0.02,
+      "id": "translation_y_-0.02"
+    },
+    {
+      "axis": "y",
+      "family": "translation",
+      "fraction": 0.02,
+      "id": "translation_y_+0.02"
+    }
+  ]
+}
