@@ -1,0 +1,92 @@
+{
+  "bootstrap": {
+    "primary": {
+      "analysis_label": "Primary IoU>=0.50 frozen weighted final-test evaluation",
+      "correct": 3803,
+      "draw_indices_sha256": "c3b71a9e22ce7bec6586a9bbdb960d1b43c4287e24a27a1ea1a7b7738a0ba303",
+      "incorrect": 14037,
+      "incorrect_prevalence": 0.7868273542600897,
+      "percentile_method": "linear",
+      "redraw_invalid": false,
+      "replicates": 10000,
+      "rng": "PCG64",
+      "sampled_images_per_replicate": 2052,
+      "sampling_unit": "final-test image",
+      "seed": 24209199,
+      "validity_by_method": [
+        {
+          "auprc_invalid_replicates": 0,
+          "auprc_valid_replicates": 10000,
+          "auroc_invalid_replicates": 0,
+          "auroc_valid_replicates": 10000,
+          "method": "calibrated_confidence_risk"
+        },
+        {
+          "auprc_invalid_replicates": 0,
+          "auprc_valid_replicates": 10000,
+          "auroc_invalid_replicates": 0,
+          "auroc_valid_replicates": 10000,
+          "method": "equal_weight_trustpcb_risk"
+        },
+        {
+          "auprc_invalid_replicates": 0,
+          "auprc_valid_replicates": 10000,
+          "auroc_invalid_replicates": 0,
+          "auroc_valid_replicates": 10000,
+          "method": "weighted_trustpcb_risk"
+        }
+      ]
+    },
+    "sensitivity_iou75": {
+      "analysis_label": "Secondary IoU>=0.75 sensitivity analysis",
+      "correct": 2579,
+      "draw_indices_sha256": "c3b71a9e22ce7bec6586a9bbdb960d1b43c4287e24a27a1ea1a7b7738a0ba303",
+      "incorrect": 15261,
+      "incorrect_prevalence": 0.8554372197309417,
+      "percentile_method": "linear",
+      "redraw_invalid": false,
+      "replicates": 10000,
+      "rng": "PCG64",
+      "sampled_images_per_replicate": 2052,
+      "sampling_unit": "final-test image",
+      "seed": 24209199,
+      "validity_by_method": [
+        {
+          "auprc_invalid_replicates": 0,
+          "auprc_valid_replicates": 10000,
+          "auroc_invalid_replicates": 0,
+          "auroc_valid_replicates": 10000,
+          "method": "calibrated_confidence_risk"
+        },
+        {
+          "auprc_invalid_replicates": 0,
+          "auprc_valid_replicates": 10000,
+          "auroc_invalid_replicates": 0,
+          "auroc_valid_replicates": 10000,
+          "method": "equal_weight_trustpcb_risk"
+        },
+        {
+          "auprc_invalid_replicates": 0,
+          "auprc_valid_replicates": 10000,
+          "auroc_invalid_replicates": 0,
+          "auroc_valid_replicates": 10000,
+          "method": "weighted_trustpcb_risk"
+        }
+      ]
+    }
+  },
+  "calibration_fitting_occurred": false,
+  "inference_occurred": false,
+  "interpretation": "Frozen development weights applied once; no test-driven revision or RQ3 selection.",
+  "prediction_count": 17840,
+  "referral_threshold_selected": false,
+  "test_images": 2052,
+  "test_role": "held out from RQ2 training and development, previously used for RQ1 validation",
+  "transformation_processing_occurred": false,
+  "weight_selection_occurred": false,
+  "weights": {
+    "w_class": 0.01,
+    "w_conf": 0.89,
+    "w_localisation": 0.1
+  }
+}

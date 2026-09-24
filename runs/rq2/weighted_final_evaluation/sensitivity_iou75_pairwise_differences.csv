@@ -1,0 +1,5 @@
+analysis_label,method_A,method_B,metric,observed_difference,bootstrap_mean,lower_95,upper_95,valid_replicates,invalid_replicates
+Secondary IoU>=0.75 sensitivity analysis,weighted_trustpcb_risk,calibrated_confidence_risk,auroc,0.0019971228807961205,0.001989937749147163,0.0009060372768937841,0.0031343006860479554,10000,0
+Secondary IoU>=0.75 sensitivity analysis,weighted_trustpcb_risk,calibrated_confidence_risk,auprc,0.001240352922928012,0.0012318710789594386,0.00022435050344113696,0.0022927559086124427,10000,0
+Secondary IoU>=0.75 sensitivity analysis,weighted_trustpcb_risk,equal_weight_trustpcb_risk,auroc,0.007246001771578525,0.007253821415187707,0.004167416742777802,0.010465886605676511,10000,0
+Secondary IoU>=0.75 sensitivity analysis,weighted_trustpcb_risk,equal_weight_trustpcb_risk,auprc,0.0030488799388396215,0.0030521432401881383,0.0017326219295141776,0.004446833340511097,10000,0

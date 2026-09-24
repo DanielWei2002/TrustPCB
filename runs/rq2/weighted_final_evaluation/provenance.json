@@ -1,0 +1,64 @@
+{
+  "bootstrap_replicates": 10000,
+  "bootstrap_seed": 24209199,
+  "calibration_fitting_occurred": false,
+  "completed_utc": "2026-09-24T01:37:28.337577+00:00",
+  "experiment": "rq2_weighted_final_evaluation",
+  "git_commit": "97111f96da14fa2ada5d26aed463f85de3475ff7",
+  "git_dirty": false,
+  "git_input_status": "",
+  "inference_occurred": false,
+  "input_sha256": {
+    "configs/datasets/similarity_aware_val_images.txt": "a2f246bf5be60cad5fac7f985ed91888bddb43601b73331f39d02e180075bc8e",
+    "data/splits/rq2_train_development_split/detector_train_images.txt": "ec3f484e81364a1cd8619852578020aed9b9ce928eccf39cebc2613477155c06",
+    "data/splits/rq2_train_development_split/development_calibration_images.txt": "1985f0d4097812462069be9c97cb672c4f6b3257ba8cf6a2d55243d3a7f3a6e1",
+    "data/splits/rq2_train_development_split/verification_report.json": "a29cd91b4c7edf7d80c0b8c0b81b50082710835bb2a96a2f29e15c5afca5db9e",
+    "runs/rq2/final_evaluation/labelled_predictions.csv": "f7c841c13f91f6293d2c4063e512750baf55795d86dcf7a5e798797da2ac8f02",
+    "runs/rq2/final_evaluation/prediction_stability_scores.csv": "74d7fba33380980abe80493f54f9ed4ad3c117f9835583db227db9053b786493",
+    "runs/rq2/final_evaluation/primary_iou50/summary.json": "a695703543d1a5e2115469f2ec0c4b80889ddb3957facb067cc89c8d64b2ce8f",
+    "runs/rq2/final_evaluation/provenance.json": "f77b201966d4d91781e30d102c5d69fbe289fba669b891559453e13e085b98b9",
+    "runs/rq2/weighted_fusion/selected_weights.json": "2dcacea31b481bd05733d459c580645bda5984ff41c381753263fde1cf439e99"
+  },
+  "metric_definitions": {
+    "auprc": "non-interpolated average precision: sum(delta_recall * precision) at distinct descending score groups",
+    "auroc": "P(risk_incorrect > risk_correct) + 0.5 * P(tied risks); prediction-weighted",
+    "descriptives": "population standard deviation ddof=0; median/Q1/Q3 use linear quantiles",
+    "interval": "paired image-cluster bootstrap; percentile 2.5/97.5 with linear interpolation; omit undefined replicates without redrawing",
+    "spearman": "Pearson correlation of average tied ranks; undefined for a constant signal or fewer than two predictions",
+    "target": "incorrect_prediction = 1 - correct_iou50",
+    "undefined": "AUROC undefined without both target classes; AUPRC undefined without positives; empty population undefined for both"
+  },
+  "output_sha256": {
+    "primary_method_metrics.csv": "38ac671146a66b74638deae45576b393ee2975c58c067ea6622b7c5864c74748",
+    "primary_pairwise_differences.csv": "62d3cc5cfd086beb86721952f491a1e4595519c92e6f8816c74e06e9493bc9ea",
+    "sensitivity_iou75_method_metrics.csv": "a3fd59459932ddfd17e40ea28aa13e97e45509ca74b107ecdcd156a48637c230",
+    "sensitivity_iou75_pairwise_differences.csv": "5f3cce3267cd948b37bca20da474112a6f1364020029b6e09d50246a74ce7e00",
+    "summary.json": "886a196f680f8d57e2318a8d9a02a77270819f7e9f81eab49182bd1867f11fe3"
+  },
+  "prediction_count": 17840,
+  "primary_correctness": "same-class one-to-one IoU >= 0.50",
+  "referral_threshold_selected": false,
+  "risk_formula": "0.89*(1-calibrated_confidence)+0.01*(1-class_consistency)+0.10*(1-localisation_stability)",
+  "selected_weight_identity": {
+    "committed_blob_sha256": "2dcacea31b481bd05733d459c580645bda5984ff41c381753263fde1cf439e99",
+    "evidence_commit": "74510277056c72114dc421bd900ddb5dfbc91933",
+    "path": "runs/rq2/weighted_fusion/selected_weights.json",
+    "sha256": "2dcacea31b481bd05733d459c580645bda5984ff41c381753263fde1cf439e99"
+  },
+  "sensitivity_correctness": "same-class one-to-one IoU >= 0.75",
+  "started_utc": "2026-09-24T01:36:38.282242+00:00",
+  "status": "complete",
+  "test_images": 2052,
+  "test_role": "held out from RQ2 training and development, previously used for RQ1 validation",
+  "transformation_processing_occurred": false,
+  "versions": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1"
+  },
+  "weight_selection_occurred": false,
+  "weights": {
+    "w_class": 0.01,
+    "w_conf": 0.89,
+    "w_localisation": 0.1
+  }
+}
