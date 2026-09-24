@@ -41,8 +41,8 @@ def selected_identity(root):
     path = resolve_input(root, SELECTED)
     working = path.read_bytes()
     try:
-        committed = subprocess.run(["git", "-C", str(root), "show", f"{EVIDENCE_COMMIT}:{SELECTED}"],
-                                   check=True, capture_output=True).stdout
+        committed = subprocess.run(["git", "show", f"{EVIDENCE_COMMIT}:{SELECTED}"],
+                                   cwd=root, check=True, capture_output=True).stdout
     except subprocess.CalledProcessError as exc:
         raise ValueError("Frozen weight evidence commit/file unavailable; obtain the evidence history before execution") from exc
     if working.replace(b"\r\n", b"\n") != committed.replace(b"\r\n", b"\n"):

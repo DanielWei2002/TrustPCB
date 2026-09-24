@@ -49,7 +49,10 @@ class ValidationTests(unittest.TestCase):
                 identity = evaluation.selected_identity(root)
             self.assertEqual(identity["evidence_commit"], evaluation.EVIDENCE_COMMIT)
             self.assertEqual(identity["sha256"], evaluation.rq1._sha(path))
-            self.assertIn(evaluation.EVIDENCE_COMMIT, git.call_args.args[0][-1])
+            git.assert_called_once_with(
+                ["git", "show", f"{evaluation.EVIDENCE_COMMIT}:{evaluation.SELECTED}"],
+                cwd=root, check=True, capture_output=True)
+            self.assertNotIn("-C", git.call_args.args[0])
             with patch.object(evaluation.subprocess, "run", return_value=subprocess.CompletedProcess([], 0, stdout=b"different")):
                 with self.assertRaisesRegex(ValueError, "evidence commit"):
                     evaluation.selected_identity(root)
