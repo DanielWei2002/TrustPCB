@@ -101,6 +101,77 @@ class CalculationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             review.prepare(images, rows, scores)
 
+    def test_automatic_error_counts_reduction_and_multiplicity(self):
+        result = review.referral_metrics(np.array([.9, .3, -np.inf]), np.array([3, 2, 0]),
+            np.array([2, 0, 0]), .3, np.array([2, 3, 1]))
+        self.assertEqual(result["automatic_predictions"], 6)
+        self.assertEqual(result["automatic_incorrect"], 0)
+        self.assertEqual(result["remaining_automatic_error_rate"], 0)
+        self.assertAlmostEqual(result["no_referral_error_rate"], 4/12)
+        self.assertAlmostEqual(result["absolute_error_reduction"], 4/12)
+        none = review.referral_metrics(np.array([.9]), np.array([3]), np.array([2]), 1, np.ones(1))
+        self.assertEqual(none["absolute_error_reduction"], 0)
+        all_referred = review.referral_metrics(np.array([.9]), np.array([3]), np.array([2]), 0, np.ones(1))
+        self.assertEqual(all_referred["automatic_predictions"], 0)
+        self.assertIsNone(all_referred["remaining_automatic_error_rate"])
+        self.assertIsNone(all_referred["absolute_error_reduction"])
+        worse = review.referral_metrics(np.array([.9, .1]), np.array([1, 1]), np.array([0, 1]), .5, np.ones(2))
+        self.assertEqual(worse["absolute_error_reduction"], -.5)
+
+    def test_paired_bootstrap_matches_explicit_shared_samples(self):
+        images, rows = fixture()
+        rows = [{**r, "image": images[i], "correct_iou50": [0, 1, 0][i]} for i, r in enumerate(rows[:3])]
+        scores = {m: np.array([.9, .1, .8]) for m in review.METHODS}
+        scores[review.METHODS[0]] = np.array([.1, .9, .2])
+        scores[review.METHODS[1]] = np.array([.9, .2, .1])
+        thresholds = review.tables(images, rows, scores)[-1]
+        with patch.object(review, "threshold_for", side_effect=AssertionError("no retuning")):
+            intervals, info = review.bootstrap(images, rows, scores, thresholds, replicates=17)
+        self.assertEqual(len(info["paired_differences"]), 14)
+        draws = np.random.Generator(np.random.PCG64(review.SEED)).integers(0, len(images), size=(17, len(images)))
+        for pair in info["paired_differences"]:
+            differences = []
+            observed = []
+            for draw in [np.arange(len(images)), *draws]:
+                values = []
+                for method in (pair["method_A"], pair["method_B"]):
+                    copied = [dict(r, prediction_id=f"{j}:{r['prediction_id']}") for j, image_index in enumerate(draw)
+                              for r in rows if r["image"] == images[image_index]]
+                    copied_scores = {m: np.array([scores[m][int(r["prediction_id"].split(":")[-1])] for r in copied])
+                                     for m in review.METHODS}
+                    # Explicit duplicated crops/predictions, including empty crop copies.
+                    copied_images = [f"copy_{i}" for i in range(len(draw))]
+                    for r in copied:
+                        r["image"] = copied_images[int(r["prediction_id"].split(":")[0])]
+                    _, labels, counts, errors, crops, plans = review.prepare(copied_images, copied, copied_scores)
+                    if pair["metric"] == "aurc":
+                        value = review.curve(plans[method], labels, np.ones(len(copied)))[1]
+                    else:
+                        threshold = next(t["threshold"] for t in thresholds[method] if t["budget_percent"] == pair["budget_percent"])
+                        value = review.referral_metrics(crops[method], counts, errors, threshold, np.ones(len(draw)))[pair["metric"]]
+                    values.append(value)
+                delta = values[0]-values[1] if all(v is not None for v in values) else np.nan
+                if not observed:
+                    observed.append(delta)
+                else:
+                    differences.append(delta)
+            expected = review.risk.interval(differences)
+            for key, value in expected.items():
+                if value is None:
+                    self.assertIsNone(pair[key])
+                else:
+                    self.assertAlmostEqual(pair[key], value)
+            if np.isfinite(observed[0]):
+                self.assertAlmostEqual(pair["observed_difference"], observed[0])
+            else:
+                self.assertIsNone(pair["observed_difference"])
+        raw_pairs = [r for r in info["paired_differences"] if r["method_B"] == review.METHODS[0]]
+        self.assertLess(next(r for r in raw_pairs if r["metric"] == "aurc")["observed_difference"], 0)
+        self.assertGreater(next(r for r in raw_pairs if r["metric"] == "error_capture" and r["budget_percent"] == 5)["observed_difference"], 0)
+        self.assertLess(next(r for r in raw_pairs if r["metric"] == "remaining_automatic_error_rate" and r["budget_percent"] == 5)["observed_difference"], 0)
+        self.assertTrue(any(r["invalid_replicates"] for r in info["paired_differences"]))
+        self.assertTrue(any(r["metric"] == "absolute_error_reduction" for r in intervals))
+
     def test_bootstrap_determinism_shared_draws_fixed_thresholds(self):
         images, rows = fixture()
         scores = review.scores_for(rows)
@@ -176,6 +247,51 @@ class WorkflowTests(unittest.TestCase):
             (root/review.OUTPUT).mkdir(parents=True)
             with self.assertRaises(FileExistsError):
                 review.run(root)
+
+    def test_reporting_extension_preserves_evidence_and_saved_thresholds(self):
+        images, rows = fixture()
+        scores = review.scores_for(rows)
+        thresholds = review.tables(images, rows, scores)[-1]
+        intervals, info = review.bootstrap(images, rows, scores, thresholds, replicates=3)
+        info["replicates"] = 10000  # Tiny synthetic stand-in for completed metadata.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            with patch.object(review, "load_inputs", return_value=(images, rows, {"synthetic": "hash"}, {"evidence": "hash"})), \
+                 patch.object(review.rq1, "git_provenance", return_value={"git_dirty": False, "git_commit": "synthetic"}):
+                original = review.run(root)
+                review.rq1._write_json(original/"bootstrap_summary.json", info)
+                source = review.rq1._read_json(original/"provenance.json")
+                source.update(bootstrap_requested=True, bootstrap_replicates=10000)
+                source["output_sha256"]["bootstrap_summary.json"] = review.rq1._sha(original/"bootstrap_summary.json")
+                review.rq1._write_json(original/"provenance.json", source)
+                before = {p.name: p.read_bytes() for p in original.iterdir()}
+                with patch.object(review, "threshold_for", side_effect=AssertionError("saved thresholds only")), \
+                     patch.object(review, "bootstrap", return_value=(intervals, info)) as boot:
+                    output = review.extend_reporting(root)
+                self.assertEqual(boot.call_args.args[3], thresholds)
+                for name, content in before.items():
+                    self.assertEqual((original/name).read_bytes(), content)
+                self.assertEqual(review.rq1._read_json(output/"provenance.json")["status"], "complete")
+                self.assertEqual(len(review.risk.read_csv(output/"paired_bootstrap_differences.csv")), 14)
+                with self.assertRaises(FileExistsError):
+                    review.extend_reporting(root)
+
+    def test_reporting_extension_rejects_different_draws(self):
+        images, rows = fixture()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            with patch.object(review, "load_inputs", return_value=(images, rows, {}, {})), \
+                 patch.object(review.rq1, "git_provenance", return_value={"git_dirty": False, "git_commit": "synthetic"}):
+                original = review.run(root)
+                review.rq1._write_json(original/"bootstrap_summary.json", {"seed": review.SEED, "replicates": 10000, "draw_indices_sha256": "original"})
+                source = review.rq1._read_json(original/"provenance.json")
+                source.update(bootstrap_requested=True, bootstrap_replicates=10000)
+                source["output_sha256"]["bootstrap_summary.json"] = review.rq1._sha(original/"bootstrap_summary.json")
+                review.rq1._write_json(original/"provenance.json", source)
+                with patch.object(review, "bootstrap", return_value=([], {"seed": review.SEED, "replicates": 10000, "draw_indices_sha256": "different"})):
+                    with self.assertRaisesRegex(ValueError, "draws differ"):
+                        review.extend_reporting(root)
+                self.assertEqual(review.rq1._read_json(original/"reporting_extension/provenance.json")["status"], "incomplete")
 
     def test_windows_gate(self):
         with patch.object(review.os, "name", "nt"), patch.object(review, "run") as run:

@@ -69,6 +69,14 @@ among referred predictions. Error capture is undefined when there are no incorre
 predictions. These are not estimates of human correction effectiveness or recall
 of undetected objects.
 
+For each operating point also report `automatic_predictions` (predictions in
+non-referred crops), `automatic_incorrect`, `remaining_automatic_error_rate`
+(automatic incorrect / automatic predictions), `no_referral_error_rate`, and
+`absolute_error_reduction` (no-referral rate minus automatic rate). Reduction is
+an absolute probability-point difference, not a relative percentage reduction;
+multiply by 100 to express percentage points. It can be negative. No automatic
+predictions means the automatic rate and reduction are undefined, not zero.
+
 The random sanity baseline selects uniformly without replacement among nonempty
 crops at the same achieved crop count. It obeys empty-crop ineligibility and retains
 all crops in the workload denominator. Its exact expected error capture is
@@ -90,6 +98,49 @@ without redrawing. This is conditional development uncertainty, not independent
 test evidence; weights and Beta calibration were developed on this population.
 The bootstrap module is separate from point calculations. Full bootstrap curves
 are not persisted; full observed curves are exported.
+
+The same replicates also give intervals for automatic prediction/error counts,
+remaining automatic error rate and absolute error reduction. The no-referral
+reference rate is recomputed from each replicate's full prediction population.
+Fixed development thresholds remain unchanged.
+
+`paired_bootstrap_differences.csv` has 14 rows: weighted TrustPCB versus raw and
+calibrated confidence, each for AURC and for error capture/remaining automatic
+error at each of the three budgets. Every difference is **method A (weighted)
+minus method B (reference)**. Negative AURC or remaining-error differences favour
+weighted TrustPCB; positive capture differences favour weighted TrustPCB. Columns
+are `method_A`, `method_B`, `budget_percent` (blank for AURC), `metric`,
+`observed_difference`, `bootstrap_mean`, `lower_95`, `upper_95`,
+`valid_replicates`, `invalid_replicates`. Subtract the two metrics within the same
+image draw; do not subtract interval bounds or use independent bootstrap sequences.
+A paired replicate is invalid if either metric is undefined. No replicate is
+redrawn; all-invalid intervals and undefined observed differences remain blank/null.
+
+## Extend completed development evidence
+
+For the already completed bootstrap run, use the reporting extension after code
+review and committing the execution inputs:
+
+```bash
+PYTHONPATH=src python -B -m trustpcb.rq3_selective_review --dicc --extend-report
+```
+
+This reads the original `development_thresholds.json` without calling threshold
+derivation. It verifies completed provenance, every recorded output hash and the
+unchanged development input identities. It reproduces the existing 10,000 image
+draws with the same seed and verifies their SHA-256 against the original bootstrap
+summary. The original implementation stored interval summaries, not replicate
+arrays, so recomputing the same draws is required to obtain paired differences.
+No separate random sequence is generated for any added metric.
+
+New files go under `runs/rq3/development_selective_review/reporting_extension/`:
+`crop_referral_metrics.csv`, `bootstrap_intervals.csv`,
+`paired_bootstrap_differences.csv`, `bootstrap_summary.json`, and `provenance.json`.
+The original outputs, thresholds and provenance are never rewritten. The extension
+has its own input/evidence/output hashes and partial/completed overwrite protection.
+A draw-hash mismatch fails the extension. This command always includes bootstrap;
+`--bootstrap` is unnecessary. Run it on DICC only, without GPU. No completed evidence
+has been extended locally.
 
 ## DICC execution
 
@@ -120,6 +171,7 @@ Output directory: `runs/rq3/development_selective_review/`:
 - `development_thresholds.json`: scalar boundaries, budgets and no-test-retuning rule
 - `summary.json` and `provenance.json`
 - optional `bootstrap_intervals.csv` and `bootstrap_summary.json`
+- optional `paired_bootstrap_differences.csv`
 
 Local verification uses tiny synthetic fixtures only. Real development evaluation
 and bootstrap execution belong on DICC. The missing local RQ2 artifacts must be
