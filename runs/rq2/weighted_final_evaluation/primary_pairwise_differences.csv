@@ -1,0 +1,5 @@
+analysis_label,method_A,method_B,metric,observed_difference,bootstrap_mean,lower_95,upper_95,valid_replicates,invalid_replicates
+Primary IoU>=0.50 frozen weighted final-test evaluation,weighted_trustpcb_risk,calibrated_confidence_risk,auroc,0.0022902265117258347,0.0022888300393427976,0.0013585382364263681,0.0032523934365682435,10000,0
+Primary IoU>=0.50 frozen weighted final-test evaluation,weighted_trustpcb_risk,calibrated_confidence_risk,auprc,0.0020384626441255493,0.002035920275820069,0.0008905219796871338,0.0032336805686937584,10000,0
+Primary IoU>=0.50 frozen weighted final-test evaluation,weighted_trustpcb_risk,equal_weight_trustpcb_risk,auroc,0.009044033001621044,0.009038555778553406,0.00640558307397999,0.01184003924489513,10000,0
+Primary IoU>=0.50 frozen weighted final-test evaluation,weighted_trustpcb_risk,equal_weight_trustpcb_risk,auprc,0.00558433057277008,0.005585506783071496,0.004019781399308109,0.007256927796482828,10000,0
