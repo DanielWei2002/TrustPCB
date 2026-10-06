@@ -1,0 +1,136 @@
+{
+  "comparison": ">",
+  "definitions": {
+    "aurc": "right-endpoint step integral over coverage; sum(delta_coverage * retained_error_rate); empty curve undefined",
+    "bootstrap": "paired whole-image resampling with replacement; fixed original development thresholds; no threshold rederivation; percentile CIs; no redraw",
+    "crop_risk": "maximum retained prediction risk; empty crop is undefined and never referred",
+    "curve": "retain ascending risk with entire equal-score groups; coverage=retained/total predictions; risk=retained incorrect/retained",
+    "error_capture": "incorrect predictions in referred crops / all incorrect predictions; undefined without errors",
+    "inclusion": "existing raw confidence >= 0.01 population only",
+    "random": "uniform selection without replacement among nonempty crops at achieved workload; analytic expected capture=k/nonempty crops",
+    "referral": "nonempty crop AND crop_risk > threshold",
+    "scope": "development only; 821 manifest images are 821 reviewable crops",
+    "scores": "higher = higher risk; 1-raw, 1-calibrated, 1-class, 1-localisation, frozen 89/1/10 fusion",
+    "target": "incorrect_prediction = 1 - correct_iou50; existing same-class one-to-one IoU >= 0.50",
+    "threshold": "largest achievable count <= floor(all crops * budget / 100); whole ties, no ID or label tie-break"
+  },
+  "derived_from": "development scores only",
+  "test_retuning_permitted": false,
+  "thresholds": {
+    "calibrated_confidence_risk": [
+      {
+        "achieved_crops": 41,
+        "achieved_workload": 0.049939098660170524,
+        "budget_percent": 5,
+        "nominal_crops": 41,
+        "threshold": 0.9936295930738688
+      },
+      {
+        "achieved_crops": 82,
+        "achieved_workload": 0.09987819732034105,
+        "budget_percent": 10,
+        "nominal_crops": 82,
+        "threshold": 0.9935662080426598
+      },
+      {
+        "achieved_crops": 164,
+        "achieved_workload": 0.1997563946406821,
+        "budget_percent": 20,
+        "nominal_crops": 164,
+        "threshold": 0.9933347346162636
+      }
+    ],
+    "class_consistency_risk": [
+      {
+        "achieved_crops": 40,
+        "achieved_workload": 0.048721071863580996,
+        "budget_percent": 5,
+        "nominal_crops": 41,
+        "threshold": 0.625
+      },
+      {
+        "achieved_crops": 82,
+        "achieved_workload": 0.09987819732034105,
+        "budget_percent": 10,
+        "nominal_crops": 82,
+        "threshold": 0.5333333333333333
+      },
+      {
+        "achieved_crops": 159,
+        "achieved_workload": 0.19366626065773446,
+        "budget_percent": 20,
+        "nominal_crops": 164,
+        "threshold": 0.4
+      }
+    ],
+    "localisation_stability_risk": [
+      {
+        "achieved_crops": 41,
+        "achieved_workload": 0.049939098660170524,
+        "budget_percent": 5,
+        "nominal_crops": 41,
+        "threshold": 0.4875717639229651
+      },
+      {
+        "achieved_crops": 82,
+        "achieved_workload": 0.09987819732034105,
+        "budget_percent": 10,
+        "nominal_crops": 82,
+        "threshold": 0.39966973900079283
+      },
+      {
+        "achieved_crops": 164,
+        "achieved_workload": 0.1997563946406821,
+        "budget_percent": 20,
+        "nominal_crops": 164,
+        "threshold": 0.35418015715243134
+      }
+    ],
+    "raw_confidence_risk": [
+      {
+        "achieved_crops": 41,
+        "achieved_workload": 0.049939098660170524,
+        "budget_percent": 5,
+        "nominal_crops": 41,
+        "threshold": 0.9899041010066867
+      },
+      {
+        "achieved_crops": 82,
+        "achieved_workload": 0.09987819732034105,
+        "budget_percent": 10,
+        "nominal_crops": 82,
+        "threshold": 0.9898020355030894
+      },
+      {
+        "achieved_crops": 164,
+        "achieved_workload": 0.1997563946406821,
+        "budget_percent": 20,
+        "nominal_crops": 164,
+        "threshold": 0.9894293267279863
+      }
+    ],
+    "weighted_trustpcb_risk": [
+      {
+        "achieved_crops": 41,
+        "achieved_workload": 0.049939098660170524,
+        "budget_percent": 5,
+        "nominal_crops": 41,
+        "threshold": 0.9310489886477032
+      },
+      {
+        "achieved_crops": 82,
+        "achieved_workload": 0.09987819732034105,
+        "budget_percent": 10,
+        "nominal_crops": 82,
+        "threshold": 0.9239604592252796
+      },
+      {
+        "achieved_crops": 164,
+        "achieved_workload": 0.1997563946406821,
+        "budget_percent": 20,
+        "nominal_crops": 164,
+        "threshold": 0.9186685950307968
+      }
+    ]
+  }
+}

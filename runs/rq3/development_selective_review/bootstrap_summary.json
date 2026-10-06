@@ -1,0 +1,9 @@
+{
+  "draw_indices_sha256": "f4812819f1214a2808572de037fc9b8214476d2c613ec723df9febd66f8524c4",
+  "redraw_invalid": false,
+  "replicates": 10000,
+  "rng": "PCG64",
+  "sampling_unit": "whole development image/crop",
+  "seed": 24209199,
+  "thresholds_rederived": false
+}

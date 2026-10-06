@@ -1,0 +1,30 @@
+{
+  "calibration_performed": false,
+  "computational_benchmark_performed": false,
+  "definitions": {
+    "absolute_error_reduction": "no-referral error rate minus automatic error rate; probability-point difference; replicate-specific reference",
+    "aurc": "right-endpoint step integral over coverage; sum(delta_coverage * retained_error_rate); empty curve undefined",
+    "automatic_error": "non-referred incorrect / non-referred predictions; undefined with zero automatic predictions",
+    "bootstrap": "paired whole-image resampling with replacement; fixed original development thresholds; no threshold rederivation; percentile CIs; no redraw",
+    "crop_risk": "maximum retained prediction risk; empty crop is undefined and never referred",
+    "curve": "retain ascending risk with entire equal-score groups; coverage=retained/total predictions; risk=retained incorrect/retained",
+    "error_capture": "incorrect predictions in referred crops / all incorrect predictions; undefined without errors",
+    "inclusion": "existing raw confidence >= 0.01 population only",
+    "paired_difference": "weighted TrustPCB minus reference on the same replicate; negative favours weighted for AURC/automatic error, positive for capture",
+    "random": "uniform selection without replacement among nonempty crops at achieved workload; analytic expected capture=k/nonempty crops",
+    "referral": "nonempty crop AND crop_risk > threshold",
+    "scope": "final evaluation of frozen development thresholds on 2052 test crops",
+    "scores": "higher = higher risk; 1-raw, 1-calibrated, 1-class, 1-localisation, frozen 89/1/10 fusion",
+    "target": "incorrect_prediction = 1 - correct_iou50; existing same-class one-to-one IoU >= 0.50",
+    "threshold": "load exact saved development values; never derive from test data"
+  },
+  "empty_crops": 0,
+  "fitting_performed": false,
+  "inference_performed": false,
+  "prediction_count": 17840,
+  "test_crops": 2052,
+  "test_role": "held out from RQ2 training and development, previously used for RQ1 validation.",
+  "thresholds_rederived": false,
+  "transformation_processing_performed": false,
+  "weight_selection_performed": false
+}

@@ -1,0 +1,197 @@
+{
+  "applied_thresholds": {
+    "calibrated_confidence_risk": [
+      {
+        "achieved_crops": 41,
+        "achieved_workload": 0.049939098660170524,
+        "budget_percent": 5,
+        "nominal_crops": 41,
+        "threshold": 0.9936295930738688
+      },
+      {
+        "achieved_crops": 82,
+        "achieved_workload": 0.09987819732034105,
+        "budget_percent": 10,
+        "nominal_crops": 82,
+        "threshold": 0.9935662080426598
+      },
+      {
+        "achieved_crops": 164,
+        "achieved_workload": 0.1997563946406821,
+        "budget_percent": 20,
+        "nominal_crops": 164,
+        "threshold": 0.9933347346162636
+      }
+    ],
+    "class_consistency_risk": [
+      {
+        "achieved_crops": 40,
+        "achieved_workload": 0.048721071863580996,
+        "budget_percent": 5,
+        "nominal_crops": 41,
+        "threshold": 0.625
+      },
+      {
+        "achieved_crops": 82,
+        "achieved_workload": 0.09987819732034105,
+        "budget_percent": 10,
+        "nominal_crops": 82,
+        "threshold": 0.5333333333333333
+      },
+      {
+        "achieved_crops": 159,
+        "achieved_workload": 0.19366626065773446,
+        "budget_percent": 20,
+        "nominal_crops": 164,
+        "threshold": 0.4
+      }
+    ],
+    "localisation_stability_risk": [
+      {
+        "achieved_crops": 41,
+        "achieved_workload": 0.049939098660170524,
+        "budget_percent": 5,
+        "nominal_crops": 41,
+        "threshold": 0.4875717639229651
+      },
+      {
+        "achieved_crops": 82,
+        "achieved_workload": 0.09987819732034105,
+        "budget_percent": 10,
+        "nominal_crops": 82,
+        "threshold": 0.39966973900079283
+      },
+      {
+        "achieved_crops": 164,
+        "achieved_workload": 0.1997563946406821,
+        "budget_percent": 20,
+        "nominal_crops": 164,
+        "threshold": 0.35418015715243134
+      }
+    ],
+    "raw_confidence_risk": [
+      {
+        "achieved_crops": 41,
+        "achieved_workload": 0.049939098660170524,
+        "budget_percent": 5,
+        "nominal_crops": 41,
+        "threshold": 0.9899041010066867
+      },
+      {
+        "achieved_crops": 82,
+        "achieved_workload": 0.09987819732034105,
+        "budget_percent": 10,
+        "nominal_crops": 82,
+        "threshold": 0.9898020355030894
+      },
+      {
+        "achieved_crops": 164,
+        "achieved_workload": 0.1997563946406821,
+        "budget_percent": 20,
+        "nominal_crops": 164,
+        "threshold": 0.9894293267279863
+      }
+    ],
+    "weighted_trustpcb_risk": [
+      {
+        "achieved_crops": 41,
+        "achieved_workload": 0.049939098660170524,
+        "budget_percent": 5,
+        "nominal_crops": 41,
+        "threshold": 0.9310489886477032
+      },
+      {
+        "achieved_crops": 82,
+        "achieved_workload": 0.09987819732034105,
+        "budget_percent": 10,
+        "nominal_crops": 82,
+        "threshold": 0.9239604592252796
+      },
+      {
+        "achieved_crops": 164,
+        "achieved_workload": 0.1997563946406821,
+        "budget_percent": 20,
+        "nominal_crops": 164,
+        "threshold": 0.9186685950307968
+      }
+    ]
+  },
+  "bootstrap_replicates": 10000,
+  "bootstrap_seed": 24209199,
+  "calibration_performed": false,
+  "completed_utc": "2026-10-06T05:49:11.257257+00:00",
+  "computational_benchmark_performed": false,
+  "correctness_definition": "same-class one-to-one IoU >= 0.50",
+  "definitions": {
+    "absolute_error_reduction": "no-referral error rate minus automatic error rate; probability-point difference; replicate-specific reference",
+    "aurc": "right-endpoint step integral over coverage; sum(delta_coverage * retained_error_rate); empty curve undefined",
+    "automatic_error": "non-referred incorrect / non-referred predictions; undefined with zero automatic predictions",
+    "bootstrap": "paired whole-image resampling with replacement; fixed original development thresholds; no threshold rederivation; percentile CIs; no redraw",
+    "crop_risk": "maximum retained prediction risk; empty crop is undefined and never referred",
+    "curve": "retain ascending risk with entire equal-score groups; coverage=retained/total predictions; risk=retained incorrect/retained",
+    "error_capture": "incorrect predictions in referred crops / all incorrect predictions; undefined without errors",
+    "inclusion": "existing raw confidence >= 0.01 population only",
+    "paired_difference": "weighted TrustPCB minus reference on the same replicate; negative favours weighted for AURC/automatic error, positive for capture",
+    "random": "uniform selection without replacement among nonempty crops at achieved workload; analytic expected capture=k/nonempty crops",
+    "referral": "nonempty crop AND crop_risk > threshold",
+    "scope": "final evaluation of frozen development thresholds on 2052 test crops",
+    "scores": "higher = higher risk; 1-raw, 1-calibrated, 1-class, 1-localisation, frozen 89/1/10 fusion",
+    "target": "incorrect_prediction = 1 - correct_iou50; existing same-class one-to-one IoU >= 0.50",
+    "threshold": "load exact saved development values; never derive from test data"
+  },
+  "development_threshold_artifact": "runs/rq3/development_selective_review/development_thresholds.json",
+  "development_threshold_sha256": "dce28d9d4d631d552982c0970ed889018b8cad88e7c23d9856b3715e2e4a7aa5",
+  "experiment": "rq3_final_evaluation",
+  "fitting_performed": false,
+  "frozen_weight_identity": {
+    "committed_blob_sha256": "2dcacea31b481bd05733d459c580645bda5984ff41c381753263fde1cf439e99",
+    "evidence_commit": "74510277056c72114dc421bd900ddb5dfbc91933",
+    "path": "runs/rq2/weighted_fusion/selected_weights.json",
+    "sha256": "2dcacea31b481bd05733d459c580645bda5984ff41c381753263fde1cf439e99"
+  },
+  "git_commit": "27e7dc23d22a443c040ae8e022495c6b0c1ea4ab",
+  "git_dirty": false,
+  "git_input_status": "",
+  "inference_performed": false,
+  "input_sha256": {
+    "configs/datasets/similarity_aware_val_images.txt": "a2f246bf5be60cad5fac7f985ed91888bddb43601b73331f39d02e180075bc8e",
+    "data/splits/rq2_train_development_split/detector_train_images.txt": "ec3f484e81364a1cd8619852578020aed9b9ce928eccf39cebc2613477155c06",
+    "data/splits/rq2_train_development_split/development_calibration_images.txt": "1985f0d4097812462069be9c97cb672c4f6b3257ba8cf6a2d55243d3a7f3a6e1",
+    "data/splits/rq2_train_development_split/verification_report.json": "a29cd91b4c7edf7d80c0b8c0b81b50082710835bb2a96a2f29e15c5afca5db9e",
+    "runs/rq2/final_evaluation/labelled_predictions.csv": "f7c841c13f91f6293d2c4063e512750baf55795d86dcf7a5e798797da2ac8f02",
+    "runs/rq2/final_evaluation/prediction_stability_scores.csv": "74d7fba33380980abe80493f54f9ed4ad3c117f9835583db227db9053b786493",
+    "runs/rq2/final_evaluation/primary_iou50/summary.json": "a695703543d1a5e2115469f2ec0c4b80889ddb3957facb067cc89c8d64b2ce8f",
+    "runs/rq2/final_evaluation/provenance.json": "f77b201966d4d91781e30d102c5d69fbe289fba669b891559453e13e085b98b9",
+    "runs/rq2/weighted_fusion/selected_weights.json": "2dcacea31b481bd05733d459c580645bda5984ff41c381753263fde1cf439e99",
+    "runs/rq3/development_selective_review/development_thresholds.json": "dce28d9d4d631d552982c0970ed889018b8cad88e7c23d9856b3715e2e4a7aa5",
+    "runs/rq3/development_selective_review/provenance.json": "e1e8db9083fa88255983295172abf97aa9b42541546d81adf879e789d9b15e37"
+  },
+  "output_sha256": {
+    "aurc.csv": "e1070a77d1987272565312d36047fa24db54e1d6a94a9d1c11e2a23a8a4054fb",
+    "bootstrap_intervals.csv": "1f786eddfc7c81d39be63e1b1216ed2a404bf2fc358ed5bfdf924b20a893405f",
+    "bootstrap_summary.json": "848781631134fd4ef7167c1c8c716ef29b0e54296cfb164c8982e5a856e56c8f",
+    "crop_referral_metrics.csv": "cd4cc7a03dd7addb3d45fbb0849c77de7d222e8ba6d9978194dfdd6a40af1b8a",
+    "crop_risks.csv": "18ee2e5b39f1fac795e67fef09eddc4a1cbd3451336eaf14c0c13be7318554c7",
+    "paired_bootstrap_differences.csv": "f11704183a7111bd8152610437cdd88a4c4aff83793af67a9b3fe6119d9abf85",
+    "prediction_risk_coverage.csv": "687129236aada7c21eb1a1f9bc487ace6ab8a011f58bc3d23f9de08a64a3d7d8",
+    "summary.json": "dbc0576fa3183a7c5d140e69d8906ee26375e4268691dcfabb423d50fd91dfb8"
+  },
+  "prediction_count": 17840,
+  "python": "3.11.13",
+  "started_utc": "2026-10-06T05:40:48.629038+00:00",
+  "status": "complete",
+  "test_crops": 2052,
+  "test_role": "held out from RQ2 training and development, previously used for RQ1 validation.",
+  "thresholds_rederived": false,
+  "transformation_processing_performed": false,
+  "versions": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1"
+  },
+  "weight_selection_performed": false,
+  "weights": [
+    0.89,
+    0.01,
+    0.1
+  ]
+}

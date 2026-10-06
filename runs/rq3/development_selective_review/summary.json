@@ -1,0 +1,20 @@
+{
+  "definitions": {
+    "aurc": "right-endpoint step integral over coverage; sum(delta_coverage * retained_error_rate); empty curve undefined",
+    "bootstrap": "paired whole-image resampling with replacement; fixed original development thresholds; no threshold rederivation; percentile CIs; no redraw",
+    "crop_risk": "maximum retained prediction risk; empty crop is undefined and never referred",
+    "curve": "retain ascending risk with entire equal-score groups; coverage=retained/total predictions; risk=retained incorrect/retained",
+    "error_capture": "incorrect predictions in referred crops / all incorrect predictions; undefined without errors",
+    "inclusion": "existing raw confidence >= 0.01 population only",
+    "random": "uniform selection without replacement among nonempty crops at achieved workload; analytic expected capture=k/nonempty crops",
+    "referral": "nonempty crop AND crop_risk > threshold",
+    "scope": "development only; 821 manifest images are 821 reviewable crops",
+    "scores": "higher = higher risk; 1-raw, 1-calibrated, 1-class, 1-localisation, frozen 89/1/10 fusion",
+    "target": "incorrect_prediction = 1 - correct_iou50; existing same-class one-to-one IoU >= 0.50",
+    "threshold": "largest achievable count <= floor(all crops * budget / 100); whole ties, no ID or label tie-break"
+  },
+  "development_images": 821,
+  "empty_crops": 0,
+  "interpretation": "development protocol analysis; not independent test generalisation evidence",
+  "prediction_count": 7131
+}

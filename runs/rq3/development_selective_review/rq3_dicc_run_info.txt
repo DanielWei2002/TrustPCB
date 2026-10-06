@@ -1,0 +1,11 @@
+Git commit:
+4aaaa27eeb187d23414e2b0b44be15708013a743
+
+Git status:
+?? rq3_development_selective_review.tar.gz
+?? rq3_dicc_run_info.txt
+?? runs/rq3/
+
+Python:
+/scr/user/danielw9199/TrustPCB/.conda/bin/python
+Python 3.11.13
