@@ -30,9 +30,11 @@ Future provenance uses `experiment` and purpose-based identifiers; detector
 provenance uses `partition_commit`. These metadata-name changes do not alter
 scientific parameters or historical records.
 
-The explicit aliases in `src/trustpcb/rq2_artifact_paths.py` are the only supported
-historical path translations. They are used when reading a frozen checkpoint or
-prediction directory and when comparing path fields in historical provenance.
+The explicit aliases in `src/trustpcb/rq2/artifact_paths.py` are the only supported
+historical path translations. The legacy `trustpcb.rq2_artifact_paths` import
+aliases the same module object for compatibility. The aliases are used when
+reading a frozen checkpoint or prediction directory and when comparing path
+fields in historical provenance.
 The provenance files themselves stay byte-for-byte unchanged. Hash and membership
 checks remain mandatory. If both artifact locations exist, reading stops rather
 than choosing one silently.
