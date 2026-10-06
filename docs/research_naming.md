@@ -50,4 +50,4 @@ supported location remains. Do not edit absolute paths embedded in the completed
 receipt. Do not regenerate frozen outputs or rewrite Git history.
 
 For inventory, rename details, and verification evidence, see
-[the naming refactor record](naming_refactor.md).
+[the naming refactor record](history/naming_refactor.md).
