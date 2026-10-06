@@ -44,11 +44,23 @@ requires clean execution/scientific sources. Configure ignored
 
 ```sh
 # Text-only plan, safe locally; no checkpoint load/hash or image access.
-PYTHONPATH=src python -B -m trustpcb.rq2_confidence_distribution plan
+PYTHONPATH=src python -B -m trustpcb.rq2.confidence_distribution plan
 
 # DICC ONLY; GPU 0 is recommended and fixed for reproducibility.
-PYTHONPATH=src python -B -m trustpcb.rq2_confidence_distribution extract --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2.confidence_distribution extract --dicc
 ```
+
+The canonical implementation is `src/trustpcb/rq2/confidence_distribution.py`.
+The legacy `trustpcb.rq2_confidence_distribution` import and CLI remain supported:
+imports share the canonical module object, and CLI execution calls its `main()`.
+The implementation uses canonical `rq2.detector_training` and `rq2.artifact_paths`
+dependencies while retaining the `rq2_detector_training` attribute for consumers.
+
+This workflow records the executing Git commit rather than a separate source-file
+hash inventory. Future provenance retains that schema; the new commit identifies
+the package layout. Checkpoint and manifest identities, version identifiers and
+output paths are unchanged. Completed provenance remains historical and must not
+be rewritten or regenerated because the implementation moved.
 
 ## Outputs
 
