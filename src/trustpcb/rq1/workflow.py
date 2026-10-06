@@ -34,6 +34,12 @@ SEEDS = (
 )
 SPLITS = ("supplied", "similarity_aware")
 BASELINE_FILE = "configs/experiments/yolov8n_preliminary_baseline_v1.yaml"
+# Future provenance records the actual package sources, never a fabricated old hash.
+SOURCE_FILES = (
+    "src/trustpcb/rq1/__init__.py",
+    "src/trustpcb/rq1/__main__.py",
+    "src/trustpcb/rq1/workflow.py",
+)
 EXECUTION_INPUTS = ("src/trustpcb/", BASELINE_FILE, "configs/datasets/", "data/splits/")
 # A drift guard for the approved design, not a second configuration source.
 APPROVED_BASELINE = {
@@ -130,7 +136,7 @@ def build_plan(root, git_info=None):
     if _json(baseline) != _json(APPROVED_BASELINE):
         raise ValueError(f"{BASELINE_FILE} differs from the approved RQ1 configuration")
     git_info = git_provenance(root) if git_info is None else git_info
-    inputs = [root / BASELINE_FILE, root / "src/trustpcb/rq1.py",
+    inputs = [root / BASELINE_FILE, *(root / name for name in SOURCE_FILES),
               root / "src/trustpcb/dataset_config.py"]
     inputs += sorted((root / "configs/datasets").glob("*"))
     inputs += sorted((root / "data/splits").glob("*"))

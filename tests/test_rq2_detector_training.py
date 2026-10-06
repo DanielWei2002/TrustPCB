@@ -26,7 +26,7 @@ class DetectorTrainingTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name).resolve()
         for relative in (detector.TEMPLATE, rq1.BASELINE_FILE, "src/trustpcb/rq2_detector_training.py",
-                         "src/trustpcb/rq1.py", "src/trustpcb/dataset_config.py",
+                         *rq1.SOURCE_FILES, "src/trustpcb/dataset_config.py",
                          *(spec[0] for spec in detector.MANIFESTS.values())):
             target = self.root / relative
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -69,6 +69,9 @@ class DetectorTrainingTests(unittest.TestCase):
 
     def test_frozen_config_and_manifest_wiring(self):
         self.assertEqual(self.plan["baseline_config"], rq1.APPROVED_BASELINE)
+        self.assertNotIn("src/trustpcb/rq1.py", self.plan["input_hashes"])
+        for relative in rq1.SOURCE_FILES:
+            self.assertEqual(self.plan["input_hashes"][relative], rq1._sha(self.root / relative))
         lists = detector.frozen_inputs(self.root)
         self.assertEqual([len(lists[k]) for k in ("train", "val")], [7386, 821])
         self.assertFalse(set(lists["train"]) & set(lists["val"]))

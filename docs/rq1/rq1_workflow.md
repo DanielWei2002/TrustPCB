@@ -24,7 +24,7 @@ Each output directory is `runs/rq1/<split>/seed_<label>/`. Labels are strings:
 
 ## Configuration and architecture
 
-`src/trustpcb/rq1.py` loads
+`src/trustpcb/rq1/workflow.py` loads
 `configs/experiments/yolov8n_preliminary_baseline_v1.yaml`. A guard rejects any
 drift from the approved configuration rather than silently changing a setting.
 Only the seed, dataset, and output arguments vary. `exist_ok=False` prevents
@@ -177,3 +177,14 @@ import that column as text in spreadsheets to retain `02092026`.
 Training output provenance contains machine-local absolute paths by design.
 Checkpoints are already ignored by Git. No result metrics are supplied by this
 implementation; all tests use temporary synthetic text artifacts.
+
+## RQ1 package compatibility
+
+The implementation lives in `src/trustpcb/rq1/workflow.py`. The package facade
+retains established `trustpcb.rq1` attributes, and `__main__.py` preserves
+`python -m trustpcb.rq1`. Shared provenance infrastructure remains in `common/`.
+Future RQ1 and RQ2 detector plans hash the three actual RQ1 package source files.
+Completed records retain their original source paths, hashes and execution commits;
+the preservation tag is the historical source reference. Existing strict
+training/reuse identity checks are unchanged: this move does not authorize
+retraining or adopting historical runs under a new source identity.

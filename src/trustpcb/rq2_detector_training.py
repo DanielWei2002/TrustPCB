@@ -69,7 +69,7 @@ def build_plan(root, git_info=None):
     kwargs.update(data=str(data), project=str(output.parent), name=output.name,
                   exist_ok=False, resume=False, split="val")
     inputs = [TEMPLATE, rq1.BASELINE_FILE, "src/trustpcb/rq2_detector_training.py",
-              "src/trustpcb/rq1.py", "src/trustpcb/dataset_config.py"]
+              *rq1.SOURCE_FILES, "src/trustpcb/dataset_config.py"]
     return {
         "schema_version": 1, "experiment": "rq2_detector_training", "project_root": str(root),
         **(rq1.git_provenance(root) if git_info is None else git_info),
