@@ -1,7 +1,10 @@
 """Synthetic text and ranking fixtures only; never real final-test analysis."""
 
 import copy
+import csv
+import importlib
 from pathlib import Path
+import runpy
 import subprocess
 import sys
 import tempfile
@@ -11,7 +14,105 @@ from unittest.mock import patch
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from trustpcb import rq2_weighted_final_evaluation as evaluation
+from trustpcb.rq2 import weighted_final_evaluation as evaluation
+
+
+class PackageCompatibilityTests(unittest.TestCase):
+    def test_fresh_import_orders_identity_and_bidirectional_patches(self):
+        names = ("trustpcb.rq2_weighted_final_evaluation", "trustpcb.rq2.weighted_final_evaluation")
+        for order in (names, names[::-1]):
+            with self.subTest(order=order):
+                script = f"""
+import importlib, sys
+from unittest.mock import patch
+a, b = [importlib.import_module(name) for name in {order!r}]
+assert a is b
+for source, target in ((a, b), (b, a)):
+    with patch.object(source, 'load_inputs', return_value='synthetic') as loader:
+        assert target.load_inputs(None) == 'synthetic'
+        loader.assert_called_once_with(None)
+assert 'torch' not in sys.modules and 'ultralytics' not in sys.modules
+"""
+                subprocess.run([sys.executable, "-B", "-c", script], check=True, capture_output=True)
+
+    def test_canonical_dependencies_and_frozen_constants(self):
+        for alias, name in (("risk", "risk_evaluation"), ("fusion", "weighted_fusion"),
+                            ("final", "final_evaluation"), ("sensitivity", "risk_sensitivity")):
+            self.assertIs(getattr(evaluation, alias), importlib.import_module(f"trustpcb.rq2.{name}"))
+        self.assertIs(evaluation.resolve_input, importlib.import_module("trustpcb.rq2.artifact_paths").resolve_input)
+        self.assertEqual(evaluation.WEIGHTS, (89, 1, 10))
+        self.assertEqual(evaluation.fusion.WEIGHT_KEYS, ("conf_percent", "class_percent", "localisation_percent"))
+        self.assertEqual(evaluation.risk.SIGNALS, ("calibrated_confidence", "class_consistency", "localisation_stability"))
+        self.assertEqual((evaluation.SEED, evaluation.REPLICATES, evaluation.PREDICTION_COUNT), (24209199, 10000, 17840))
+        self.assertEqual(evaluation.OUTPUT, "runs/rq2/weighted_final_evaluation")
+        self.assertEqual(evaluation.EVIDENCE_COMMIT, "74510277056c72114dc421bd900ddb5dfbc91933")
+
+    def test_rq3_final_loader_and_validator_through_both_names(self):
+        from trustpcb import rq3_final_evaluation as consumer
+        legacy = importlib.import_module("trustpcb.rq2_weighted_final_evaluation")
+        self.assertIs(consumer.frozen, evaluation)
+        images, rows = fixture()
+        identity = {"synthetic": "identity"}
+        for source in (legacy, evaluation):
+            with patch.object(source, "validate_population", return_value=rows) as validator:
+                self.assertIs(consumer.validate_population(images, rows), rows)
+                validator.assert_called_once_with(images, rows)
+            with patch.object(source, "load_inputs", return_value=(images, rows, {"input": "hash"}, identity)) as loader, \
+                 patch.object(source, "validate_population", return_value=rows), \
+                 patch.object(consumer, "load_thresholds", return_value=({}, {"threshold": "hash"}, {"selected_weight_identity": identity})):
+                self.assertEqual(consumer.load_inputs(Path("synthetic")),
+                                 (images, rows, {"input": "hash", "threshold": "hash"}, identity, {}))
+                loader.assert_called_once_with(Path("synthetic"))
+        with patch.object(consumer.frozen, "WEIGHTS", (1, 2, 97)):
+            self.assertEqual(legacy.WEIGHTS, (1, 2, 97))
+            self.assertEqual(evaluation.WEIGHTS, (1, 2, 97))
+
+    def test_rq3_direct_symbol_imports_share_live_globals_and_evidence_guards(self):
+        from trustpcb import rq3_selective_review as review
+        from trustpcb import rq3_computational_efficiency as efficiency
+        legacy = importlib.import_module("trustpcb.rq2_weighted_final_evaluation")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path = root / evaluation.SELECTED
+            path.parent.mkdir(parents=True)
+            evaluation.rq1._write_json(path, selected())
+            for consumer in (review, efficiency):
+                self.assertIs(consumer.selected_identity, evaluation.selected_identity)
+                self.assertIs(consumer.selected_identity.__globals__, evaluation.__dict__)
+                for source in (legacy, evaluation):
+                    with patch.object(source, "resolve_input", return_value=path) as resolver, \
+                         patch.object(source.subprocess, "run", return_value=subprocess.CompletedProcess([], 0, stdout=path.read_bytes())):
+                        self.assertEqual(consumer.selected_identity(root)["sha256"], evaluation.rq1._sha(path))
+                        resolver.assert_called_once_with(root, evaluation.SELECTED)
+                    with patch.dict(consumer.selected_identity.__globals__, {"EVIDENCE_COMMIT": "synthetic"}):
+                        self.assertEqual(source.EVIDENCE_COMMIT, "synthetic")
+                    with patch.object(source.subprocess, "run", return_value=subprocess.CompletedProcess([], 0, stdout=b"mismatch")):
+                        with self.assertRaisesRegex(ValueError, "evidence commit"):
+                            consumer.selected_identity(root)
+
+    def test_both_module_help_commands(self):
+        for name in ("trustpcb.rq2_weighted_final_evaluation", "trustpcb.rq2.weighted_final_evaluation"):
+            result = subprocess.run([sys.executable, "-B", "-m", name, "--help"],
+                                    check=True, capture_output=True, text=True)
+            self.assertIn("--dicc", result.stdout)
+
+    def test_legacy_execution_dispatches_canonical_main(self):
+        with patch.object(evaluation, "main") as main:
+            runpy.run_path(str(Path(__file__).resolve().parents[1] / "src/trustpcb/rq2_weighted_final_evaluation.py"),
+                           run_name="__main__")
+        main.assert_called_once_with()
+
+    def test_parser_dispatch_and_missing_flag(self):
+        root = Path("synthetic")
+        with patch.object(evaluation.os, "name", "posix"), \
+             patch.object(evaluation, "find_project_root", return_value=root) as find, \
+             patch.object(evaluation, "run", return_value="synthetic_output") as run, patch("builtins.print"):
+            with self.assertRaisesRegex(RuntimeError, "DICC-only"):
+                evaluation.main([])
+            find.assert_not_called()
+            run.assert_not_called()
+            evaluation.main(["--dicc"])
+            run.assert_called_once_with(root)
 
 
 def fixture():
@@ -86,12 +187,112 @@ class ValidationTests(unittest.TestCase):
                 evaluation.validate_population(images, rows)
 
 
+class ArtifactAlignmentTests(unittest.TestCase):
+    """Exercise the real text loader using only three synthetic prediction rows."""
+
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        self.folder = self.root / evaluation.final.OUTPUT
+        (self.folder / "primary_iou50").mkdir(parents=True)
+        self.images = [f"synthetic_{i}" for i in range(2052)]
+        _, self.rows = fixture()
+        for i, row in enumerate(self.rows):
+            row["image"] = self.images[i]
+        self.labels = copy.deepcopy(self.rows)
+        for row in self.rows:
+            row["legacy_extra_risk"] = .123
+        self.provenance = {"status": "complete", "test_role": evaluation.final.ROLE,
+            "test_images": 2052, "test_manifest": evaluation.final.MANIFEST,
+            "test_manifest_sha256_lf": evaluation.final.MANIFEST_SHA, "reference_threshold": .01,
+            "checkpoint_identity": {"sha256": evaluation.final.raw.CHECKPOINT_SHA},
+            "beta_parameters": list(evaluation.final.BETA)}
+        for relative in (evaluation.final.MANIFEST, evaluation.final.PARTITION_REPORT,
+                         *(s[0] for s in evaluation.final.raw.rq2_detector_training.MANIFESTS.values())):
+            path = self.root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("synthetic manifest bytes\n", encoding="utf-8")
+        for mocked in (patch.object(evaluation, "selected_identity", return_value={"sha256": "synthetic"}),
+                       patch.object(evaluation.final, "frozen_test_images", return_value=self.images),
+                       patch.object(evaluation, "PREDICTION_COUNT", 3)):
+            mocked.start()
+            self.addCleanup(mocked.stop)
+        self.save()
+
+    def save(self):
+        # Rewrite only this test's temporary fixtures to simulate rehashed tampering.
+        for name, rows in (("prediction_stability_scores.csv", self.rows),
+                           ("labelled_predictions.csv", self.labels)):
+            with (self.folder / name).open("w", encoding="utf-8", newline="") as file:
+                writer = csv.DictWriter(file, fieldnames=list(rows[0]))
+                writer.writeheader()
+                writer.writerows(rows)
+        evaluation.rq1._write_json(self.folder / "primary_iou50/summary.json",
+            {"test_images": 2052, "prediction_count": 3, "test_role": evaluation.final.ROLE})
+        self.provenance["output_sha256"] = {name: evaluation.rq1._sha(self.folder / name) for name in
+            ("prediction_stability_scores.csv", "labelled_predictions.csv", "primary_iou50/summary.json")}
+        evaluation.rq1._write_json(self.folder / "provenance.json", self.provenance)
+
+    def test_load_preserves_row_order_labels_and_signals(self):
+        images, rows, hashes, identity = evaluation.load_inputs(self.root)
+        self.assertEqual(images, self.images)
+        self.assertEqual([r["prediction_id"] for r in rows], [r["prediction_id"] for r in self.rows])
+        for actual, expected in zip(rows, self.rows):
+            for key in ("raw_confidence", *evaluation.risk.SIGNALS, "correct_iou50", "incorrect_iou75"):
+                self.assertEqual(actual[key], expected[key])
+        self.assertEqual(identity, {"sha256": "synthetic"})
+        self.assertIn(f"{evaluation.final.OUTPUT}/labelled_predictions.csv", hashes)
+
+    def test_rehashed_reordered_or_missing_rows_fail(self):
+        original = copy.deepcopy(self.labels)
+        for labels in (original[::-1], original[:-1]):
+            self.labels = labels
+            self.save()
+            with self.assertRaisesRegex(ValueError, "fields/order"):
+                evaluation.load_inputs(self.root)
+
+    def test_rehashed_label_confidence_or_stability_misalignment_fails(self):
+        original = copy.deepcopy(self.labels)
+        for key in ("correct_iou50", "calibrated_confidence", "class_consistency", "localisation_stability"):
+            self.labels = copy.deepcopy(original)
+            self.labels[0][key] = 1 - self.labels[0][key] if key != "localisation_stability" else .6
+            self.save()
+            with self.assertRaisesRegex(ValueError, "fields/order"):
+                evaluation.load_inputs(self.root)
+
+    def test_hash_and_completion_guards(self):
+        with (self.folder / "labelled_predictions.csv").open("a") as file:
+            file.write("tampered")
+        with self.assertRaisesRegex(ValueError, "hash mismatch"):
+            evaluation.load_inputs(self.root)
+        self.provenance["status"] = "incomplete"
+        self.save()
+        with self.assertRaisesRegex(ValueError, "incomplete"):
+            evaluation.load_inputs(self.root)
+
+
 class MetricTests(unittest.TestCase):
     def test_exact_weighted_score_and_equal_baseline(self):
         _, rows = fixture()
         scores = evaluation.scores_for(rows)
         self.assertAlmostEqual(scores["weighted_trustpcb_risk"][0], .89*.8 + .01*.2 + .10*.5)
         self.assertEqual(scores["equal_weight_trustpcb_risk"][0], evaluation.risk.risk_scores(rows)["trustpcb_risk"][0])
+
+    def test_component_order_endpoints_and_no_clipping_or_imputation(self):
+        _, rows = fixture()
+        self.assertEqual(tuple(evaluation.scores_for(rows)), evaluation.METHODS)
+        for values, expected in (((0., 1., 1.), .89), ((1., 0., 1.), .01),
+                                 ((1., 1., 0.), .10), ((1., 1., 1.), 0.), ((0., 0., 0.), 1.)):
+            row = {**rows[0], **dict(zip(evaluation.risk.SIGNALS, values))}
+            self.assertEqual(evaluation.scores_for([row])[evaluation.METHODS[2]][0], expected)
+        for value in (-.1, 1.1, float("nan"), None):
+            with self.assertRaises(ValueError):
+                evaluation.scores_for([{**rows[0], "class_consistency": value}])
+        missing = dict(rows[0])
+        del missing["class_consistency"]
+        with self.assertRaises(KeyError):
+            evaluation.scores_for([missing])
 
     def test_shared_deterministic_bootstrap_and_secondary(self):
         images, rows = fixture()
@@ -189,10 +390,22 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(provenance["test_role"], evaluation.final.ROLE)
         self.assertEqual(provenance["weights"], selected()["weights"])
         self.assertEqual(provenance["status"], "complete")
+        self.assertEqual(provenance["experiment"], "rq2_weighted_final_evaluation")
+        self.assertEqual(provenance["risk_formula"], evaluation.FORMULA)
+        self.assertEqual({p.name for p in output.iterdir()}, {
+            "primary_method_metrics.csv", "primary_pairwise_differences.csv",
+            "sensitivity_iou75_method_metrics.csv", "sensitivity_iou75_pairwise_differences.csv",
+            "summary.json", "provenance.json"})
         for prefix in ("primary", "sensitivity_iou75"):
             pairs = evaluation.risk.read_csv(output / f"{prefix}_pairwise_differences.csv")
             self.assertEqual(len(pairs), 4)
             self.assertEqual({r["metric"] for r in pairs}, {"auroc", "auprc"})
+            self.assertEqual(list(pairs[0]), ["analysis_label", "method_A", "method_B", "metric",
+                "observed_difference", "bootstrap_mean", "lower_95", "upper_95", "valid_replicates", "invalid_replicates"])
+            self.assertEqual([(r["method_B"], r["metric"]) for r in pairs],
+                [(method, metric) for method in evaluation.METHODS[:2] for metric in ("auroc", "auprc")])
+            methods = evaluation.risk.read_csv(output / f"{prefix}_method_metrics.csv")
+            self.assertEqual([r["method"] for r in methods], list(evaluation.METHODS))
         for key in evaluation.NO_ACTIONS:
             self.assertIs(provenance[key], False)
         for name, value in provenance["output_sha256"].items():

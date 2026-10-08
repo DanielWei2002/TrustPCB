@@ -1,5 +1,22 @@
 # Frozen weighted RQ2 final evaluation
 
+Canonical source: `src/trustpcb/rq2/weighted_final_evaluation.py`; module:
+`trustpcb.rq2.weighted_final_evaluation`. The legacy
+`trustpcb.rq2_weighted_final_evaluation` import resolves to the same live module
+and retains CLI compatibility. Completed evaluations must not be rerun because
+of this package migration.
+
+The frozen evidence commit, selected-weight identity, fixed
+`rq2_weighted_final_evaluation` experiment identifier and historical outputs remain
+unchanged. Future Git/version/timestamp metadata remain dynamic. This workflow
+does not hash its own source file; the shim and canonical implementation are
+different source files, not interchangeable source hashes.
+
+RQ3 final evaluation continues using `validate_population` and `load_inputs`
+through the legacy import. RQ3 selective review and computational efficiency keep
+their direct `selected_identity` imports. Their existing artifact paths and
+schemas are unchanged; this relocation does not alter any RQ3 consumer.
+
 Apply the permanently frozen development weights **0.89 confidence / 0.01 class /
 0.10 localisation** to existing final-test predictions. This is not a search,
 selection or optimisation workflow. Existing equal-weight and final outputs remain
@@ -72,7 +89,7 @@ performance-driven model changes are introduced.
 After review and committing execution inputs, from the repository root:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq2_weighted_final_evaluation --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2.weighted_final_evaluation --dicc
 ```
 
 CPU-only; existing NumPy, SciPy and PyYAML suffice. No GPU, detector inference,
