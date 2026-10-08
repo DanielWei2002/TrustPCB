@@ -2,16 +2,98 @@
 
 import copy
 import hashlib
+import importlib
 from pathlib import Path
+import runpy
+import subprocess
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from trustpcb import rq2_final_evaluation as evaluation
+from trustpcb.rq2 import final_evaluation as evaluation
+
+
+class PackageCompatibilityTests(unittest.TestCase):
+    def test_both_fresh_import_orders_and_patch_propagation(self):
+        names = ("trustpcb.rq2_final_evaluation", "trustpcb.rq2.final_evaluation")
+        for order in (names, names[::-1]):
+            with self.subTest(order=order):
+                script = f"""
+import importlib, sys
+from unittest.mock import patch
+a, b = [importlib.import_module(name) for name in {order!r}]
+assert a is b
+for source, target in ((a, b), (b, a)):
+    with patch.object(source, 'frozen_test_images', return_value='synthetic') as loader:
+        assert target.frozen_test_images(None) == 'synthetic'
+        loader.assert_called_once_with(None)
+assert 'torch' not in sys.modules and 'ultralytics' not in sys.modules
+"""
+                subprocess.run([sys.executable, "-B", "-c", script], check=True, capture_output=True)
+
+    def test_downstream_live_identity_and_actual_interfaces(self):
+        from trustpcb import rq2_weighted_final_evaluation as weighted
+        from trustpcb import rq3_final_evaluation as rq3
+        from trustpcb import rq3_selective_review as review
+        from trustpcb import rq3_computational_efficiency as efficiency
+        legacy = importlib.import_module("trustpcb.rq2_final_evaluation")
+        consumers = (legacy, weighted.final, rq3.frozen.final,
+                     review.selected_identity.__globals__["final"],
+                     efficiency.selected_identity.__globals__["final"])
+        for consumer in consumers:
+            self.assertIs(consumer, evaluation)
+            self.assertIs(consumer.raw.rq2_detector_training.MANIFESTS,
+                          evaluation.raw.rq2_detector_training.MANIFESTS)
+            for source, target in ((consumer, evaluation), (evaluation, consumer)):
+                with patch.object(source, "frozen_test_images", return_value=["synthetic"]) as loader:
+                    self.assertEqual(target.frozen_test_images(Path("synthetic")), ["synthetic"])
+                    loader.assert_called_once()
+                with patch.object(source, "MANIFEST_SHA", "synthetic"):
+                    self.assertEqual(target.MANIFEST_SHA, "synthetic")
+
+    def test_canonical_dependencies_and_default_bindings(self):
+        for alias, name in (("raw", "confidence_distribution"), ("matching", "calibration_analysis"),
+                            ("calibration", "calibrator_comparison"), ("final", "final_calibrator"),
+                            ("stability", "transformation_stability"), ("risk", "risk_evaluation"),
+                            ("sensitivity", "risk_sensitivity")):
+            self.assertIs(getattr(evaluation, alias), importlib.import_module(f"trustpcb.rq2.{name}"))
+        self.assertIs(evaluation.resolve_input, importlib.import_module("trustpcb.rq2.artifact_paths").resolve_input)
+        self.assertEqual(evaluation.run.__defaults__,
+                         (evaluation._original, evaluation.stability._predict, evaluation.matching.read_ground_truth))
+        self.assertEqual((evaluation.SEED, evaluation.REPLICATES, evaluation.IMAGE_COUNT), (24209199, 10000, 2052))
+        self.assertEqual(evaluation.OUTPUT, "runs/rq2/final_evaluation")
+
+    def test_both_module_help_commands_without_model_imports(self):
+        for name in ("trustpcb.rq2_final_evaluation", "trustpcb.rq2.final_evaluation"):
+            result = subprocess.run([sys.executable, "-B", "-m", name, "--help"],
+                                    check=True, capture_output=True, text=True)
+            self.assertIn("--dicc", result.stdout)
+
+    def test_legacy_module_execution_dispatches_canonical_main(self):
+        with patch.object(evaluation, "main") as main:
+            runpy.run_path(str(Path(__file__).resolve().parents[1] / "src/trustpcb/rq2_final_evaluation.py"),
+                           run_name="__main__")
+        main.assert_called_once_with()
+
+    def test_parser_dispatch_with_synthetic_paths(self):
+        root, dataset = Path("synthetic"), Path("synthetic_dataset")
+        with patch.object(evaluation.os, "name", "posix"), \
+             patch.object(evaluation, "find_project_root", return_value=root), \
+             patch.object(evaluation, "load_paths", return_value=SimpleNamespace(project_root=root, dataset_root=dataset)), \
+             patch.object(evaluation, "run", return_value="synthetic_output") as run, patch("builtins.print"):
+            evaluation.main(["--dicc"])
+        run.assert_called_once_with(root, dataset)
+
+    def test_missing_flag_blocks_before_paths(self):
+        with patch.object(evaluation.os, "name", "posix"), patch.object(evaluation, "find_project_root") as root:
+            with self.assertRaisesRegex(RuntimeError, "DICC-only"):
+                evaluation.main([])
+        root.assert_not_called()
 
 
 def prediction(image, confidence=.8, box=(20, 20, 40, 40)):
@@ -230,11 +312,16 @@ class OrchestrationTests(unittest.TestCase):
         provenance = evaluation.rq1._read_json(output / "provenance.json")
         self.assertEqual(provenance["test_role"], evaluation.ROLE)
         self.assertEqual(provenance["status"], "complete")
+        self.assertEqual(provenance["experiment"], "rq2_final_evaluation")
         self.assertEqual(provenance["beta_parameters"], list(evaluation.BETA))
         self.assertEqual(provenance["risk_formulas"], evaluation.risk.FORMULAS)
         for name, digest in provenance["output_sha256"].items():
             self.assertEqual(evaluation.rq1._sha(output / name), digest)
         labelled = evaluation.risk.read_csv(output / "labelled_predictions.csv")
+        original = evaluation.risk.read_csv(output / "original_predictions.csv")
+        self.assertEqual(list(original[0]), [*evaluation.raw.FIELDS, "prediction_id", "raw_confidence",
+                                           "calibrated_confidence", "checkpoint_sha256", "checkpoint_epoch"])
+        self.assertEqual([r["prediction_id"] for r in original], [r["prediction_id"] for r in labelled])
         metrics = evaluation.rq1._read_json(output / "calibration_metrics.json")["metrics"]
         expected = evaluation.calibration.metric_summary([float(r["calibrated_confidence"]) for r in labelled], [int(r["correct_iou50"]) for r in labelled])
         self.assertEqual(metrics["Beta"], expected)
@@ -265,6 +352,21 @@ class OrchestrationTests(unittest.TestCase):
     def test_missing_transformed_views_rejected(self):
         with self.assertRaisesRegex(RuntimeError, "Incomplete transformed"):
             self.execute(transformed=lambda *args: iter(()))
+
+    def test_duplicate_original_image_rejected(self):
+        def duplicate(root, dataset, images, metadata):
+            yield images[0], [prediction(images[0])]
+            yield images[0], [prediction(images[0])]
+        with self.assertRaisesRegex(RuntimeError, "duplicate/misordered original"):
+            self.execute(original=duplicate)
+
+    def test_misordered_transformed_views_rejected(self):
+        def reordered(*args):
+            rows = list(self.transformed(*args))
+            rows[0], rows[1] = rows[1], rows[0]
+            yield from rows
+        with self.assertRaisesRegex(RuntimeError, "duplicate/misordered transformed"):
+            self.execute(transformed=reordered)
 
     def test_windows_gate_before_data_or_inference(self):
         with patch.object(evaluation.os, "name", "nt"), patch.object(evaluation, "run") as run:
