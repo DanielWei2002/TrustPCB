@@ -1,9 +1,14 @@
 """Synthetic secondary-target fixtures only; primary outputs remain immutable."""
 
+import contextlib
 import copy
+import io
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -23,7 +28,124 @@ def population():
     return images, rows
 
 
+class SensitivityCompatibilityTests(unittest.TestCase):
+    def python(self, args):
+        root = Path(__file__).resolve().parents[1]
+        env = os.environ.copy()
+        env["PYTHONPATH"] = os.pathsep.join((str(root / "src"), env.get("PYTHONPATH", "")))
+        result = subprocess.run([sys.executable, "-B", *args], cwd=root, env=env,
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        return result.stdout
+
+    def imports(self, first, second):
+        self.python(["-c", f"""
+import importlib
+import sys
+from pathlib import Path
+from unittest.mock import patch
+first = importlib.import_module({first!r})
+second = importlib.import_module({second!r})
+from trustpcb import rq2_risk_sensitivity as legacy, rq2_risk_evaluation as old_primary
+from trustpcb.rq2 import risk_sensitivity as canonical, risk_evaluation as primary
+from trustpcb import rq2_weighted_fusion as fusion, rq2_final_evaluation as evaluation
+from trustpcb import rq2_weighted_final_evaluation as weighted
+from trustpcb import rq3_selective_review as review, rq3_computational_efficiency as efficiency
+from trustpcb import rq3_final_evaluation as rq3
+assert first is second is legacy is canonical
+assert sys.modules["trustpcb.rq2_risk_sensitivity"] is canonical
+assert sys.modules["trustpcb.rq2.risk_sensitivity"] is canonical
+assert Path(canonical.__file__).resolve() == Path("src/trustpcb/rq2/risk_sensitivity.py").resolve()
+assert canonical.primary is primary is old_primary
+consumers = (fusion.sensitivity, evaluation.sensitivity, weighted.sensitivity,
+             review.fusion.sensitivity, efficiency.fusion.sensitivity,
+             rq3.frozen.sensitivity, rq3.review.fusion.sensitivity)
+assert all(item is canonical for item in consumers)
+for name in ("OUTPUT", "LABEL", "TARGET", "CORRECTNESS", "SEED", "REPLICATES",
+             "DEFINITIONS", "sensitivity_rows", "load_inputs", "run", "main", "primary"):
+    assert getattr(legacy, name) is getattr(canonical, name)
+for name in ("sensitivity_rows", "load_inputs", "run", "main"):
+    assert getattr(canonical, name).__globals__ is canonical.__dict__
+assert (canonical.SEED, canonical.REPLICATES) == (24209199, 10000)
+assert canonical.OUTPUT == "runs/rq2/risk_sensitivity_iou75"
+assert canonical.LABEL == "Secondary IoU>=0.75 sensitivity analysis"
+assert canonical.TARGET == "incorrect_iou75 = 1 - frozen IoU75 correctness"
+assert canonical.CORRECTNESS == "same-class one-to-one IoU >= 0.75; existing secondary labels only"
+assert canonical.DEFINITIONS == dict(primary.DEFINITIONS, target=canonical.TARGET)
+for owner, observer in ((legacy, canonical), (canonical, legacy)):
+    with patch.object(owner, "LABEL", "synthetic"):
+        assert all(item.LABEL == observer.LABEL == "synthetic" for item in consumers)
+    with patch.dict(owner.DEFINITIONS, synthetic="shared"):
+        assert all(item.DEFINITIONS["synthetic"] == "shared" for item in consumers)
+    with patch.object(owner, "sensitivity_rows", return_value="synthetic") as mocked:
+        for item in consumers:
+            assert item.sensitivity_rows is observer.sensitivity_rows is mocked
+            assert item.sensitivity_rows("fixture") == "synthetic"
+        assert mocked.call_count == len(consumers)
+for owner in (old_primary, primary):
+    for name in ("load_inputs", "risk_scores", "bootstrap", "evaluation_tables", "nullable"):
+        with patch.object(owner, name, return_value="synthetic") as mocked:
+            for item in consumers:
+                assert getattr(item.primary, name) is mocked
+                assert getattr(item.primary, name)("fixture") == "synthetic"
+            assert mocked.call_count == len(consumers)
+assert "torch" not in sys.modules and "ultralytics" not in sys.modules
+"""])
+
+    def test_legacy_first(self):
+        self.imports("trustpcb.rq2_risk_sensitivity", "trustpcb.rq2.risk_sensitivity")
+
+    def test_canonical_first(self):
+        self.imports("trustpcb.rq2.risk_sensitivity", "trustpcb.rq2_risk_sensitivity")
+
+    def test_legacy_help(self):
+        self.assertIn("--dicc", self.python(["-m", "trustpcb.rq2_risk_sensitivity", "--help"]))
+
+    def test_canonical_help(self):
+        self.assertIn("--dicc", self.python(["-m", "trustpcb.rq2.risk_sensitivity", "--help"]))
+
+    def test_legacy_main_dispatch(self):
+        self.python(["-c", """
+import runpy
+from unittest.mock import patch
+from trustpcb.rq2 import risk_sensitivity
+with patch.object(risk_sensitivity, "main") as main:
+    runpy.run_path("src/trustpcb/rq2_risk_sensitivity.py", run_name="__main__")
+    main.assert_called_once_with()
+"""])
+
+    def test_parser_dispatch_mock_only(self):
+        with patch.object(sensitivity, "os", SimpleNamespace(name="posix")), \
+                patch.object(sensitivity, "find_project_root", return_value="synthetic-root"), \
+                patch.object(sensitivity, "run", return_value="synthetic") as run, \
+                contextlib.redirect_stdout(io.StringIO()):
+            sensitivity.main(["--dicc"])
+        run.assert_called_once_with("synthetic-root")
+
+    def test_missing_dicc_blocks_before_access(self):
+        with patch.object(sensitivity, "os", SimpleNamespace(name="posix")), \
+                patch.object(sensitivity, "find_project_root") as root, patch.object(sensitivity, "run") as run:
+            with self.assertRaisesRegex(RuntimeError, "DICC-only"):
+                sensitivity.main([])
+            root.assert_not_called()
+            run.assert_not_called()
+
+
 class TargetMetricTests(unittest.TestCase):
+    def test_empty_agreeing_aliases_and_exact_row_preservation(self):
+        self.assertEqual(sensitivity.sensitivity_rows([]), [])
+        _, rows = population()
+        for row in rows:
+            row["correct_iou75"] = int(row["correct_at_iou75"])
+        before = copy.deepcopy(rows)
+        adapted = sensitivity.sensitivity_rows(rows)
+        self.assertEqual(adapted, sensitivity.sensitivity_rows(rows))
+        for original, result in zip(rows, adapted):
+            self.assertIsNot(original, result)
+            self.assertEqual({k: result[k] for k in original if k != "incorrect_prediction"},
+                             {k: v for k, v in original.items() if k != "incorrect_prediction"})
+        self.assertEqual(rows, before)
+
     def test_secondary_inversion_preserves_primary_and_input(self):
         _, rows = population()
         before = copy.deepcopy(rows)
@@ -103,6 +225,12 @@ class InputTests(unittest.TestCase):
             row["image"] = images[index]
         validated = p.validate_rows(images, rows, expected_count=4)
         self.assertEqual(len(sensitivity.sensitivity_rows(validated)), 4)
+        duplicates = copy.deepcopy(rows)
+        duplicates[1]["prediction_id"] = duplicates[0]["prediction_id"]
+        with self.assertRaisesRegex(ValueError, "Duplicate"):
+            p.validate_rows(images, duplicates, expected_count=4)
+        with self.assertRaises(ValueError):
+            p.validate_rows(images, rows[:-1], expected_count=4)
         with self.assertRaises(ValueError):
             p.validate_rows(images, rows)
         rows[0]["image"] = "images/val/final-test.jpg"
@@ -139,6 +267,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(info["risk_formulas"], p.FORMULAS)
         self.assertEqual(info["metric_definitions"]["target"], sensitivity.TARGET)
         self.assertEqual(info["status"], "complete")
+        self.assertEqual(info["experiment"], "rq2_risk_sensitivity_iou75")
         for name, digest in info["output_sha256"].items():
             self.assertEqual(sensitivity.rq1._sha(output / name), digest)
         summary = sensitivity.rq1._read_json(output / "summary.json")
@@ -146,6 +275,14 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(summary["incorrect_prevalence"], .75)
         self.assertEqual(len(p.read_csv(output / "method_metrics.csv")), 8)
         self.assertEqual(len(p.read_csv(output / "bootstrap_metrics.csv")), 32 * 8)
+        methods = p.read_csv(output / "method_metrics.csv")
+        self.assertEqual([r["method"] for r in methods], list(p.METHODS))
+        audit = p.read_csv(output / "bootstrap_metrics.csv")
+        self.assertEqual(list(audit[0]), ["analysis_label", "replicate", "method", "auroc",
+                                        "auprc", "auroc_valid", "auprc_valid"])
+        self.assertEqual([(r["replicate"], r["method"]) for r in audit],
+                         [(str(i), method) for i in range(32) for method in p.METHODS])
+        self.assertTrue(all(r["analysis_label"] == sensitivity.LABEL for r in audit))
         with self.assertRaises(FileExistsError):
             sensitivity.run(self.root)
 
