@@ -89,7 +89,8 @@ wholesale locally.
 
 RQ1 and RQ2 are organized into `src/trustpcb/rq1/` and `src/trustpcb/rq2/`.
 Legacy flat RQ2 module paths remain as compatibility shims. RQ3 package migration
-has begun: `trustpcb.rq3.selective_review` is canonical, with a legacy compatibility
-shim; `computational_efficiency` and `final_evaluation` remain flat and unmigrated.
+is incomplete: `trustpcb.rq3.selective_review` and
+`trustpcb.rq3.computational_efficiency` are canonical, with legacy compatibility
+shims; `final_evaluation` remains flat and unmigrated.
 Module commands use `PYTHONPATH=src`. Dataset roots are configured using
 [the local-path example](configs/paths.example.yaml).
