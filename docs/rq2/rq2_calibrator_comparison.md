@@ -123,11 +123,13 @@ and `rq2.data_partition`, retaining the `analysis`, `raw` and `partition` attrib
 
 Comparison provenance continues to use the executing Git commit and input/output
 hashes; it has no separate source-file hash inventory. Function metadata now
-identifies `trustpcb.rq2.calibrator_comparison.fit_calibrator`. The unmoved final
-calibrator currently writes a fixed implementation-label string,
-`trustpcb.rq2_calibrator_comparison.fit_calibrator`; it is not dynamically derived
-and remains unchanged in this phase. That legacy name resolves to the same
-canonical function. Historical metadata and hashes are never rewritten, and
+identifies `trustpcb.rq2.calibrator_comparison.fit_calibrator`. The final calibrator
+is canonical at `trustpcb.rq2.final_calibrator`; both workflows retain their legacy
+flat module paths as compatibility aliases and CLI shims. The final calibrator's
+fixed implementation label, `trustpcb.rq2_calibrator_comparison.fit_calibrator`,
+is intentionally preserved for protocol identity and is not dynamically derived.
+That legacy name resolves to the same canonical function. Historical metadata
+and hashes are never rewritten, and
 completed experiments must not be rerun because the source moved.
 
 This is CPU work; no GPU, PyTorch or Ultralytics is required. The CLI rejects

@@ -87,6 +87,7 @@ on DICC. Local work is limited to implementation, inspection and CPU-safe tests
 with synthetic or deliberately tiny inputs. Do not run the original notebooks
 wholesale locally.
 
-Current module entry points remain unchanged and use `PYTHONPATH=src`; package
-restructuring is deferred. Dataset roots are configured using
+RQ1 and RQ2 are organized into `src/trustpcb/rq1/` and `src/trustpcb/rq2/`.
+Legacy flat RQ2 module paths remain as compatibility shims. RQ3 has not yet been
+migrated. Module commands use `PYTHONPATH=src`. Dataset roots are configured using
 [the local-path example](configs/paths.example.yaml).
