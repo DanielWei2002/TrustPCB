@@ -87,10 +87,10 @@ on DICC. Local work is limited to implementation, inspection and CPU-safe tests
 with synthetic or deliberately tiny inputs. Do not run the original notebooks
 wholesale locally.
 
-RQ1 and RQ2 are organized into `src/trustpcb/rq1/` and `src/trustpcb/rq2/`.
-Legacy flat RQ2 module paths remain as compatibility shims. RQ3 package migration
-is incomplete: `trustpcb.rq3.selective_review` and
-`trustpcb.rq3.computational_efficiency` are canonical, with legacy compatibility
-shims; `final_evaluation` remains flat and unmigrated.
+RQ1 and RQ2 package migrations are complete under `src/trustpcb/rq1/` and
+`src/trustpcb/rq2/`. RQ3 package migration is complete: `selective_review`,
+`computational_efficiency`, and `final_evaluation` are canonical under
+`trustpcb.rq3`. Legacy flat RQ2 and RQ3 paths remain compatibility shims.
+A final repository-wide audit remains before the reorganization is finished.
 Module commands use `PYTHONPATH=src`. Dataset roots are configured using
 [the local-path example](configs/paths.example.yaml).

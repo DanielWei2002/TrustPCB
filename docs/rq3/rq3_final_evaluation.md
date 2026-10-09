@@ -1,5 +1,12 @@
 # Frozen RQ3 final evaluation
 
+The completed workflow is canonical at `trustpcb.rq3.final_evaluation`.
+`trustpcb.rq3_final_evaluation` remains a compatibility import/CLI shim; both
+imports resolve to the same live module. The `review` and `frozen` aliases refer
+to `trustpcb.rq3.selective_review` and `trustpcb.rq2.weighted_final_evaluation`.
+Completed results, historical experiment identifiers and provenance are unchanged.
+This structural relocation does not require rerunning the evaluation.
+
 Apply the frozen development referral protocol to exactly 2,052 test crops and
 17,840 existing retained predictions. Population description:
 "held out from RQ2 training and development, previously used for RQ1 validation."
@@ -7,7 +14,7 @@ This is final evaluation, with no method or operating-point selection on test.
 
 ## Inputs and safeguards
 
-Reuse `rq2_weighted_final_evaluation.load_inputs()` for text-only validation of:
+Reuse `trustpcb.rq2.weighted_final_evaluation.load_inputs()` for text-only validation of:
 
 - `configs/datasets/similarity_aware_val_images.txt`, its pinned identity and
   separation from the frozen detector-training/development manifests
@@ -29,6 +36,10 @@ all five methods and nominal 5/10/20 budgets, strict `>` semantics and disabled
 test retuning. Validate development weight identity against the reused frozen
 weight evidence. Record the threshold file hash, source provenance hash and exact
 applied values. Missing inputs fail; nothing is regenerated.
+
+The original development threshold/provenance evidence remains authoritative;
+the separate development reporting extension is not substituted for it. Final
+output schemas remain unchanged rather than being harmonized with that extension.
 
 All existing evidence remains read-only. No images, annotation files or checkpoint
 bytes are accessed. No detector/transform inference, calibration fitting or
@@ -75,17 +86,19 @@ Negative favours weighted for AURC/remaining error; positive favours it for capt
 
 ## DICC execution and outputs
 
-After reviewing and committing the execution inputs, from the repository root:
+The preserved DICC command is shown for reproducibility, not as a request to
+rerun the completed evaluation. Any separately approved execution requires
+committed inputs and runs from the repository root:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq3_final_evaluation --dicc
+PYTHONPATH=src python -B -m trustpcb.rq3.final_evaluation --dicc
 ```
 
 CPU-only DICC analysis of stored artifacts; GPU is unnecessary. Do not run the
 real evaluation locally. The CLI rejects Windows and requires `--dicc`.
 The development threshold file/provenance and full RQ2 prediction tables must exist
-on DICC. This preparation does not establish their actual hashes locally or reveal
-any final RQ3 result. Execution validates them before analysis.
+on DICC. Execution validates their identities before analysis; this migration
+does not regenerate evidence or recalculate final RQ3 results.
 
 Write only `runs/rq3/final_evaluation/`:
 
