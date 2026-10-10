@@ -12,10 +12,12 @@ unchanged. Future Git/version/timestamp metadata remain dynamic. This workflow
 does not hash its own source file; the shim and canonical implementation are
 different source files, not interchangeable source hashes.
 
-RQ3 final evaluation continues using `validate_population` and `load_inputs`
-through the legacy import. RQ3 selective review and computational efficiency keep
-their direct `selected_identity` imports. Their existing artifact paths and
-schemas are unchanged; this relocation does not alter any RQ3 consumer.
+Canonical RQ3 final evaluation imports `trustpcb.rq2.weighted_final_evaluation`
+directly to use `validate_population` and `load_inputs`. The legacy
+`trustpcb.rq2_weighted_final_evaluation` path remains available as a compatibility
+shim. RQ3 selective review and computational efficiency intentionally preserve
+their direct `selected_identity` bindings. Their existing artifact paths and
+schemas remain unchanged.
 
 Apply the permanently frozen development weights **0.89 confidence / 0.01 class /
 0.10 localisation** to existing final-test predictions. This is not a search,

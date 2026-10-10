@@ -5,7 +5,9 @@ Canonical source: `src/trustpcb/rq3/selective_review.py`; module:
 aliases the same live module, and its CLI dispatches to the canonical `main()`.
 RQ2 dependencies use canonical package imports; `selected_identity` remains a
 directly bound import, patched in the selective-review namespace when needed.
-The still-flat RQ3 final evaluator continues using the compatibility alias.
+RQ3 final evaluation is canonical at `trustpcb.rq3.final_evaluation` and imports
+`trustpcb.rq3.selective_review` directly. The legacy `trustpcb.rq3_selective_review`
+path remains supported as a compatibility/CLI shim.
 
 The package move preserves fixed experiment identifiers and all completed evidence.
 This workflow has no source-file hash identity; future Git/version/time metadata
