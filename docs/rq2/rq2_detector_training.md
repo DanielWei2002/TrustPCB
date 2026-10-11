@@ -44,11 +44,17 @@ From the repository root, with the intended DICC Python environment activated:
 
 ```sh
 # CPU-safe, text-only plan; does not create runtime files or load models.
-PYTHONPATH=src python -B -m trustpcb.rq2_detector_training plan
+PYTHONPATH=src python -B -m trustpcb.rq2.detector_training plan
 
 # DICC ONLY: launches the fresh GPU training worker.
-PYTHONPATH=src python -B -m trustpcb.rq2_detector_training train --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2.detector_training train --dicc
 ```
+
+The canonical implementation is `src/trustpcb/rq2/detector_training.py`.
+The legacy `trustpcb.rq2_detector_training` import and module command remain
+supported: imports alias the same module object, and CLI execution calls the
+canonical `main()`. New workers invoke `trustpcb.rq2.detector_training _worker
+--dicc` with the existing worker environment guards and arguments.
 
 The launcher sets `PYTHONHASHSEED=24209199` before the fresh worker starts.
 Absolute train/dev manifests and YAML are generated under the ignored
@@ -108,6 +114,27 @@ runtime input hashes, original pretrained path/hash/size, Python/package version
 timestamps, selected epoch/stored score/checkpoint path/hash/size, and CSV/args
 hashes. Original pretrained and runtime input identities are checked before and
 after training and before reuse.
+
+Future `input_hashes` include exactly these source/configuration files:
+
+- `src/trustpcb/rq2/detector_training.py`
+- `src/trustpcb/rq2_detector_training.py` (legacy entry point)
+- `src/trustpcb/rq2/__init__.py`
+- `src/trustpcb/rq1/__init__.py`
+- `src/trustpcb/rq1/__main__.py`
+- `src/trustpcb/rq1/workflow.py`
+- `src/trustpcb/dataset_config.py`
+- `configs/datasets/dspcbsd_rq2_train_dev.yaml`
+- `configs/experiments/yolov8n_preliminary_baseline_v1.yaml`
+
+Frozen manifest identities remain recorded separately in `frozen_manifests`.
+The existing RQ1 source inventory is retained; common provenance helpers were
+not separately hashed by this plan and remain covered by the unchanged Git
+commit and clean-source checks. Historical receipts retain their original
+source paths and hashes. They may fail strict reuse after this migration;
+do not edit receipts, rerun completed training, or relax checks to bypass that
+source-identity difference. Downstream readers can continue using the frozen
+selected checkpoint.
 
 An exclusive runner lock and sidecar reservation prevent concurrent/overwriting
 runs. Incomplete runs, orphan output directories, altered runtime files or stale

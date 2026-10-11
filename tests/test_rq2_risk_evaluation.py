@@ -1,9 +1,14 @@
 """Synthetic development ranking fixtures only; no research run or image access."""
 
+import contextlib
 import csv
+import io
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -24,7 +29,116 @@ def population():
     return images, rows
 
 
+class RiskCompatibilityTests(unittest.TestCase):
+    def python(self, args):
+        root = Path(__file__).resolve().parents[1]
+        env = os.environ.copy()
+        env["PYTHONPATH"] = os.pathsep.join((str(root / "src"), env.get("PYTHONPATH", "")))
+        result = subprocess.run([sys.executable, "-B", *args], cwd=root, env=env,
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        return result.stdout
+
+    def imports(self, first, second):
+        self.python(["-c", f"""
+import importlib
+import sys
+from pathlib import Path
+from unittest.mock import patch
+first = importlib.import_module({first!r})
+second = importlib.import_module({second!r})
+from trustpcb import rq2_risk_evaluation as legacy
+from trustpcb.rq2 import risk_evaluation as canonical, final_calibrator, artifact_paths
+from trustpcb.rq2 import calibrator_comparison, calibration_analysis, confidence_distribution, data_partition
+from trustpcb import rq2_risk_sensitivity as sensitivity, rq2_weighted_fusion as fusion
+from trustpcb import rq2_final_evaluation as evaluation, rq2_weighted_final_evaluation as weighted
+from trustpcb import rq3_selective_review as review, rq3_computational_efficiency as efficiency
+from trustpcb import rq3_final_evaluation as rq3
+assert first is second is legacy is canonical
+assert sys.modules["trustpcb.rq2_risk_evaluation"] is canonical
+assert sys.modules["trustpcb.rq2.risk_evaluation"] is canonical
+assert Path(canonical.__file__).resolve() == Path("src/trustpcb/rq2/risk_evaluation.py").resolve()
+assert canonical.final is final_calibrator
+assert canonical.resolve_input is artifact_paths.resolve_input
+assert canonical.final.comparison is calibrator_comparison
+assert canonical.final.comparison.analysis is calibration_analysis
+assert canonical.final.comparison.raw is confidence_distribution
+assert canonical.final.comparison.partition is data_partition
+consumers = (sensitivity.primary, fusion.risk, evaluation.risk, weighted.risk,
+             review.risk, efficiency.risk, rq3.review.risk, rq3.frozen.risk)
+assert all(item is canonical for item in consumers)
+for name in ("OUTPUT", "STABILITY", "INPUT", "SEED", "REPLICATES", "IMAGE_COUNT",
+             "PREDICTION_COUNT", "SIGNALS", "FORMULAS", "METHODS", "PAIRS", "DEFINITIONS",
+             "read_csv", "validate_rows", "load_inputs", "risk_scores", "ranking_plan",
+             "weighted_metrics", "nullable", "metrics", "interval", "bootstrap",
+             "evaluation_tables", "diagnostics", "run", "main", "final"):
+    assert getattr(legacy, name) is getattr(canonical, name)
+assert (canonical.SEED, canonical.REPLICATES, canonical.IMAGE_COUNT, canonical.PREDICTION_COUNT) == (24209199, 10000, 821, 7131)
+assert canonical.validate_rows.__defaults__ == (7131,)
+assert canonical.bootstrap.__kwdefaults__ == dict(replicates=10000, seed=24209199, methods=None)
+for owner, observer in ((legacy, canonical), (canonical, legacy)):
+    with patch.object(owner, "METHODS", ("synthetic",)):
+        assert all(item.METHODS is observer.METHODS for item in consumers)
+    with patch.dict(owner.FORMULAS, synthetic="shared"):
+        assert all(item.FORMULAS["synthetic"] == "shared" for item in consumers)
+    for name in ("load_inputs", "risk_scores", "metrics", "interval", "bootstrap", "evaluation_tables"):
+        with patch.object(owner, name, return_value="synthetic") as mocked:
+            for item in consumers:
+                assert getattr(item, name) is getattr(observer, name) is mocked
+                assert getattr(item, name)("fixture") == "synthetic"
+            assert mocked.call_count == len(consumers)
+assert "torch" not in sys.modules and "ultralytics" not in sys.modules
+"""])
+
+    def test_legacy_first(self):
+        self.imports("trustpcb.rq2_risk_evaluation", "trustpcb.rq2.risk_evaluation")
+
+    def test_canonical_first(self):
+        self.imports("trustpcb.rq2.risk_evaluation", "trustpcb.rq2_risk_evaluation")
+
+    def test_legacy_help(self):
+        self.assertIn("--dicc", self.python(["-m", "trustpcb.rq2_risk_evaluation", "--help"]))
+
+    def test_canonical_help(self):
+        self.assertIn("--dicc", self.python(["-m", "trustpcb.rq2.risk_evaluation", "--help"]))
+
+    def test_legacy_main_dispatch(self):
+        self.python(["-c", """
+import runpy
+from unittest.mock import patch
+from trustpcb.rq2 import risk_evaluation
+with patch.object(risk_evaluation, "main") as main:
+    runpy.run_path("src/trustpcb/rq2_risk_evaluation.py", run_name="__main__")
+    main.assert_called_once_with()
+"""])
+
+    def test_parser_dispatch_mock_only(self):
+        with patch.object(risk, "os", SimpleNamespace(name="posix")), \
+                patch.object(risk, "find_project_root", return_value="synthetic-root"), \
+                patch.object(risk, "run", return_value="synthetic") as run, \
+                contextlib.redirect_stdout(io.StringIO()):
+            risk.main(["--dicc"])
+        run.assert_called_once_with("synthetic-root")
+
+    def test_missing_dicc_blocks_before_access(self):
+        with patch.object(risk, "os", SimpleNamespace(name="posix")), \
+                patch.object(risk, "find_project_root") as root, patch.object(risk, "run") as run:
+            with self.assertRaisesRegex(RuntimeError, "DICC-only"):
+                risk.main([])
+            root.assert_not_called()
+            run.assert_not_called()
+
+
 class FormulaMetricTests(unittest.TestCase):
+    def test_component_endpoints_and_stable_ranking(self):
+        rows = [{key: value for key in ("raw_confidence", *risk.SIGNALS)} for value in (0., 1.)]
+        for scores in risk.risk_scores(rows).values():
+            np.testing.assert_array_equal(scores, [1., 0.])
+        order, starts, labels = risk.ranking_plan([.2, .8, .8, .1], [0, 1, 0, 1])
+        np.testing.assert_array_equal(order, [1, 2, 0, 3])
+        np.testing.assert_array_equal(starts, [0, 2, 3])
+        np.testing.assert_array_equal(labels, [1, 0, 0, 1])
+
     def test_all_eight_equal_weight_formulas(self):
         row = {"raw_confidence": .2, "calibrated_confidence": .4, "class_consistency": .7, "localisation_stability": .9}
         result = risk.risk_scores([row])
@@ -229,6 +343,17 @@ class InputBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "identity/order"):
             risk.load_inputs(self.root)
 
+    def test_missing_row_rejected_with_updated_hash(self):
+        table = self.root / risk.INPUT
+        rows = risk.read_csv(table)[:-1]
+        table.unlink()
+        risk.final.comparison.write_csv(table, rows)
+        provenance = risk.rq1._read_json(self.stability / "provenance.json")
+        provenance["output_sha256"][table.name] = risk.rq1._sha(table)
+        risk.rq1._write_json(self.stability / "provenance.json", provenance)
+        with self.assertRaisesRegex(ValueError, "population count"):
+            risk.load_inputs(self.root)
+
 
 class WorkflowTests(unittest.TestCase):
     def setUp(self):
@@ -248,6 +373,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(info["risk_formulas"], risk.FORMULAS)
         self.assertEqual(info["bootstrap_seed"], 24209199)
         self.assertEqual(info["status"], "complete")
+        self.assertEqual(info["experiment"], "rq2_risk_evaluation")
         self.assertEqual(info["input_sha256"][risk.INPUT], "synthetic")
         for name, digest in info["output_sha256"].items():
             self.assertEqual(risk.rq1._sha(output / name), digest)
@@ -256,6 +382,14 @@ class WorkflowTests(unittest.TestCase):
         self.assertFalse(summary["weights_tuned"])
         self.assertFalse(summary["threshold_selected"])
         self.assertEqual(len(risk.read_csv(output / "bootstrap_metrics.csv")), 32 * 8)
+        audit = risk.read_csv(output / "bootstrap_metrics.csv")
+        self.assertEqual(list(audit[0]), ["replicate", "method", "auroc", "auprc", "auroc_valid", "auprc_valid"])
+        self.assertEqual([(r["replicate"], r["method"]) for r in audit],
+                         [(str(i), method) for i in range(32) for method in risk.METHODS])
+        self.assertEqual([r["method"] for r in risk.read_csv(output / "method_metrics.csv")], list(risk.METHODS))
+        self.assertEqual(list(risk.read_csv(output / "pairwise_auroc_differences.csv")[0]),
+                         ["method_A", "method_B", "observed_delta_auroc", "bootstrap_mean",
+                          "lower_95", "upper_95", "valid_replicates", "invalid_replicates"])
         with self.assertRaises(FileExistsError):
             risk.run(self.root)
 

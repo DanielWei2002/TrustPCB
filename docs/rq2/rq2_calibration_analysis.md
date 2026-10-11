@@ -74,8 +74,22 @@ or required to execute this analysis. GPU is not needed.
 From the repository root on DICC:
 
 ```sh
-PYTHONPATH=src python -B -m trustpcb.rq2_calibration_analysis analyze --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2.calibration_analysis analyze --dicc
 ```
+
+The canonical implementation is `src/trustpcb/rq2/calibration_analysis.py`.
+The legacy `trustpcb.rq2_calibration_analysis` import and command remain supported:
+imports share the canonical module object, and the legacy CLI calls its `main()`.
+Dependencies use canonical `rq2.artifact_paths`, `rq2.confidence_distribution` and
+`rq2.detector_training`, retaining the existing `raw` and `rq2_detector_training`
+attributes for downstream consumers.
+
+Provenance continues to record the executing Git commit, input artifact hashes,
+frozen checkpoint/manifest identities and output hashes. It does not record a
+separate implementation path or source-file hash. Future commits identify the
+new layout; the experiment identifier, output paths and metadata schema remain
+unchanged. Completed evidence and historical hashes must not be rewritten or
+regenerated because the implementation moved.
 
 Local execution of the real development analysis is blocked. Synthetic unit tests
 remain CPU-safe:

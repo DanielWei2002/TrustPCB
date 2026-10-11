@@ -1,10 +1,15 @@
 """Tiny synthetic pixels, boxes and mocked predictions only. No detector imports."""
 
+import contextlib
 import csv
+import io
 import math
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -23,12 +28,127 @@ def detection(box=(20, 20, 40, 40), cls=0, confidence=.005):
     return {"box": list(box), "class_id": cls, "confidence": confidence}
 
 
+class StabilityCompatibilityTests(unittest.TestCase):
+    def python(self, args):
+        root = Path(__file__).resolve().parents[1]
+        env = os.environ.copy()
+        env["PYTHONPATH"] = os.pathsep.join((str(root / "src"), env.get("PYTHONPATH", "")))
+        result = subprocess.run([sys.executable, "-B", *args], cwd=root, env=env,
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        return result.stdout
+
+    def imports(self, first, second):
+        self.python(["-c", f"""
+import importlib
+import sys
+from pathlib import Path
+from unittest.mock import patch
+first = importlib.import_module({first!r})
+second = importlib.import_module({second!r})
+from trustpcb import rq2_transformation_stability as legacy
+from trustpcb.rq2 import transformation_stability as canonical
+from trustpcb.rq2 import final_calibrator, confidence_distribution, artifact_paths
+from trustpcb.rq2 import calibrator_comparison, calibration_analysis, data_partition, detector_training
+from trustpcb import rq2_final_evaluation as evaluation, rq2_weighted_final_evaluation as weighted
+from trustpcb import rq2_risk_evaluation as risk, rq2_risk_sensitivity as sensitivity
+from trustpcb import rq2_weighted_fusion as fusion
+from trustpcb import rq3_computational_efficiency as efficiency, rq3_selective_review as review
+from trustpcb import rq3_final_evaluation as rq3
+assert first is second is legacy is canonical
+assert sys.modules["trustpcb.rq2_transformation_stability"] is canonical
+assert sys.modules["trustpcb.rq2.transformation_stability"] is canonical
+assert Path(canonical.__file__).resolve() == Path("src/trustpcb/rq2/transformation_stability.py").resolve()
+assert canonical.final is final_calibrator
+assert canonical.raw is confidence_distribution
+assert canonical.resolve_input is artifact_paths.resolve_input
+assert canonical.raw.rq2_detector_training is detector_training
+assert canonical.final.comparison is calibrator_comparison
+assert canonical.final.comparison.analysis is calibration_analysis
+assert canonical.final.comparison.partition is data_partition
+consumers = (evaluation.stability, weighted.final.stability, efficiency.stability,
+             rq3.frozen.final.stability)
+assert all(item is canonical for item in consumers)
+for name in ("OUTPUT", "FAMILIES", "SPECS", "RULES", "rectangle", "map_points",
+             "forward_matrix", "transform", "evaluable", "signed_area", "polygon_area",
+             "polygon_intersection", "polygon_iou", "assign", "match_transform",
+             "aggregate", "load_inputs", "_predict", "run", "main", "final", "raw"):
+    assert getattr(legacy, name) is getattr(canonical, name)
+assert evaluation.run.__defaults__[1] is canonical._predict
+# Risk workflows consume stability artifacts, not a transformation module import.
+assert risk.STABILITY == canonical.OUTPUT == "runs/rq2/transformation_stability"
+assert sensitivity.primary is risk
+assert fusion.risk is risk
+assert weighted.risk is risk
+assert review.risk is risk
+assert rq3.review.risk is risk
+for owner, observer in ((legacy, canonical), (canonical, legacy)):
+    with patch.object(owner, "SPECS", ("synthetic",)):
+        assert all(item.SPECS is observer.SPECS for item in consumers)
+    with patch.dict(owner.RULES, synthetic="shared"):
+        assert all(item.RULES["synthetic"] == "shared" for item in consumers)
+    for name in ("transform", "match_transform", "aggregate", "load_inputs", "_predict"):
+        with patch.object(owner, name, return_value="synthetic") as mocked:
+            for item in consumers:
+                assert getattr(item, name) is getattr(observer, name) is mocked
+                assert getattr(item, name)("fixture") == "synthetic"
+            assert mocked.call_count == len(consumers)
+# The downstream default is intentionally bound at definition time, as before.
+assert evaluation.run.__defaults__[1] is canonical._predict
+assert "torch" not in sys.modules and "ultralytics" not in sys.modules
+"""])
+
+    def test_legacy_first(self):
+        self.imports("trustpcb.rq2_transformation_stability", "trustpcb.rq2.transformation_stability")
+
+    def test_canonical_first(self):
+        self.imports("trustpcb.rq2.transformation_stability", "trustpcb.rq2_transformation_stability")
+
+    def test_legacy_help(self):
+        self.assertIn("--dicc", self.python(["-m", "trustpcb.rq2_transformation_stability", "--help"]))
+
+    def test_canonical_help(self):
+        self.assertIn("--dicc", self.python(["-m", "trustpcb.rq2.transformation_stability", "--help"]))
+
+    def test_legacy_main_dispatch(self):
+        self.python(["-c", """
+import runpy
+from unittest.mock import patch
+from trustpcb.rq2 import transformation_stability
+with patch.object(transformation_stability, "main") as main:
+    runpy.run_path("src/trustpcb/rq2_transformation_stability.py", run_name="__main__")
+    main.assert_called_once_with()
+"""])
+
+    def test_parser_dispatch_mock_only(self):
+        root, dataset = Path("synthetic-root"), Path("synthetic-dataset")
+        with patch.object(stability, "os", SimpleNamespace(name="posix")), \
+                patch.object(stability, "find_project_root", return_value=root), \
+                patch.object(stability, "load_paths", return_value=SimpleNamespace(project_root=root, dataset_root=dataset)), \
+                patch.object(stability, "run", return_value="synthetic") as run, \
+                contextlib.redirect_stdout(io.StringIO()):
+            stability.main(["--dicc"])
+        run.assert_called_once_with(root, dataset, stability._predict)
+
+    def test_missing_dicc_blocks_before_access(self):
+        with patch.object(stability, "os", SimpleNamespace(name="posix")), \
+                patch.object(stability, "find_project_root") as root, patch.object(stability, "run") as run:
+            with self.assertRaisesRegex(RuntimeError, "DICC-only"):
+                stability.main([])
+            root.assert_not_called()
+            run.assert_not_called()
+
+
 class TransformTests(unittest.TestCase):
     def setUp(self):
         self.image = np.arange(12 * 14 * 3, dtype=np.uint8).reshape(12, 14, 3)
 
     def test_exact_frozen_eleven_specs(self):
         self.assertEqual(len(stability.SPECS), 11)
+        self.assertEqual([s["id"] for s in stability.SPECS], [
+            "brightness_0.90", "brightness_1.10", "contrast_0.90", "contrast_1.10",
+            "blur_0.6", "rotation_-2", "rotation_+2", "translation_x_-0.02",
+            "translation_x_+0.02", "translation_y_-0.02", "translation_y_+0.02"])
         self.assertEqual([s["factor"] for s in stability.SPECS[:4]], [.9, 1.1, .9, 1.1])
         self.assertEqual(stability.SPECS[4]["sigma"], .6)
         self.assertEqual([s["degrees"] for s in stability.SPECS[5:7]], [-2, 2])
@@ -140,6 +260,25 @@ class PolygonTests(unittest.TestCase):
 
 
 class MatchingTests(unittest.TestCase):
+    def test_empty_references_and_invalid_iou(self):
+        mapped, audits = stability.match_transform([], [detection()], stability.SPECS[0], 100, 100)
+        self.assertEqual(len(mapped), 1)
+        self.assertEqual(audits, [])
+        self.assertEqual(stability.assign(np.empty((0, 2))), {})
+        for values in ([[float("nan")]], [[-.01]], [[1.01]], [1.]):
+            with self.assertRaises(ValueError):
+                stability.assign(values)
+
+    def test_no_evaluable_family_has_missing_scores(self):
+        audits = [{"transform_id": spec["id"], "family": spec["family"], "evaluable": False,
+                   "status": "not_evaluable", "class_consistency_value": None,
+                   "localisation_stability_value": None} for spec in stability.SPECS]
+        scores = stability.aggregate(audits)
+        self.assertIsNone(scores["class_consistency"])
+        self.assertIsNone(scores["localisation_stability"])
+        self.assertEqual(scores["n_evaluable_families"], 0)
+        self.assertEqual(scores["n_matched_transforms"], 0)
+
     def test_threshold_cardinality_before_iou(self):
         self.assertEqual(stability.assign([[1., .5], [.5, .49]]), {0: 1, 1: 0})
         result = stability.assign([[1., .5, 0], [0, 1., .5], [.5, 0, 0]])
@@ -301,12 +440,25 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual([s["prediction_id"] for s in scores], ["synthetic#2", "synthetic#1"])
         with (output / "prediction_transform_matches.csv").open() as file:
             audits = list(csv.DictReader(file))
+        self.assertEqual(list(audits[0]), [
+            "image", "prediction_id", "transform_id", "family", "evaluable", "status",
+            "detection_id", "mapped_iou", "class_consistency_value",
+            "localisation_stability_value", "max_det_saturation"])
+        with (output / "transformed_predictions.csv").open() as file:
+            predictions = list(csv.DictReader(file))
+        self.assertEqual(list(predictions[0]), [
+            "image", "transform_id", "detection_id", "class_id", "confidence",
+            "x1", "y1", "x2", "y2", "inverse_mapped_polygon", "max_det_saturation"])
+        self.assertEqual([row["transform_id"] for row in audits],
+                         [spec["id"] for spec in stability.SPECS for _ in self.refs])
         self.assertEqual(len(audits), 22)
         self.assertTrue(any(r["status"] == "not_evaluable" and r["localisation_stability_value"] == "" for r in audits))
         summary = stability.rq1._read_json(output / "summary.json")
         self.assertEqual(summary["max_det_saturated_views"], 1)
         provenance = stability.rq1._read_json(output / "provenance.json")
         self.assertEqual(provenance["status"], "complete")
+        self.assertEqual(provenance["experiment"], "rq2_transformation_stability")
+        self.assertEqual(provenance["rules"], stability.RULES)
         for name, digest in provenance["output_sha256"].items():
             self.assertEqual(stability.rq1._sha(output / name), digest)
         with self.assertRaises(FileExistsError):

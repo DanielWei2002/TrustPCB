@@ -112,8 +112,25 @@ Commit/review the execution inputs before running. From the repository root on
 DICC, with the completed calibration-analysis inputs available:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq2_calibrator_comparison --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2.calibrator_comparison --dicc
 ```
+
+The canonical implementation is `src/trustpcb/rq2/calibrator_comparison.py`.
+The legacy `trustpcb.rq2_calibrator_comparison` import and command remain supported:
+imports share the canonical module object, and the legacy CLI calls its `main()`.
+Dependencies use canonical `rq2.calibration_analysis`, `rq2.confidence_distribution`
+and `rq2.data_partition`, retaining the `analysis`, `raw` and `partition` attributes.
+
+Comparison provenance continues to use the executing Git commit and input/output
+hashes; it has no separate source-file hash inventory. Function metadata now
+identifies `trustpcb.rq2.calibrator_comparison.fit_calibrator`. The final calibrator
+is canonical at `trustpcb.rq2.final_calibrator`; both workflows retain their legacy
+flat module paths as compatibility aliases and CLI shims. The final calibrator's
+fixed implementation label, `trustpcb.rq2_calibrator_comparison.fit_calibrator`,
+is intentionally preserved for protocol identity and is not dynamically derived.
+That legacy name resolves to the same canonical function. Historical metadata
+and hashes are never rewritten, and
+completed experiments must not be rerun because the source moved.
 
 This is CPU work; no GPU, PyTorch or Ultralytics is required. The CLI rejects
 Windows and requires explicit `--dicc`. Do not run real comparison data locally.

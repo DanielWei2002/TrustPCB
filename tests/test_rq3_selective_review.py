@@ -1,14 +1,145 @@
 """Tiny CPU-only fixtures; no real development/test evaluation."""
 
 import copy
+import importlib
 from pathlib import Path
+import runpy
+import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
 
 import numpy as np
 
-from trustpcb import rq3_selective_review as review
+from trustpcb.rq3 import selective_review as review
+
+
+class PackageCompatibilityTests(unittest.TestCase):
+    def check_order(self, names):
+        script = f'''
+import importlib, sys
+from unittest.mock import patch
+first, second = [importlib.import_module(n) for n in {names!r}]
+from trustpcb import rq3_final_evaluation as final
+assert first is second is final.review
+assert first.__name__ == 'trustpcb.rq3.selective_review'
+for source, target in ((first, second), (second, first)):
+    with patch.object(source, 'scores_for', return_value='synthetic') as score:
+        assert target.scores_for([]) == final.review.scores_for([]) == 'synthetic'
+        assert score.call_count == 2
+    with patch.dict(source.DEFINITIONS, synthetic='shared'):
+        assert target.DEFINITIONS['synthetic'] == final.review.DEFINITIONS['synthetic'] == 'shared'
+assert 'torch' not in sys.modules and 'ultralytics' not in sys.modules
+'''
+        subprocess.run([sys.executable, "-B", "-c", script], check=True, capture_output=True)
+
+    def test_legacy_first(self):
+        self.check_order(("trustpcb.rq3_selective_review", "trustpcb.rq3.selective_review"))
+
+    def test_canonical_first(self):
+        self.check_order(("trustpcb.rq3.selective_review", "trustpcb.rq3_selective_review"))
+
+    def test_canonical_dependencies_and_direct_binding(self):
+        from trustpcb.rq2 import risk_evaluation, weighted_fusion, weighted_final_evaluation
+        self.assertIs(review.risk, risk_evaluation)
+        self.assertIs(review.fusion, weighted_fusion)
+        self.assertIs(review.selected_identity, weighted_final_evaluation.selected_identity)
+        original = review.selected_identity
+        with patch.object(weighted_final_evaluation, "selected_identity") as source:
+            self.assertIs(review.selected_identity, original)
+            self.assertIsNot(review.selected_identity, source)
+        with patch.object(review, "selected_identity", return_value={"synthetic": "identity"}) as selected, \
+             patch.object(review.risk, "load_inputs", return_value=(["a"], [], {})) as load, \
+             patch.object(weighted_final_evaluation, "load_inputs", side_effect=AssertionError("no test population")):
+            self.assertEqual(review.load_inputs(Path("synthetic")), (["a"], [], {}, {"synthetic": "identity"}))
+            selected.assert_called_once_with(Path("synthetic"))
+            load.assert_called_once_with(Path("synthetic"))
+
+    def test_downstream_all_consumed_interfaces_and_bidirectional_patches(self):
+        from trustpcb import rq3_final_evaluation as final
+        legacy = importlib.import_module("trustpcb.rq3_selective_review")
+        self.assertIs(final.review, review)
+        names = ("OUTPUT", "SEED", "REPLICATES", "BUDGETS", "METHODS", "REFERRAL_BOOTSTRAP_METRICS",
+                 "DEFINITIONS", "scores_for", "prepare", "curve", "threshold_for", "referral_metrics",
+                 "tables", "bootstrap", "load_inputs", "extend_reporting", "run", "main",
+                 "risk", "fusion", "rq1", "selected_identity")
+        for name in names:
+            self.assertIs(getattr(final.review, name), getattr(legacy, name))
+        for owner, observer in ((review, final.review), (final.review, legacy)):
+            for name in ("METHODS", "BUDGETS", "DEFINITIONS"):
+                marker = object()
+                with patch.object(owner, name, marker):
+                    self.assertIs(getattr(observer, name), marker)
+            for name in ("scores_for", "prepare", "curve", "referral_metrics", "bootstrap"):
+                with patch.object(owner, name, return_value="synthetic") as helper:
+                    self.assertEqual(getattr(observer, name)("fixture"), "synthetic")
+                    helper.assert_called_once_with("fixture")
+        images, rows = fixture()
+        scores = review.scores_for(rows)
+        thresholds = review.tables(images, rows, scores)[-1]
+        with patch.object(legacy, "threshold_for", side_effect=AssertionError("no test retuning")), \
+             patch.object(review, "prepare", wraps=review.prepare) as prepare, \
+             patch.object(review, "curve", wraps=review.curve) as curve, \
+             patch.object(review, "referral_metrics", wraps=review.referral_metrics) as referral:
+            final.observed_tables(images, rows, scores, thresholds)
+        prepare.assert_called_once()
+        self.assertEqual(curve.call_count, 5)
+        self.assertEqual(referral.call_count, 15)
+
+    def test_both_cli_help_forms(self):
+        for name in ("trustpcb.rq3_selective_review", "trustpcb.rq3.selective_review"):
+            result = subprocess.run([sys.executable, "-B", "-m", name, "--help"],
+                                    check=True, capture_output=True, text=True)
+            for option in ("--dicc", "--bootstrap", "--extend-report"):
+                self.assertIn(option, result.stdout)
+
+    def test_legacy_execution_dispatches_canonical_main(self):
+        with patch.object(review, "main") as main:
+            runpy.run_path(str(Path(__file__).resolve().parents[1] / "src/trustpcb/rq3_selective_review.py"),
+                           run_name="__main__")
+        main.assert_called_once_with()
+
+    def test_parser_bootstrap_and_extension_dispatch(self):
+        root = Path("synthetic")
+        for flags in ([], ["--bootstrap"], ["--extend-report"], ["--extend-report", "--bootstrap"]):
+            with self.subTest(flags=flags), patch.object(review.os, "name", "posix"), \
+                 patch.object(review, "find_project_root", return_value=root), \
+                 patch.object(review, "run") as run, patch.object(review, "extend_reporting") as extend, \
+                 patch("builtins.print"):
+                review.main(["--dicc", *flags])
+                if "--extend-report" in flags:
+                    extend.assert_called_once_with(root)
+                    run.assert_not_called()
+                else:
+                    run.assert_called_once_with(root, with_bootstrap="--bootstrap" in flags)
+                    extend.assert_not_called()
+
+    def test_missing_dicc_blocks_before_root_access(self):
+        with patch.object(review.os, "name", "posix"), patch.object(review, "find_project_root") as root:
+            with self.assertRaisesRegex(RuntimeError, "DICC-only"):
+                review.main(["--bootstrap"])
+        root.assert_not_called()
+
+    def test_frozen_population_and_inclusion_validator_identity(self):
+        self.assertEqual((review.risk.IMAGE_COUNT, review.risk.PREDICTION_COUNT), (821, 7131))
+        images = [f"synthetic_{i}" for i in range(821)]
+        template = fixture()[1][0]
+        rows = [{**template, "image": images[i % 821], "prediction_id": str(i), "raw_confidence": .01}
+                for i in range(7131)]
+        self.assertEqual(len(review.risk.validate_rows(images, rows)), 7131)
+        for bad_images, bad_rows in ((images[:-1], rows), (images, rows[:-1]),
+                                    (images, [{**rows[0], "raw_confidence": .009}, *rows[1:]])):
+            with self.assertRaises(ValueError):
+                review.risk.validate_rows(bad_images, bad_rows)
+
+    def test_frozen_defaults_and_method_order(self):
+        self.assertEqual(review.bootstrap.__kwdefaults__, {"replicates": 10000, "seed": 24209199})
+        self.assertEqual(review.run.__kwdefaults__, {"with_bootstrap": False})
+        self.assertEqual(review.BUDGETS, (5, 10, 20))
+        self.assertEqual(review.METHODS, ("raw_confidence_risk", "calibrated_confidence_risk",
+            "class_consistency_risk", "localisation_stability_risk", "weighted_trustpcb_risk"))
+        self.assertEqual(review.fusion.WEIGHT_KEYS, ("conf_percent", "class_percent", "localisation_percent"))
 
 
 def fixture():
@@ -230,6 +361,7 @@ class WorkflowTests(unittest.TestCase):
             self.assertEqual(sentinel.read_bytes(), b"immutable")
             provenance = review.rq1._read_json(output/"provenance.json")
             self.assertEqual(provenance["status"], "complete")
+            self.assertEqual(provenance["experiment"], "rq3_development_selective_review")
             self.assertFalse(provenance["test_population_accessed"])
             self.assertFalse(provenance["bootstrap_requested"])
             for name, digest in provenance["output_sha256"].items():
@@ -237,6 +369,23 @@ class WorkflowTests(unittest.TestCase):
             thresholds = review.rq1._read_json(output/"development_thresholds.json")
             self.assertEqual(thresholds["comparison"], ">")
             self.assertFalse(thresholds["test_retuning_permitted"])
+            curves = review.risk.read_csv(output/"prediction_risk_coverage.csv")
+            self.assertEqual(list(curves[0]), ["method", "coverage", "retained_predictions",
+                "retained_incorrect", "empirical_risk", "max_retained_score"])
+            inventory = review.risk.read_csv(output/"crop_risks.csv")
+            self.assertEqual(list(inventory[0]), ["method", "image", "prediction_count",
+                "incorrect_predictions", "crop_risk", "referral_eligible"])
+            self.assertEqual([(r["method"], r["image"]) for r in inventory],
+                             [(method, image) for method in review.METHODS for image in images])
+            referrals = review.risk.read_csv(output/"crop_referral_metrics.csv")
+            self.assertEqual([(r["method"], int(r["budget_percent"])) for r in referrals],
+                             [(method, budget) for method in review.METHODS for budget in review.BUDGETS])
+            self.assertEqual(list(referrals[0]), ["method", "budget_percent", "nominal_crops", "threshold",
+                "achieved_crops", "achieved_workload", "referred_crops", "workload", "referred_predictions",
+                "captured_incorrect", "error_capture", "referred_error_rate", "automatic_predictions",
+                "automatic_incorrect", "no_referral_error_rate", "remaining_automatic_error_rate",
+                "absolute_error_reduction", "random_expected_error_capture",
+                "random_expected_captured_incorrect", "random_expected_referred_predictions"])
 
     def test_partial_and_dirty_input_protection(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -272,7 +421,13 @@ class WorkflowTests(unittest.TestCase):
                 for name, content in before.items():
                     self.assertEqual((original/name).read_bytes(), content)
                 self.assertEqual(review.rq1._read_json(output/"provenance.json")["status"], "complete")
+                self.assertEqual(review.rq1._read_json(output/"provenance.json")["experiment"],
+                                 "rq3_development_reporting_extension")
                 self.assertEqual(len(review.risk.read_csv(output/"paired_bootstrap_differences.csv")), 14)
+                pairs = review.risk.read_csv(output/"paired_bootstrap_differences.csv")
+                self.assertEqual(list(pairs[0]), ["method_A", "method_B", "budget_percent", "metric",
+                    "observed_difference", "bootstrap_mean", "lower_95", "upper_95",
+                    "valid_replicates", "invalid_replicates"])
                 with self.assertRaises(FileExistsError):
                     review.extend_reporting(root)
 

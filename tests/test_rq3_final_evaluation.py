@@ -1,15 +1,105 @@
 """Synthetic final-evaluator tests; never read real test predictions."""
 
 import copy
+from contextlib import ExitStack
 import hashlib
+import importlib
 from pathlib import Path
+import runpy
+import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
 
 import numpy as np
 
-from trustpcb import rq3_final_evaluation as evaluation
+from trustpcb.rq3 import final_evaluation as evaluation
+
+
+class PackageCompatibilityTests(unittest.TestCase):
+    def check_order(self, names):
+        script = f'''
+import importlib, sys
+from unittest.mock import patch
+first, second = [importlib.import_module(n) for n in {names!r}]
+assert first is second
+assert first.__name__ == 'trustpcb.rq3.final_evaluation'
+for owner, observer in ((first, second), (second, first)):
+    with patch.object(owner, 'load_inputs', return_value='synthetic') as load:
+        assert observer.load_inputs(None) == 'synthetic'
+        load.assert_called_once_with(None)
+    with patch.dict(owner.FLAGS, synthetic=False):
+        assert observer.FLAGS['synthetic'] is False
+assert 'torch' not in sys.modules and 'ultralytics' not in sys.modules
+'''
+        subprocess.run([sys.executable, "-B", "-c", script], check=True, capture_output=True)
+
+    def test_legacy_first(self):
+        self.check_order(("trustpcb.rq3_final_evaluation", "trustpcb.rq3.final_evaluation"))
+
+    def test_canonical_first(self):
+        self.check_order(("trustpcb.rq3.final_evaluation", "trustpcb.rq3_final_evaluation"))
+
+    def test_canonical_aliases_and_review_patch_delegation(self):
+        from trustpcb import rq1, rq3_selective_review as legacy_review
+        from trustpcb.rq3 import selective_review
+        from trustpcb.rq2 import weighted_final_evaluation
+        self.assertIs(evaluation.rq1, rq1)
+        self.assertIs(evaluation.review, selective_review)
+        self.assertIs(evaluation.frozen, weighted_final_evaluation)
+        self.assertIs(evaluation.review.fusion, evaluation.frozen.fusion)
+        self.assertIs(evaluation.review.risk, evaluation.frozen.risk)
+        images, rows, thresholds = fixture()
+        for owner in (legacy_review, selective_review):
+            with patch.object(owner, "prepare", wraps=owner.prepare) as prepare, \
+                 patch.object(owner, "curve", wraps=owner.curve) as curve, \
+                 patch.object(owner, "referral_metrics", wraps=owner.referral_metrics) as referral, \
+                 patch.object(owner, "threshold_for", side_effect=AssertionError("no retuning")):
+                evaluation.observed_tables(images, rows, owner.scores_for(rows), thresholds)
+            prepare.assert_called_once()
+            self.assertEqual(curve.call_count, 5)
+            self.assertEqual(referral.call_count, 15)
+
+    def test_frozen_constants_and_identity_delegation(self):
+        self.assertEqual((evaluation.IMAGE_COUNT, evaluation.PREDICTION_COUNT), (2052, 17840))
+        self.assertEqual((evaluation.SEED, evaluation.REPLICATES), (24209199, 10000))
+        self.assertEqual(evaluation.THRESHOLDS, "runs/rq3/development_selective_review/development_thresholds.json")
+        self.assertEqual(evaluation.OUTPUT, "runs/rq3/final_evaluation")
+        self.assertEqual(evaluation.frozen.final.MANIFEST, "configs/datasets/similarity_aware_val_images.txt")
+        self.assertEqual(evaluation.frozen.final.MANIFEST_SHA, "a2f246bf5be60cad5fac7f985ed91888bddb43601b73331f39d02e180075bc8e")
+        self.assertEqual(evaluation.frozen.final.PARTITION_REPORT, "data/splits/rq2_train_development_split/verification_report.json")
+        self.assertEqual(evaluation.frozen.WEIGHTS, (89, 1, 10))
+        self.assertEqual(evaluation.review.fusion.WEIGHT_KEYS, ("conf_percent", "class_percent", "localisation_percent"))
+        self.assertEqual(evaluation.review.METHODS, ("raw_confidence_risk", "calibrated_confidence_risk",
+            "class_consistency_risk", "localisation_stability_risk", "weighted_trustpcb_risk"))
+        with patch.object(evaluation.frozen, "validate_population", return_value="checked") as validate:
+            self.assertEqual(evaluation.validate_population([], []), "checked")
+            validate.assert_called_once_with([], [])
+
+    def test_both_cli_help_forms(self):
+        for module in ("trustpcb.rq3_final_evaluation", "trustpcb.rq3.final_evaluation"):
+            result = subprocess.run([sys.executable, "-B", "-m", module, "--help"],
+                                    check=True, capture_output=True, text=True)
+            self.assertIn("--dicc", result.stdout)
+
+    def test_legacy_cli_dispatches_canonical_main(self):
+        with patch.object(evaluation, "main") as main:
+            runpy.run_path(str(Path(__file__).resolve().parents[1]/"src/trustpcb/rq3_final_evaluation.py"),
+                           run_name="__main__")
+        main.assert_called_once_with()
+
+    def test_parser_dispatch_and_missing_dicc_guard(self):
+        root = Path("synthetic")
+        with patch.object(evaluation.os, "name", "posix"), \
+             patch.object(evaluation, "find_project_root", return_value=root) as find, \
+             patch.object(evaluation, "run") as run, patch("builtins.print"):
+            with self.assertRaisesRegex(RuntimeError, "--dicc required"):
+                evaluation.main([])
+            find.assert_not_called()
+            run.assert_not_called()
+            evaluation.main(["--dicc"])
+            run.assert_called_once_with(root)
 
 
 def fixture():
@@ -39,6 +129,35 @@ def save_thresholds(root):
 
 
 class ValidationTests(unittest.TestCase):
+    def test_original_threshold_evidence_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            expected = save_thresholds(root)
+            original_read = evaluation.rq1._read_json
+            with patch.object(evaluation.rq1, "_read_json", wraps=original_read) as read:
+                self.assertEqual(evaluation.load_thresholds(root)[0], expected)
+            self.assertEqual([call.args[0] for call in read.call_args_list],
+                             [root/evaluation.DEVELOPMENT/"provenance.json", root/evaluation.THRESHOLDS])
+            # A reporting extension cannot substitute for missing original provenance.
+            provenance = root/evaluation.DEVELOPMENT/"provenance.json"
+            extension = root/evaluation.DEVELOPMENT/"reporting_extension"
+            extension.mkdir()
+            (extension/"provenance.json").write_bytes(provenance.read_bytes())
+            provenance.unlink()
+            with self.assertRaises(FileNotFoundError):
+                evaluation.load_thresholds(root)
+
+    def test_incomplete_development_provenance_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            save_thresholds(root)
+            path = root/evaluation.DEVELOPMENT/"provenance.json"
+            record = evaluation.rq1._read_json(path)
+            record["status"] = "incomplete"
+            evaluation.rq1._write_json(path, record)
+            with self.assertRaisesRegex(ValueError, "completed frozen"):
+                evaluation.load_thresholds(root)
+
     def test_exact_saved_thresholds_and_hash(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -118,6 +237,14 @@ class CalculationTests(unittest.TestCase):
         self.assertEqual(record["automatic_predictions"], 1)
         self.assertEqual(record["automatic_incorrect"], 1)
         self.assertEqual(record["remaining_automatic_error_rate"], 1)
+        self.assertEqual(record["development_nominal_crops"], 41)
+        self.assertEqual(record["development_achieved_crops"], 0)
+        self.assertEqual(record["development_achieved_workload"], 0)
+        self.assertEqual(list(curves[0]), ["method", "coverage", "retained_predictions", "retained_incorrect",
+                                           "empirical_risk", "max_retained_score"])
+        self.assertEqual(list(areas[0]), ["method", "aurc"])
+        self.assertEqual(list(crops[0]), ["method", "image", "prediction_count", "incorrect_predictions",
+                                        "crop_risk", "referral_eligible"])
         self.assertEqual(len(crops), 3*5)
         self.assertTrue(all(r["crop_risk"] is None and not r["referral_eligible"] for r in crops if r["image"] == "synthetic_empty"))
         self.assertEqual(len(areas), 5)
@@ -140,15 +267,32 @@ class CalculationTests(unittest.TestCase):
         self.assertEqual(len(info["paired_differences"]), 14)
         self.assertFalse(info["thresholds_rederived"])
 
+    def test_iou75_does_not_change_primary_outputs(self):
+        images, rows, thresholds = fixture()
+        changed = [{**r, "correct_iou75": 1-r["correct_iou75"]} for r in rows]
+        self.assertEqual(evaluation.observed_tables(images, rows, evaluation.review.scores_for(rows), thresholds),
+                         evaluation.observed_tables(images, changed, evaluation.review.scores_for(changed), thresholds))
+
 
 class WorkflowTests(unittest.TestCase):
     def test_outputs_provenance_and_no_forbidden_operations(self):
         images, rows, thresholds = fixture()
-        with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory() as tmp, ExitStack() as forbidden:
             root = Path(tmp)
             evidence = root/"runs/rq3/development_selective_review/synthetic_evidence.txt"
             evidence.parent.mkdir(parents=True)
             evidence.write_bytes(b"frozen")
+            from trustpcb.rq3 import computational_efficiency
+            from trustpcb.rq2 import transformation_stability, calibrator_comparison
+            from trustpcb.rq2 import confidence_distribution
+            for module, names in ((evaluation.review, ("tables", "run", "extend_reporting")),
+                    (calibrator_comparison, ("apply_calibrator", "run")),
+                    (transformation_stability, ("transform", "_predict", "run")),
+                    (confidence_distribution, ("_predict",)),
+                    (evaluation.frozen, ("run",)),
+                    (computational_efficiency, ("run", "measure", "adapter"))):
+                for name in names:
+                    forbidden.enter_context(patch.object(module, name, side_effect=AssertionError(f"forbidden {name}")))
             with patch.object(evaluation, "load_inputs", return_value=(images, rows, {evaluation.THRESHOLDS: "synthetic_sha"}, {"evidence": "frozen"}, thresholds)), \
                  patch.object(evaluation.rq1, "git_provenance", return_value={"git_dirty": False, "git_commit": "synthetic"}), \
                  patch.object(evaluation, "REPLICATES", 5), \
@@ -164,6 +308,8 @@ class WorkflowTests(unittest.TestCase):
                 "bootstrap_summary.json", "summary.json", "provenance.json"})
             provenance = evaluation.rq1._read_json(output/"provenance.json")
             self.assertEqual(provenance["status"], "complete")
+            self.assertEqual(provenance["experiment"], "rq3_final_evaluation")
+            self.assertEqual(provenance["correctness_definition"], "same-class one-to-one IoU >= 0.50")
             self.assertEqual(provenance["test_role"], evaluation.ROLE)
             self.assertEqual(provenance["applied_thresholds"], thresholds)
             self.assertEqual(provenance["development_threshold_sha256"], "synthetic_sha")

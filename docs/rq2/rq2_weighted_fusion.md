@@ -7,12 +7,12 @@ inference, refits calibration, reruns transformations or recomputes matching.
 
 ## Frozen inputs
 
-Reuse `rq2_risk_evaluation.load_inputs` to validate the stored development stability
+Reuse `trustpcb.rq2.risk_evaluation.load_inputs` to validate the stored development stability
 table, its upstream provenance/hash chain, 821-image manifest, 7,131 unique ordered
 predictions, binary IoU50 labels and finite signals in [0,1]. The reference floor
 remains 0.01. No alternative input-file or population option is exposed.
 
-Reuse `rq2_calibrator_comparison.load_inputs` for confirmed development similarity
+Reuse `trustpcb.rq2.calibrator_comparison.load_inputs` for confirmed development similarity
 links; require identical manifest inventory and matching dependency hashes.
 Only existing development text artifacts and similarity metadata are read, not
 dataset images, annotations, model files or final-test results.
@@ -77,13 +77,26 @@ After review and committing execution inputs, use the project environment with
 NumPy, SciPy and PyYAML, from the repository root:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq2_weighted_fusion --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2.weighted_fusion --dicc
 ```
 
 This is CPU work. Do not run the real development grid locally; Windows and missing
 `--dicc` are rejected. No GPU or detector-library import is needed.
 
 Output: `runs/rq2/weighted_fusion/`.
+
+The canonical implementation is `src/trustpcb/rq2/weighted_fusion.py`.
+The legacy `trustpcb.rq2_weighted_fusion` import and module command remain
+supported through a shim referencing the same live module. Executable imports
+use canonical risk-evaluation, calibrator-comparison and risk-sensitivity modules.
+
+The fixed `rq2_weighted_fusion` experiment identifier, component/weight keys,
+selection hierarchy, artifact paths and schemas remain unchanged. Historical
+selected weights and provenance are not rewritten. Future execution still
+records its actual Git state, package versions, timestamps and input/output
+hashes. No source-code-file hash is recorded here, and relocation does not claim
+old/new source-hash equivalence or require rerunning weight selection.
+This workflow uses five-fold metrics; it does not run a bootstrap.
 
 - `candidate_weights.csv`: all integer triples, five fold AP/AUROC values,
   mean fold metrics and equal-weight distance.

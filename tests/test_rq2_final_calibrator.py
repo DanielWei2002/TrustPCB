@@ -1,10 +1,15 @@
 """Synthetic final-fit fixtures only; no scientific data, inference or GPU."""
 
+import contextlib
 import csv
+import io
 import hashlib
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -14,6 +19,111 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from trustpcb import rq2_final_calibrator as final
 
 c = final.comparison
+
+
+class FinalCompatibilityTests(unittest.TestCase):
+    def python(self, arguments):
+        root = Path(__file__).resolve().parents[1]
+        env = os.environ.copy()
+        env["PYTHONPATH"] = os.pathsep.join((str(root / "src"), env.get("PYTHONPATH", "")))
+        result = subprocess.run([sys.executable, "-B", *arguments], cwd=root, env=env,
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        return result.stdout
+
+    def imports(self, first, second):
+        self.python(["-c", f"""
+import importlib
+import sys
+from pathlib import Path
+from unittest.mock import patch
+first = importlib.import_module({first!r})
+second = importlib.import_module({second!r})
+from trustpcb import rq2_final_calibrator as legacy, rq2_calibrator_comparison as old_comparison
+from trustpcb.rq2 import final_calibrator as canonical, calibrator_comparison as comparison
+from trustpcb.rq2 import calibration_analysis, confidence_distribution, data_partition
+from trustpcb import rq2_transformation_stability as stability, rq2_risk_evaluation as risk
+from trustpcb import rq2_risk_sensitivity as sensitivity, rq2_weighted_fusion as fusion
+from trustpcb import rq2_final_evaluation as evaluation, rq2_weighted_final_evaluation as weighted
+from trustpcb import rq3_selective_review as review, rq3_computational_efficiency as efficiency
+from trustpcb import rq3_final_evaluation as rq3
+assert first is second is legacy is canonical
+assert sys.modules["trustpcb.rq2_final_calibrator"] is canonical
+assert sys.modules["trustpcb.rq2.final_calibrator"] is canonical
+assert Path(canonical.__file__).resolve() == Path("src/trustpcb/rq2/final_calibrator.py").resolve()
+assert canonical.comparison is comparison is old_comparison
+assert comparison.analysis is calibration_analysis
+assert comparison.raw is confidence_distribution
+assert comparison.partition is data_partition
+consumers = (stability.final, risk.final, sensitivity.primary.final, fusion.risk.final,
+             evaluation.final, weighted.final.final, weighted.risk.final,
+             review.risk.final, efficiency.stability.final, efficiency.risk.final,
+             rq3.review.risk.final, rq3.frozen.final.final)
+assert all(item is canonical for item in consumers)
+for name in ("OUTPUT", "FORM", "TARGET", "DIAGNOSTIC", "load_inputs", "run", "main", "comparison", "rq1"):
+    assert getattr(legacy, name) is getattr(canonical, name)
+for name in ("load_inputs", "run", "main"):
+    assert getattr(canonical, name).__globals__ is canonical.__dict__
+assert canonical.OUTPUT == "runs/rq2/final_calibrator"
+assert canonical.FORM == "sigmoid(a * log(p) - b * log(1 - p) + c)"
+assert canonical.TARGET == "same-class one-to-one IoU >= 0.50"
+for owner, observer in ((legacy, canonical), (canonical, legacy)):
+    with patch.object(owner, "OUTPUT", "synthetic/output"):
+        assert all(item.OUTPUT == observer.OUTPUT == "synthetic/output" for item in consumers)
+    with patch.object(owner, "load_inputs", return_value="synthetic") as mocked:
+        for item in consumers:
+            assert item.load_inputs is observer.load_inputs is mocked
+            assert item.load_inputs("fixture", approve_beta_selection=True) == "synthetic"
+        assert mocked.call_count == len(consumers)
+for owner in (old_comparison, comparison):
+    for name in ("apply_calibrator", "fit_calibrator", "write_csv", "load_inputs", "metric_summary"):
+        with patch.object(owner, name, return_value="synthetic") as mocked:
+            for item in consumers:
+                assert getattr(item.comparison, name) is mocked
+                assert getattr(item.comparison, name)("fixture") == "synthetic"
+            assert mocked.call_count == len(consumers)
+assert "torch" not in sys.modules and "ultralytics" not in sys.modules
+"""])
+
+    def test_legacy_first(self):
+        self.imports("trustpcb.rq2_final_calibrator", "trustpcb.rq2.final_calibrator")
+
+    def test_canonical_first(self):
+        self.imports("trustpcb.rq2.final_calibrator", "trustpcb.rq2_final_calibrator")
+
+    def test_legacy_help(self):
+        self.assertIn("--approve-beta-selection", self.python(["-m", "trustpcb.rq2_final_calibrator", "--help"]))
+
+    def test_canonical_help(self):
+        self.assertIn("--approve-beta-selection", self.python(["-m", "trustpcb.rq2.final_calibrator", "--help"]))
+
+    def test_legacy_main_dispatch(self):
+        self.python(["-c", """
+import runpy
+from unittest.mock import patch
+from trustpcb.rq2 import final_calibrator
+with patch.object(final_calibrator, "main") as main:
+    runpy.run_path("src/trustpcb/rq2_final_calibrator.py", run_name="__main__")
+    main.assert_called_once_with()
+"""])
+
+    def test_parser_dispatch_mock_only(self):
+        for approved in (False, True):
+            args = ["--dicc"] + (["--approve-beta-selection"] if approved else [])
+            with patch.object(final, "os", SimpleNamespace(name="posix")), \
+                    patch.object(final, "find_project_root", return_value="synthetic-root"), \
+                    patch.object(final, "run", return_value="synthetic") as run, \
+                    contextlib.redirect_stdout(io.StringIO()):
+                final.main(args)
+            run.assert_called_once_with("synthetic-root", approve_beta_selection=approved)
+
+    def test_missing_dicc_blocks_before_access(self):
+        with patch.object(final, "os", SimpleNamespace(name="posix")), \
+                patch.object(final, "find_project_root") as root, patch.object(final, "run") as run:
+            with self.assertRaisesRegex(RuntimeError, "DICC-only"):
+                final.main([])
+            root.assert_not_called()
+            run.assert_not_called()
 
 
 class FinalCalibratorTests(unittest.TestCase):
@@ -112,6 +222,8 @@ class FinalCalibratorTests(unittest.TestCase):
         self.assertEqual(artifact["input_sha256"], before)
         self.assertEqual(artifact["git_commit"], "synthetic")
         self.assertTrue(artifact["optimizer"]["converged"])
+        self.assertEqual(artifact["optimizer"]["implementation"],
+                         "trustpcb.rq2_calibrator_comparison.fit_calibrator")
         self.assertEqual(artifact["epsilon"], 1e-15)
         self.assertEqual(artifact["source_comparison"]["selection"]["selected_method"], "Beta")
         with (output / "calibrated_development_predictions.csv").open() as file:
@@ -120,8 +232,12 @@ class FinalCalibratorTests(unittest.TestCase):
             for key, value in original.items():
                 self.assertEqual(row[key], value)
         self.assertEqual(len(exported), len(rows))
+        self.assertEqual(list(exported[0]), [*originals[0], "prediction_id", "raw_confidence",
+                                            "calibrated_confidence", "correct_iou50"])
+        self.assertEqual([r["prediction_id"] for r in exported], [r["prediction_id"] for r in rows])
         report = final.rq1._read_json(output / "fit_summary.json")
         self.assertIn("in-sample", report["diagnostic_scope"])
+        self.assertEqual(report["optimizer"], artifact["optimizer"])
         self.assertEqual(report["raw"], c.metric_summary([r["raw_confidence"] for r in rows], [r["correct_iou50"] for r in rows]))
         self.assertAlmostEqual(report["fitted_beta"]["nll"], np.log(2), places=6)
         self.assertAlmostEqual(report["fitted_beta"]["brier"], .25, places=6)
@@ -171,6 +287,18 @@ class FinalCalibratorTests(unittest.TestCase):
         (self.comparison / "method_metrics.csv").write_text("changed")
         with self.assertRaisesRegex(ValueError, "hash mismatch"):
             self.load()
+
+    def test_checkpoint_and_manifest_identity_guards(self):
+        path = self.analysis / "provenance.json"
+        original = final.rq1._read_json(path)
+        for key, value in (("checkpoint_epoch", 71), ("checkpoint_sha256", "changed"),
+                           ("manifest_sha256_lf", "changed")):
+            with self.subTest(key=key):
+                final.rq1._write_json(path, {**original, key: value})
+                with self.assertRaises(ValueError):
+                    self.load()
+        final.rq1._write_json(path, original)
+        self.load()
 
     def test_comparison_population_mismatch_rejected(self):
         self.write_population(sensitivity="changed-input-after-comparison")

@@ -69,7 +69,7 @@ convention is used for resampling and geometric mapping.
 
 ## Frozen inference settings
 
-Reuse `rq2_confidence_distribution.SETTINGS`, including:
+Reuse `trustpcb.rq2.confidence_distribution.SETTINGS`, including:
 
 - `conf=0.001`, `iou=0.7`, `max_det=300`, `imgsz=640`, `device=0`;
 - `batch=1`, `rect=True`, `augment=False`, class-aware NMS;
@@ -128,7 +128,7 @@ After review and committing the execution inputs, configure the existing
 Pillow. From the repository root:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq2_transformation_stability --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2.transformation_stability --dicc
 ```
 
 GPU device **0** is used for inference; transformations/geometry use CPU. There
@@ -136,6 +136,20 @@ are 9,031 view-inference calls. Do not execute this command locally. The CLI and
 real inference adapter reject Windows. Synthetic tests inject a fake predictor.
 
 Output: `runs/rq2/transformation_stability/`.
+
+The canonical implementation is `src/trustpcb/rq2/transformation_stability.py`.
+The legacy `trustpcb.rq2_transformation_stability` import and module command
+remain supported by a shim referencing the same live module. Executable imports
+use canonical final-calibrator, confidence-distribution and artifact-path modules.
+Existing downstream imports and patch targets remain supported.
+
+The fixed experiment identifier `rq2_transformation_stability`, output paths,
+transformation specifications and rules remain unchanged. Historical provenance
+and completed artifacts are not rewritten. Future execution records its actual
+Git state, package versions, timestamps, checkpoint/input/output identities and
+source-image hashes. No source-code-file hash is recorded by this workflow;
+relocation does not imply equivalence of old and new source-file hashes.
+No scientific rerun is needed merely because the implementation moved.
 
 | File | Audit contents |
 |---|---|

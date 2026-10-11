@@ -1,5 +1,14 @@
 # Frozen RQ2 final-test evaluation
 
+Canonical source: `src/trustpcb/rq2/final_evaluation.py`; module:
+`trustpcb.rq2.final_evaluation`. The legacy `trustpcb.rq2_final_evaluation`
+import resolves to the same live module and retains CLI compatibility.
+The package migration does not require rerunning completed evaluations.
+The fixed `rq2_final_evaluation` experiment identifier and historical evidence
+remain unchanged. Future Git/version/timestamp metadata remain dynamically
+recorded; this workflow does not hash its own source file or claim that the
+legacy shim has the same source bytes as the canonical implementation.
+
 The 2,052-image similarity-aware test partition was **held out from RQ2 training
 and development, previously used for RQ1 validation**. It is not historically
 untouched. This workflow evaluates frozen development decisions; it cannot fit,
@@ -50,16 +59,16 @@ settings are checked before dataset execution.
 
 | Operation | Existing implementation |
 |---|---|
-| Original inference | `rq2_confidence_distribution._predict`, optional settings and image-hash capture |
-| Checkpoint identity | `rq2_confidence_distribution.checkpoint_identity` and artifact resolver |
-| YOLO labels/coordinates | `rq2_calibration_analysis.read_ground_truth` |
-| Independent IoU50/IoU75 correctness | `rq2_calibration_analysis.label_predictions` |
-| Frozen Beta probabilities / calibration metrics | `rq2_calibrator_comparison.apply_calibrator`, `metric_summary` |
-| Eleven transformed views/inference | `rq2_transformation_stability._predict` / `transform` |
-| Inverse polygons and class-agnostic assignment | `rq2_transformation_stability.match_transform` |
-| Family-balanced signals | `rq2_transformation_stability.aggregate` |
-| Eight frozen risks / ranking / bootstrap / diagnostics | `rq2_risk_evaluation` pure functions |
-| Secondary target adapter | `rq2_risk_sensitivity.sensitivity_rows` |
+| Original inference | `trustpcb.rq2.confidence_distribution._predict`, optional settings and image-hash capture |
+| Checkpoint identity | `trustpcb.rq2.confidence_distribution.checkpoint_identity` and artifact resolver |
+| YOLO labels/coordinates | `trustpcb.rq2.calibration_analysis.read_ground_truth` |
+| Independent IoU50/IoU75 correctness | `trustpcb.rq2.calibration_analysis.label_predictions` |
+| Frozen Beta probabilities / calibration metrics | `trustpcb.rq2.calibrator_comparison.apply_calibrator`, `metric_summary` |
+| Eleven transformed views/inference | `trustpcb.rq2.transformation_stability._predict` / `transform` |
+| Inverse polygons and class-agnostic assignment | `trustpcb.rq2.transformation_stability.match_transform` |
+| Family-balanced signals | `trustpcb.rq2.transformation_stability.aggregate` |
+| Eight frozen risks / ranking / bootstrap / diagnostics | `trustpcb.rq2.risk_evaluation` pure functions |
+| Secondary target adapter | `trustpcb.rq2.risk_sensitivity.sensitivity_rows` |
 
 The small shared-adapter extensions preserve all development defaults: original
 extraction can receive an explicit settings dictionary and capture source hashes;
@@ -131,7 +140,7 @@ and use the frozen detector environment with NumPy, SciPy and Pillow installed.
 From the repository root:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq2_final_evaluation --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2.final_evaluation --dicc
 ```
 
 This performs GPU inference on **device 0**: 2,052 original passes plus 22,572

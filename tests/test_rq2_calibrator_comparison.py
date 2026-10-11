@@ -1,13 +1,17 @@
 """Small synthetic fixtures only; never scientific development data or final fitting."""
 
+import contextlib
 import csv
 import hashlib
+import io
 import json
 import math
 import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -25,6 +29,137 @@ def synthetic_population(n=10):
              "correct_iou50": y}
             for image in images for j, (p, y) in enumerate(((.2, 0), (.2, 1), (.8, 0), (.8, 1)), 1)]
     return images, rows
+
+
+class ComparisonCompatibilityTests(unittest.TestCase):
+    def run_python(self, arguments):
+        environment = os.environ.copy()
+        environment["PYTHONPATH"] = os.pathsep.join(
+            [str(REPO / "src"), environment.get("PYTHONPATH", "")])
+        result = subprocess.run([sys.executable, "-B", *arguments], cwd=REPO,
+                                env=environment, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        return result.stdout
+
+    def check_import_order(self, first, second):
+        self.run_python(["-c", f'''
+import importlib
+from pathlib import Path
+import sys
+from unittest.mock import patch
+first = importlib.import_module({first!r})
+second = importlib.import_module({second!r})
+from trustpcb import rq2_calibrator_comparison as legacy
+from trustpcb.rq2 import calibrator_comparison as canonical
+from trustpcb.rq2 import calibration_analysis, confidence_distribution, data_partition
+from trustpcb import rq2_final_calibrator as final_calibrator
+from trustpcb import rq2_weighted_fusion as fusion
+from trustpcb import rq2_final_evaluation as evaluation
+from trustpcb import rq3_final_evaluation as rq3
+assert first is second is legacy is canonical
+assert sys.modules["trustpcb.rq2_calibrator_comparison"] is canonical
+assert sys.modules["trustpcb.rq2.calibrator_comparison"] is canonical
+assert Path(canonical.__file__).resolve() == Path("src/trustpcb/rq2/calibrator_comparison.py").resolve()
+assert canonical.analysis is calibration_analysis
+assert canonical.raw is confidence_distribution
+assert canonical.partition is data_partition
+consumers = (final_calibrator.comparison, fusion.comparison, evaluation.calibration,
+             rq3.review.risk.final.comparison)
+assert all(consumer is canonical for consumer in consumers)
+for name in ("EPSILON", "OUTPUT", "SEED", "apply_calibrator", "assign_folds", "fit_calibrator",
+             "load_inputs", "metric_summary", "write_csv", "ALL_METHODS", "METHODS",
+             "EXPECTED_PREDICTIONS", "RESAMPLES", "cluster_bootstrap", "cross_fit", "expit", "select_method", "run", "main"):
+    assert getattr(legacy, name) is getattr(canonical, name)
+for name in ("fit_calibrator", "assign_folds", "cross_fit", "run", "main"):
+    assert getattr(canonical, name).__globals__ is canonical.__dict__
+assert canonical.fit_calibrator.__module__ == "trustpcb.rq2.calibrator_comparison"
+assert canonical.cross_fit.__defaults__ == (canonical.fit_calibrator,)
+assert canonical.METHODS == ("Temperature", "Platt", "Beta", "Isotonic")
+assert (canonical.SEED, canonical.FOLDS, canonical.RESAMPLES, canonical.EXPECTED_PREDICTIONS,
+        canonical.EPSILON) == (24209199, 5, 10000, 7131, 1e-15)
+for owner, observer in ((legacy, canonical), (canonical, legacy)):
+    with patch.object(owner, "OUTPUT", "synthetic/output"):
+        assert all(consumer.OUTPUT == observer.OUTPUT == "synthetic/output" for consumer in consumers)
+    with patch.object(owner, "METHODS", ["synthetic"]):
+        owner.METHODS.append("mutation")
+        assert observer.METHODS == ["synthetic", "mutation"]
+        assert all(consumer.METHODS is observer.METHODS for consumer in consumers)
+    for name in ("write_csv", "apply_calibrator", "fit_calibrator"):
+        with patch.object(owner, name, return_value="synthetic") as mocked:
+            for consumer in consumers:
+                assert getattr(consumer, name) is getattr(observer, name) is mocked
+                assert getattr(consumer, name)("fixture") == "synthetic"
+            assert mocked.call_count == len(consumers)
+images = [str(i) for i in range(10)]
+edges = [("0", "1"), ("1", "2")]
+with patch.object(data_partition, "components", wraps=data_partition.components) as components:
+    folds = canonical.assign_folds(images, edges)
+    components.assert_called_once_with(images, edges)
+assert folds == legacy.assign_folds(images, list(reversed(edges)))
+assert len({{r["fold_id"] for r in folds[:3]}}) == 1
+assert "torch" not in sys.modules
+assert "ultralytics" not in sys.modules
+'''])
+
+    def test_legacy_first_canonical_second(self):
+        self.check_import_order("trustpcb.rq2_calibrator_comparison", "trustpcb.rq2.calibrator_comparison")
+
+    def test_canonical_first_legacy_second(self):
+        self.check_import_order("trustpcb.rq2.calibrator_comparison", "trustpcb.rq2_calibrator_comparison")
+
+    def check_help(self, module):
+        output = self.run_python(["-m", module, "--help"])
+        self.assertIn("--dicc", output)
+        self.assertIn("development OOF calibrator comparison", output)
+
+    def test_legacy_cli_help(self):
+        self.check_help("trustpcb.rq2_calibrator_comparison")
+
+    def test_canonical_cli_help(self):
+        self.check_help("trustpcb.rq2.calibrator_comparison")
+
+    def test_legacy_main_dispatch(self):
+        self.run_python(["-c", '''
+import runpy
+import sys
+from unittest.mock import patch
+from trustpcb.rq2 import calibrator_comparison as canonical
+original_main = sys.modules["__main__"]
+with patch.object(canonical, "main") as main:
+    runpy.run_path("src/trustpcb/rq2_calibrator_comparison.py", run_name="__main__")
+    main.assert_called_once_with()
+assert sys.modules["__main__"] is original_main
+assert "torch" not in sys.modules
+assert "ultralytics" not in sys.modules
+'''])
+
+    def test_dicc_parser_dispatch_mock_only(self):
+        root = REPO / "synthetic-root-not-opened"
+        with patch.object(comparison, "os", SimpleNamespace(name="posix")), \
+                patch.object(comparison, "find_project_root", return_value=root), \
+                patch.object(comparison, "run", return_value="synthetic") as run, \
+                contextlib.redirect_stdout(io.StringIO()) as output:
+            comparison.main(["--dicc"])
+            run.assert_called_once_with(root)
+        self.assertEqual(output.getvalue().strip(), "synthetic")
+
+    def test_missing_dicc_flag_blocks_before_root_or_run(self):
+        with patch.object(comparison, "os", SimpleNamespace(name="posix")), \
+                patch.object(comparison, "find_project_root") as root, \
+                patch.object(comparison, "run") as run:
+            with self.assertRaisesRegex(RuntimeError, "DICC-only"):
+                comparison.main([])
+            root.assert_not_called()
+            run.assert_not_called()
+
+    def test_csv_field_and_row_order(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "synthetic.csv"
+            rows = [{"second": "b", "first": "a"}, {"second": "d", "first": "c"}]
+            comparison.write_csv(target, rows)
+            self.assertEqual(target.read_bytes(), b"second,first\r\nb,a\r\nd,c\r\n")
+            with self.assertRaises(FileExistsError):
+                comparison.write_csv(target, rows)
 
 
 class FoldAndFitTests(unittest.TestCase):

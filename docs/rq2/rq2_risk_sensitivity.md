@@ -28,7 +28,7 @@ unchanged. IoU75 labels are never supplied to any fitting or selection routine.
 
 ## Unchanged risks and metrics
 
-Call `rq2_risk_evaluation.risk_scores` directly. Let `r=1-raw_confidence`,
+Call `trustpcb.rq2.risk_evaluation.risk_scores` directly. Let `r=1-raw_confidence`,
 `c=1-calibrated_confidence`, `k=1-class_consistency`, `l=1-localisation_stability`.
 The same eight scores are `r`, `c`, `k`, `l`, `(c+k)/2`, `(c+l)/2`, `(k+l)/2`,
 and `(c+k+l)/3`, in the primary method order. No weights are tuned.
@@ -65,7 +65,7 @@ or model/threshold-selection rule is introduced.
 After review and committing the implementation, from the repository root:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq2_risk_sensitivity --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2.risk_sensitivity --dicc
 ```
 
 Dependencies are the existing NumPy, SciPy and PyYAML environment. This is CPU-only;
@@ -73,6 +73,20 @@ no GPU or detector library is needed. Real development processing must remain on
 DICC. Windows execution is blocked and `--dicc` is required.
 
 Output: `runs/rq2/risk_sensitivity_iou75/`.
+
+The canonical implementation is `src/trustpcb/rq2/risk_sensitivity.py`.
+The legacy `trustpcb.rq2_risk_sensitivity` import and module command remain
+supported by a shim referencing the same live module. The executable primary
+evaluation dependency uses `trustpcb.rq2.risk_evaluation`; validation, scoring,
+metrics and bootstrap remain delegated to it.
+
+The fixed experiment identifier `rq2_risk_sensitivity_iou75`, secondary labels,
+artifact paths and output schemas remain unchanged. Historical records are not
+rewritten. Future execution still records its actual Git state, package/Python
+versions, timestamps and artifact hashes. This workflow does not record a
+source-code-file hash; relocation claims no old/new source-hash equivalence
+and does not require a scientific rerun. This module owns only the IoU75 target
+adaptation, not a parameter grid, perturbation sweep or weight-selection method.
 
 - `method_metrics.csv`: eight secondary AUROC/AP results and bootstrap intervals.
 - `pairwise_auroc_differences.csv`: the five fixed comparisons.

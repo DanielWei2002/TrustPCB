@@ -63,13 +63,28 @@ After reviewing/committing the implementation, use the project's environment wit
 NumPy, SciPy and PyYAML installed. From the repository root:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq2_final_calibrator --dicc --approve-beta-selection
+PYTHONPATH=src python -B -m trustpcb.rq2.final_calibrator --dicc --approve-beta-selection
 ```
 
 This is CPU-only. No GPU, PyTorch or Ultralytics is needed. The CLI rejects Windows
 and requires `--dicc`; do not process real development predictions locally.
 
 Output: `runs/rq2/final_calibrator/`.
+
+The canonical implementation is `src/trustpcb/rq2/final_calibrator.py`.
+The legacy `trustpcb.rq2_final_calibrator` import and module command remain
+supported through a shim pointing to the same live module. Executable comparison
+imports use `trustpcb.rq2.calibrator_comparison`; its analysis, confidence and
+partition dependencies already use the canonical package.
+
+The fixed optimizer implementation label
+`trustpcb.rq2_calibrator_comparison.fit_calibrator` remains unchanged in future
+calibrator artifacts and fit summaries. It names a supported compatibility alias;
+it is not derived dynamically from a function module name. Existing artifact
+hashes and validation remain unchanged. Historical evidence is not rewritten.
+Future runs still record their actual Git commit, input/output hashes, package
+versions and timestamps. This workflow does not record a source-file hash, and
+relocation does not claim source-hash equivalence or require rerunning a fit.
 
 | File | Contents |
 |---|---|

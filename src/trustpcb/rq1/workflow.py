@@ -16,6 +16,12 @@ import sys
 
 import yaml
 
+# Preserve the established rq1 utility interfaces for downstream code and mocks.
+from trustpcb.common import provenance as _common_provenance
+from trustpcb.common.provenance import (
+    serialize_json as _json, sha256_file as _sha,
+    write_json as _write_json, read_json as _read_json,
+)
 from trustpcb.dataset_config import find_project_root, generate_runtime_configs, load_paths
 
 
@@ -28,6 +34,12 @@ SEEDS = (
 )
 SPLITS = ("supplied", "similarity_aware")
 BASELINE_FILE = "configs/experiments/yolov8n_preliminary_baseline_v1.yaml"
+# Future provenance records the actual package sources, never a fabricated old hash.
+SOURCE_FILES = (
+    "src/trustpcb/rq1/__init__.py",
+    "src/trustpcb/rq1/__main__.py",
+    "src/trustpcb/rq1/workflow.py",
+)
 EXECUTION_INPUTS = ("src/trustpcb/", BASELINE_FILE, "configs/datasets/", "data/splits/")
 # A drift guard for the approved design, not a second configuration source.
 APPROVED_BASELINE = {
@@ -45,52 +57,9 @@ METRICS = {
 SELECTION = "highest logged mAP50-95; first epoch on a CSV tie"
 
 
-def _json(value):
-    return json.dumps(value, sort_keys=True, indent=2, allow_nan=False) + "\n"
-
-
-def _sha(path):
-    # Called only on small source/configuration/CSV files, never checkpoints.
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
-
-
-def _write_json(path, value, exclusive=False):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if exclusive:
-        with path.open("x", encoding="utf-8", newline="\n") as file:
-            file.write(_json(value))
-    else:
-        temporary = path.with_suffix(path.suffix + ".tmp")
-        temporary.write_text(_json(value), encoding="utf-8")
-        temporary.replace(path)
-
-
-def _read_json(path):
-    value = json.loads(Path(path).read_text(encoding="utf-8"))
-    if not isinstance(value, dict):
-        raise ValueError(f"Expected an object: {path}")
-    return value
-
-
 def git_provenance(root):
-    def git(*args):
-        return subprocess.check_output(
-            ["git", *args], cwd=str(root), text=True, stderr=subprocess.PIPE
-        )
-    # Separate plumbing avoids older Git's limited `status` pathspec support.
-    # NUL-delimited names preserve whitespace/newlines; command failures propagate.
-    changes = []
-    for kind, command in (
-        ("unstaged", ("diff", "--name-only", "-z")),
-        ("staged", ("diff", "--cached", "--name-only", "-z")),
-        ("untracked", ("ls-files", "--others", "--exclude-standard", "-z")),
-    ):
-        names = git(*command, "--", *EXECUTION_INPUTS).split("\0")
-        changes.extend(f"{kind}: {name!r}" for name in names if name)
-    status = "\n".join(changes)
-    return {"git_commit": git("rev-parse", "HEAD").strip(),
-            "git_dirty": bool(status), "git_input_status": status}
+    """Compatibility interface retaining the existing execution-input policy."""
+    return _common_provenance.git_provenance(root, EXECUTION_INPUTS)
 
 
 def require_clean_inputs(root):
@@ -167,7 +136,7 @@ def build_plan(root, git_info=None):
     if _json(baseline) != _json(APPROVED_BASELINE):
         raise ValueError(f"{BASELINE_FILE} differs from the approved RQ1 configuration")
     git_info = git_provenance(root) if git_info is None else git_info
-    inputs = [root / BASELINE_FILE, root / "src/trustpcb/rq1.py",
+    inputs = [root / BASELINE_FILE, *(root / name for name in SOURCE_FILES),
               root / "src/trustpcb/dataset_config.py"]
     inputs += sorted((root / "configs/datasets").glob("*"))
     inputs += sorted((root / "data/splits").glob("*"))
@@ -307,15 +276,8 @@ def inspect_run(plan, for_execution=True):
 
 
 def _environment():
-    versions = {}
-    for name in ("ultralytics", "torch", "numpy", "PyYAML"):
-        try:
-            versions[name] = importlib.metadata.version(name)
-        except importlib.metadata.PackageNotFoundError:
-            versions[name] = "not installed"
-    return {"python": sys.version, "platform": platform.platform(), "packages": versions,
-            "PYTHONHASHSEED": os.environ.get("PYTHONHASHSEED"),
-            "CUDA_VISIBLE_DEVICES": os.environ.get("CUDA_VISIBLE_DEVICES")}
+    """Retain the established RQ1 package inventory and metadata schema."""
+    return _common_provenance.environment(("ultralytics", "torch", "numpy", "PyYAML"))
 
 
 def _yolo_train(plan):

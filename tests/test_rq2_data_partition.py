@@ -2,14 +2,106 @@
 
 import hashlib
 import json
+import os
 from pathlib import Path
 import random
+import subprocess
 import sys
 import tempfile
 import unittest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "src"))
 from trustpcb import rq2_data_partition as split
+
+
+class RQ2PartitionCompatibilityTests(unittest.TestCase):
+    def run_python(self, arguments):
+        environment = os.environ.copy()
+        environment["PYTHONPATH"] = os.pathsep.join(
+            [str(REPO / "src"), environment.get("PYTHONPATH", "")])
+        result = subprocess.run([sys.executable, "-B", *arguments], cwd=REPO,
+                                env=environment, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        return result.stdout
+
+    def check_import_order(self, first, second):
+        self.run_python(["-c", f'''
+import importlib
+from pathlib import Path
+import sys
+from unittest.mock import patch
+first = importlib.import_module({first!r})
+second = importlib.import_module({second!r})
+from trustpcb import rq2_data_partition as legacy
+from trustpcb.rq2 import data_partition as canonical
+from trustpcb import rq2_calibrator_comparison as comparison
+assert first is second is legacy is canonical is comparison.partition
+assert sys.modules["trustpcb.rq2_data_partition"] is canonical
+assert sys.modules["trustpcb.rq2.data_partition"] is canonical
+assert Path(canonical.__file__).resolve() == Path("src/trustpcb/rq2/data_partition.py").resolve()
+for name in ("PAIRS", "components", "OUTPUT", "REJECTED_OUTPUT", "class_balance",
+             "count_source_labels", "freeze", "partition", "validate", "main"):
+    assert getattr(legacy, name) is getattr(canonical, name)
+for name in ("components", "class_balance", "count_source_labels", "freeze",
+             "partition", "validate", "main"):
+    assert getattr(canonical, name).__globals__ is canonical.__dict__
+for owner, observer in ((legacy, canonical), (canonical, legacy)):
+    with patch.object(owner, "PAIRS", "synthetic/pairs.csv"):
+        assert observer.PAIRS == comparison.partition.PAIRS == "synthetic/pairs.csv"
+    with patch.object(owner, "components", return_value=[["a"], ["b"]]) as mocked:
+        train, dev, groups = observer.partition(["a", "b"], [], {{"a": [1], "b": [1]}}, target_dev=1)
+        mocked.assert_called_once_with(["a", "b"], [])
+        assert groups == [["a"], ["b"]]
+        assert len(train) == len(dev) == 1
+assert "torch" not in sys.modules
+assert "ultralytics" not in sys.modules
+'''])
+
+    def test_legacy_first_canonical_second(self):
+        self.check_import_order("trustpcb.rq2_data_partition", "trustpcb.rq2.data_partition")
+
+    def test_canonical_first_legacy_second(self):
+        self.check_import_order("trustpcb.rq2.data_partition", "trustpcb.rq2_data_partition")
+
+    def check_cli_help(self, module):
+        output = self.run_python(["-m", module, "--help"])
+        self.assertIn("--dicc", output)
+        self.assertIn("freeze a group-preserving train/development split", output)
+        self.assertIn("Authorize source-label processing on DICC only", output)
+
+    def test_legacy_cli_help(self):
+        self.check_cli_help("trustpcb.rq2_data_partition")
+
+    def test_canonical_cli_help(self):
+        self.check_cli_help("trustpcb.rq2.data_partition")
+
+    def test_legacy_execution_dispatches_to_canonical_main(self):
+        self.run_python(["-c", '''
+import runpy
+import sys
+from unittest.mock import patch
+from trustpcb.rq2 import data_partition as canonical
+original_main_module = sys.modules["__main__"]
+with patch.object(canonical, "main") as main:
+    runpy.run_path("src/trustpcb/rq2_data_partition.py", run_name="__main__")
+    main.assert_called_once_with()
+assert sys.modules["__main__"] is original_main_module
+assert "torch" not in sys.modules
+assert "ultralytics" not in sys.modules
+'''])
+
+    def test_synthetic_freeze_hashes_canonical_generator(self):
+        from trustpcb.rq2 import data_partition as canonical
+        self.assertIs(split, canonical)
+        generator = REPO / "src/trustpcb/rq2/data_partition.py"
+        self.assertEqual(Path(split.freeze.__globals__["__file__"]).resolve(), generator)
+        with tempfile.TemporaryDirectory() as temp:
+            report = split.freeze(Path(temp), ["a", "b"], [], {0: "A"},
+                                  {"a": [1], "b": [1]}, {}, "synthetic", "synthetic", target_dev=1)
+        self.assertEqual(report["generator_sha256"], hashlib.sha256(generator.read_bytes()).hexdigest())
+        shim_hash = hashlib.sha256((REPO / "src/trustpcb/rq2_data_partition.py").read_bytes()).hexdigest()
+        self.assertNotEqual(report["generator_sha256"], shim_hash)
 
 
 class RQ2SplitTests(unittest.TestCase):

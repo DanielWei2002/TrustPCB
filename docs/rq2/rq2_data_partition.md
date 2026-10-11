@@ -61,8 +61,15 @@ Configure `configs/local/paths.yaml` for the existing DICC checkout and dataset.
 Then, from the checkout root:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq2_data_partition --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2.data_partition --dicc
 ```
+
+The canonical implementation is `src/trustpcb/rq2/data_partition.py`. The legacy
+`trustpcb.rq2_data_partition` import and module command remain supported; imports
+share the canonical module object, and the legacy CLI dispatches to its `main()`.
+Future generator hashes identify the canonical implementation, while historical
+partition reports and generator hashes remain unchanged. Do not rerun a frozen
+partition because its implementation moved.
 
 This command does not import YOLO/PyTorch or perform training, inference,
 calibration, transformations, scoring or evaluation. It reads source labels,

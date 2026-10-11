@@ -1,5 +1,19 @@
 # RQ3 development selective review
 
+Canonical source: `src/trustpcb/rq3/selective_review.py`; module:
+`trustpcb.rq3.selective_review`. The legacy `trustpcb.rq3_selective_review` import
+aliases the same live module, and its CLI dispatches to the canonical `main()`.
+RQ2 dependencies use canonical package imports; `selected_identity` remains a
+directly bound import, patched in the selective-review namespace when needed.
+RQ3 final evaluation is canonical at `trustpcb.rq3.final_evaluation` and imports
+`trustpcb.rq3.selective_review` directly. The legacy `trustpcb.rq3_selective_review`
+path remains supported as a compatibility/CLI shim.
+
+The package move preserves fixed experiment identifiers and all completed evidence.
+This workflow has no source-file hash identity; future Git/version/time metadata
+remain dynamic. Do not rerun completed work because its source moved, or harmonize
+the original development CSV schema with the separate reporting extension.
+
 This workflow evaluates the frozen 821-image development/calibration population
 using existing RQ2 text artifacts only. Each manifest image is one reviewable crop.
 It does not load the test manifest, test predictions, dataset images, annotations
@@ -8,7 +22,7 @@ Missing inputs cause failure; they are never regenerated.
 
 ## Frozen inputs and methods
 
-Reuse `rq2_risk_evaluation.load_inputs()` to validate the development manifest,
+Reuse `trustpcb.rq2.risk_evaluation.load_inputs()` to validate the development manifest,
 7,131 retained predictions (raw confidence >= 0.01), original prediction order,
 Beta-calibrated confidence, transformation stability and their provenance chain.
 The upstream loader binds the epoch-72 detector hash through completed extraction
@@ -58,10 +72,11 @@ If all nonempty crops fit within the budget, use -1 (all scores lie in [0,1]).
 Record nominal counts, actual counts, workload and the exact threshold for each
 method/budget. Empty populations still produce zero referrals.
 
-The derived thresholds are written to `development_thresholds.json`. They are
-development-derived protocol candidates for review and subsequent freezing. Future
-test application must use the frozen scalar values unchanged: no workload forcing,
-test quantiles or retuning. No test application is implemented here.
+The derived thresholds are written to `development_thresholds.json`. They were
+development-derived protocol candidates before review and freezing; the completed
+evidence now contains the frozen thresholds. Test application must use those scalar
+values unchanged: no workload forcing, test quantiles or retuning. No test
+application is implemented in this module.
 
 Error capture is the fraction of all incorrect predictions lying in referred crops.
 Also report referred prediction count, captured incorrect count and error rate
@@ -122,7 +137,7 @@ For the already completed bootstrap run, use the reporting extension after code
 review and committing the execution inputs:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq3_selective_review --dicc --extend-report
+PYTHONPATH=src python -B -m trustpcb.rq3.selective_review --dicc --extend-report
 ```
 
 This reads the original `development_thresholds.json` without calling threshold
@@ -147,13 +162,13 @@ has been extended locally.
 After review and committing execution inputs, from the repository root:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq3_selective_review --dicc
+PYTHONPATH=src python -B -m trustpcb.rq3.selective_review --dicc
 ```
 
 To include the optional 10,000-replicate uncertainty calculation in that run:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq3_selective_review --dicc --bootstrap
+PYTHONPATH=src python -B -m trustpcb.rq3.selective_review --dicc --bootstrap
 ```
 
 Choose one command before execution. CPU only; no GPU required. The CLI rejects

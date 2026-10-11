@@ -1,5 +1,14 @@
 # RQ3 computational efficiency
 
+The canonical module is `trustpcb.rq3.computational_efficiency`.
+`trustpcb.rq3_computational_efficiency` remains a compatibility import/CLI shim;
+both import paths resolve to the same live module. RQ2 dependencies use canonical
+package paths, retaining the directly bound `selected_identity` validator.
+The definition-time clock, adapter and image-count defaults are unchanged.
+Completed benchmark evidence and the historical experiment identifier
+`rq3_computational_efficiency` remain unchanged. This source relocation does not
+require rerunning the benchmark.
+
 Benchmark only the pinned 821 development/calibration crops in manifest order,
 using the frozen epoch-72 YOLOv8n selected checkpoint, existing Beta parameters and
 89/1/10 weighted reliability score. This is a DICC GPU workload; never run locally.
@@ -21,7 +30,7 @@ aggregation. Apply the existing Beta model to original references and compute
 `0.89*(1-C)+0.01*(1-Sc)+0.10*(1-Sl)` using the original integer-weight arithmetic.
 Twelve detector passes/crop, including crops without retained original predictions.
 
-Both pipelines use unchanged `rq2_confidence_distribution.SETTINGS`, including
+Both pipelines use unchanged `trustpcb.rq2.confidence_distribution.SETTINGS`, including
 batch=1, device=0, imgsz=640, conf=0.001, iou=0.7, max_det=300, rect=True,
 augment=False and class-aware NMS. Original references retain confidence >=0.01;
 transformed detections use the frozen extraction floor. The full pipeline loads
@@ -68,7 +77,7 @@ After review and committing execution inputs, configure local paths and run from
 the repository root on a DICC GPU allocation:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq3_computational_efficiency --dicc
+PYTHONPATH=src python -B -m trustpcb.rq3.computational_efficiency --dicc
 ```
 
 Requires frozen Ultralytics 8.4.117 and the existing CUDA/PyTorch environment.

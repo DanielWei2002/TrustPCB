@@ -119,7 +119,7 @@ After reviewing/committing the implementation, from the repository root with
 NumPy, SciPy and the existing PyYAML dependency available:
 
 ```bash
-PYTHONPATH=src python -B -m trustpcb.rq2_risk_evaluation --dicc
+PYTHONPATH=src python -B -m trustpcb.rq2.risk_evaluation --dicc
 ```
 
 This is **CPU-only**; no GPU, PyTorch or Ultralytics import is required. Do not
@@ -129,6 +129,20 @@ archive explicitly before a reviewed retry. Inputs/Git state are checked again
 before marking completion. Failures leave incomplete provenance.
 
 Output directory: `runs/rq2/risk_evaluation/`.
+
+The canonical implementation is `src/trustpcb/rq2/risk_evaluation.py`.
+The legacy `trustpcb.rq2_risk_evaluation` import and module command remain
+supported through a shim referencing the same live module. Executable imports
+use canonical final-calibrator and artifact-path modules. Transformation
+stability is consumed through its saved artifacts, not a new module dependency.
+
+The fixed experiment identifier `rq2_risk_evaluation`, artifact paths, formulas,
+schemas and validation remain unchanged. Historical provenance is not rewritten.
+Future execution still records its actual Git state, package/Python versions,
+timestamps and input/output hashes. No source-code-file hash is recorded here;
+relocation does not claim equivalence of old and new source hashes or require
+rerunning scientific evaluation. Coverage, selective-error and AURC calculations
+remain in the existing RQ3 workflows.
 
 - `method_metrics.csv`: eight methods, observed AUROC/AUPRC, bootstrap means,
   intervals and valid/invalid counts.

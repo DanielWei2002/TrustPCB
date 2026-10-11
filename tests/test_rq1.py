@@ -265,7 +265,7 @@ class RQ1Tests(unittest.TestCase):
             return "a" * 40 + "\n"
         with patch.object(rq1.subprocess, "check_output", side_effect=git):
             self.assertFalse(rq1.require_clean_inputs(self.root)["git_dirty"])
-            for name in ("src/trustpcb/rq1.py", "src/trustpcb/dataset_config.py",
+            for name in (*rq1.SOURCE_FILES, "src/trustpcb/dataset_config.py",
                          rq1.BASELINE_FILE, "configs/datasets/new.txt", "data/splits/new.txt"):
                 for status in (" M", "M ", "??"):
                     with self.subTest(name=name, status=status):
@@ -317,13 +317,25 @@ class RQ1Tests(unittest.TestCase):
 
     def test_dirty_inputs_block_launch_and_direct_execution(self):
         dirty = {"git_commit": "a" * 40, "git_dirty": True,
-                 "git_input_status": "?? src/trustpcb/rq1.py"}
+                 "git_input_status": "?? src/trustpcb/rq1/workflow.py"}
         with patch.object(rq1, "git_provenance", return_value=dirty):
             with self.assertRaisesRegex(RuntimeError, "committed and clean"):
                 rq1.run_sequential(self.root, self.plans, launch=lambda *a, **k: self.fail("must not launch"))
             with self.assertRaisesRegex(RuntimeError, "committed and clean"):
                 rq1.execute_one(self.plans[0], lambda _: self.fail("must not train"))
         self.assertFalse(rq1._sidecar(self.plans[0]).exists())
+
+    def test_historical_source_identity_reports_without_adopting_for_execution(self):
+        plan = self.plans[0]
+        rq1.execute_one(plan, self.fake_training)
+        record = rq1._read_json(rq1._sidecar(plan))
+        for relative in rq1.SOURCE_FILES:
+            record["plan"]["input_hashes"].pop(relative)
+        record["plan"]["input_hashes"]["src/trustpcb/rq1.py"] = "historical-source-identity"
+        rq1._write_json(rq1._sidecar(plan), record)
+        rq1._write_json(Path(plan["output_dir"]) / "rq1_complete.json", record)
+        self.assertEqual(rq1.inspect_run(plan, for_execution=False)[0], "completed")
+        self.assertEqual(rq1.inspect_run(plan, for_execution=True)[0], "incomplete")
 
     def test_missing_pretrained_model_blocks_first_worker(self):
         self.model_file.unlink()
