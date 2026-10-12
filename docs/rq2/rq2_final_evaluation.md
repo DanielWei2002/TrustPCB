@@ -1,5 +1,8 @@
 # Frozen RQ2 final-test evaluation
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 Canonical source: `src/trustpcb/rq2/final_evaluation.py`; module:
 `trustpcb.rq2.final_evaluation`. The legacy `trustpcb.rq2_final_evaluation`
 import resolves to the same live module and retains CLI compatibility.

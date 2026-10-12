@@ -1,0 +1,1352 @@
+{
+  "schema_version": 1,
+  "base_commit": "b703ba010d677d557a05ed8c4d8e4f2b4ffce9c9",
+  "hash_convention": "SHA-256 of exact local file bytes, including line endings",
+  "rendering": {
+    "python": "3.11.13",
+    "matplotlib": "3.11.2",
+    "backend": "Agg",
+    "dpi": 160
+  },
+  "artifacts": [
+    {
+      "path": "risk_evaluation/tables/method_metrics.csv",
+      "sha256": "30119c3b811a7f1916fe1a4436965207dd2efae7703e99e0fcb0136281010f2c",
+      "bytes": 1753,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_evaluation/method_metrics.csv",
+          "sha256": "30119c3b811a7f1916fe1a4436965207dd2efae7703e99e0fcb0136281010f2c",
+          "bytes": 1753
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_evaluation/tables/pairwise_auroc_differences.csv",
+      "sha256": "16df8d6bfdf1a7218e94b7fe32c4541f111694f83c4c61062cc2f686106d9874",
+      "bytes": 840,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_evaluation/pairwise_auroc_differences.csv",
+          "sha256": "16df8d6bfdf1a7218e94b7fe32c4541f111694f83c4c61062cc2f686106d9874",
+          "bytes": 840
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_evaluation/tables/per_class_diagnostics.csv",
+      "sha256": "217eff406a8f304366bed2d447047611a0c5a8735bcaca9911a81d7692016dc0",
+      "bytes": 2315,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_evaluation/per_class_diagnostics.csv",
+          "sha256": "217eff406a8f304366bed2d447047611a0c5a8735bcaca9911a81d7692016dc0",
+          "bytes": 2315
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_evaluation/tables/signal_correlations.csv",
+      "sha256": "ed569509498e8557a52026818c72802da85b6c44885fd6fd8a0013b18038f4ae",
+      "bytes": 270,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_evaluation/signal_correlations.csv",
+          "sha256": "ed569509498e8557a52026818c72802da85b6c44885fd6fd8a0013b18038f4ae",
+          "bytes": 270
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_evaluation/tables/signal_descriptives.csv",
+      "sha256": "4e04b5b7d208686f789062b473b1eb3e23994c743604e3b56b986998456c3fca",
+      "bytes": 763,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_evaluation/signal_descriptives.csv",
+          "sha256": "4e04b5b7d208686f789062b473b1eb3e23994c743604e3b56b986998456c3fca",
+          "bytes": 763
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_evaluation/summaries/summary.json",
+      "sha256": "87d94644b35e074df6b61c1e448ff7fb06513ae0c970023bf14c4999289a56a5",
+      "bytes": 1203,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_evaluation/summary.json",
+          "sha256": "87d94644b35e074df6b61c1e448ff7fb06513ae0c970023bf14c4999289a56a5",
+          "bytes": 1203
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_evaluation/summaries/bootstrap_summary.json",
+      "sha256": "1c748de6b4a3e6f08c8d13046159f28d72c9290bc20e6ee9f5b7fae87646a4e8",
+      "bytes": 2050,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_evaluation/bootstrap_summary.json",
+          "sha256": "1c748de6b4a3e6f08c8d13046159f28d72c9290bc20e6ee9f5b7fae87646a4e8",
+          "bytes": 2050
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_evaluation/summaries/provenance.json",
+      "sha256": "84f58c4292d60c52f51b5d2783d9628ec288153f33e8012967e1acedd4ca9205",
+      "bytes": 4841,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_evaluation/provenance.json",
+          "sha256": "84f58c4292d60c52f51b5d2783d9628ec288153f33e8012967e1acedd4ca9205",
+          "bytes": 4841
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_sensitivity_iou75/tables/method_metrics.csv",
+      "sha256": "43fbb1b4f266d73c427c96d27d7b8c5e058d14d76125c39e03ef620a90788a60",
+      "bytes": 2095,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_sensitivity_iou75/method_metrics.csv",
+          "sha256": "43fbb1b4f266d73c427c96d27d7b8c5e058d14d76125c39e03ef620a90788a60",
+          "bytes": 2095
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_sensitivity_iou75/tables/pairwise_auroc_differences.csv",
+      "sha256": "cc6cdeb4762d8cd92ebd493a3dfbacb084100298f5aff864ef413b5537d44ac8",
+      "bytes": 1056,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_sensitivity_iou75/pairwise_auroc_differences.csv",
+          "sha256": "cc6cdeb4762d8cd92ebd493a3dfbacb084100298f5aff864ef413b5537d44ac8",
+          "bytes": 1056
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_sensitivity_iou75/summaries/summary.json",
+      "sha256": "d6d6bb4b43e0a165c1e3261afaf9a82f261f6fe227b98eeac4adb97c21f3a32d",
+      "bytes": 1377,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_sensitivity_iou75/summary.json",
+          "sha256": "d6d6bb4b43e0a165c1e3261afaf9a82f261f6fe227b98eeac4adb97c21f3a32d",
+          "bytes": 1377
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_sensitivity_iou75/summaries/bootstrap_summary.json",
+      "sha256": "ba513575e327a8923e8e343b59a47e1d2858eca387d51f38f6363647b059a7f1",
+      "bytes": 2189,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_sensitivity_iou75/bootstrap_summary.json",
+          "sha256": "ba513575e327a8923e8e343b59a47e1d2858eca387d51f38f6363647b059a7f1",
+          "bytes": 2189
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_sensitivity_iou75/summaries/provenance.json",
+      "sha256": "22f7f3a2e543e47b287b546b8381de44d0e7ddea3c314c36e49451f709b782df",
+      "bytes": 4826,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_sensitivity_iou75/provenance.json",
+          "sha256": "22f7f3a2e543e47b287b546b8381de44d0e7ddea3c314c36e49451f709b782df",
+          "bytes": 4826
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_fusion/tables/development_metrics.csv",
+      "sha256": "e84f69d176fcc8706d76d8a1a738a12a61407b016637b3ceebe4dfa04561a725",
+      "bytes": 537,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_fusion/development_metrics.csv",
+          "sha256": "e84f69d176fcc8706d76d8a1a738a12a61407b016637b3ceebe4dfa04561a725",
+          "bytes": 537
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_fusion/tables/sensitivity_iou75_metrics.csv",
+      "sha256": "a53a0ed9791d19f592a750ec07d47040494427eb97bcb84d65c829b48bf82cb8",
+      "bytes": 496,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_fusion/sensitivity_iou75_metrics.csv",
+          "sha256": "a53a0ed9791d19f592a750ec07d47040494427eb97bcb84d65c829b48bf82cb8",
+          "bytes": 496
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_fusion/tables/fold_assignments.csv",
+      "sha256": "084fa050d9cbb91ab1d2b650d5421ce541d77174e073881a05a9ba60396a7246",
+      "bytes": 78130,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_fusion/fold_assignments.csv",
+          "sha256": "084fa050d9cbb91ab1d2b650d5421ce541d77174e073881a05a9ba60396a7246",
+          "bytes": 78130
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_fusion/summaries/summary.json",
+      "sha256": "e62fa4ccfbae5ecb13b3abc4b13408336836cc146e54ee36fd828fbb0b8dee33",
+      "bytes": 1254,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_fusion/summary.json",
+          "sha256": "e62fa4ccfbae5ecb13b3abc4b13408336836cc146e54ee36fd828fbb0b8dee33",
+          "bytes": 1254
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_fusion/summaries/selected_weights.json",
+      "sha256": "818a53fd9867b58a6fe88001addccbcc701bc5dcce8b6f43e0e17041cc42e10b",
+      "bytes": 716,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_fusion/selected_weights.json",
+          "sha256": "818a53fd9867b58a6fe88001addccbcc701bc5dcce8b6f43e0e17041cc42e10b",
+          "bytes": 716
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_fusion/summaries/provenance.json",
+      "sha256": "6b1b66b31082733bd0ba98797ad80ca42bdb32265592e120096310f40619aedd",
+      "bytes": 4534,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_fusion/provenance.json",
+          "sha256": "6b1b66b31082733bd0ba98797ad80ca42bdb32265592e120096310f40619aedd",
+          "bytes": 4534
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/tables/calibration_bins.csv",
+      "sha256": "88ebbf1aa2174a7c3547d86067acc6cfe8710783cf4654a1ca5fc5b5c70c7574",
+      "bytes": 1310,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/calibration_bins.csv",
+          "sha256": "88ebbf1aa2174a7c3547d86067acc6cfe8710783cf4654a1ca5fc5b5c70c7574",
+          "bytes": 1310
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/tables/primary_iou50/method_metrics.csv",
+      "sha256": "a21138465e213fe7adf091f4a4219ff54d62482110852d8fbe040fcf5635f397",
+      "bytes": 2087,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/primary_iou50/method_metrics.csv",
+          "sha256": "a21138465e213fe7adf091f4a4219ff54d62482110852d8fbe040fcf5635f397",
+          "bytes": 2087
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/tables/primary_iou50/pairwise_auroc_differences.csv",
+      "sha256": "5f707dfaa7713d446a4d0c2fdaa0351da6f5e7983c916b89eb0798658b5e3938",
+      "bytes": 1046,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/primary_iou50/pairwise_auroc_differences.csv",
+          "sha256": "5f707dfaa7713d446a4d0c2fdaa0351da6f5e7983c916b89eb0798658b5e3938",
+          "bytes": 1046
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/tables/primary_iou50/signal_correlations.csv",
+      "sha256": "cfa12601941dc68d90c1930a76705d4d9b65a7679344ccfcf5d03c46a29c2fdf",
+      "bytes": 274,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/primary_iou50/signal_correlations.csv",
+          "sha256": "cfa12601941dc68d90c1930a76705d4d9b65a7679344ccfcf5d03c46a29c2fdf",
+          "bytes": 274
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/tables/primary_iou50/signal_descriptives.csv",
+      "sha256": "0ca69abd109c710b904d77f2c66f62e24986b1a67444611125e6a8a25f5efb28",
+      "bytes": 768,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/primary_iou50/signal_descriptives.csv",
+          "sha256": "0ca69abd109c710b904d77f2c66f62e24986b1a67444611125e6a8a25f5efb28",
+          "bytes": 768
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/tables/sensitivity_iou75/method_metrics.csv",
+      "sha256": "576458f22f54cf929eef4262e7aba22a49223304c19f7d4763f7178e2a5cec73",
+      "bytes": 2103,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/sensitivity_iou75/method_metrics.csv",
+          "sha256": "576458f22f54cf929eef4262e7aba22a49223304c19f7d4763f7178e2a5cec73",
+          "bytes": 2103
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/tables/sensitivity_iou75/pairwise_auroc_differences.csv",
+      "sha256": "dbcbde2d062a0001a7f5ac373f796f0c55a975d531ace765519630df6ead5767",
+      "bytes": 1061,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/sensitivity_iou75/pairwise_auroc_differences.csv",
+          "sha256": "dbcbde2d062a0001a7f5ac373f796f0c55a975d531ace765519630df6ead5767",
+          "bytes": 1061
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/calibration_metrics.json",
+      "sha256": "59f236d1868de65f6b2b2dd60dac967c8f2bdce3e7935a3876773b902769b4f0",
+      "bytes": 5535,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/calibration_metrics.json",
+          "sha256": "59f236d1868de65f6b2b2dd60dac967c8f2bdce3e7935a3876773b902769b4f0",
+          "bytes": 5535
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/transformation_manifest.json",
+      "sha256": "37d76334de9415c146905a37ad42382ea296e417c35ec2cd13762407a6b76dc1",
+      "bytes": 2166,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/transformation_manifest.json",
+          "sha256": "37d76334de9415c146905a37ad42382ea296e417c35ec2cd13762407a6b76dc1",
+          "bytes": 2166
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/provenance.json",
+      "sha256": "f9d5088155500cddadbe6894dde67b0eb9309a2d14efd301c7f1bd1253b756d3",
+      "bytes": 228606,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/provenance.json",
+          "sha256": "f9d5088155500cddadbe6894dde67b0eb9309a2d14efd301c7f1bd1253b756d3",
+          "bytes": 228606
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/primary_iou50/summary.json",
+      "sha256": "67ef3c32b9381834ff6ae3d6ca7ed8a982ef91b12009dffe4b717d8a6b00a59c",
+      "bytes": 567,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/primary_iou50/summary.json",
+          "sha256": "67ef3c32b9381834ff6ae3d6ca7ed8a982ef91b12009dffe4b717d8a6b00a59c",
+          "bytes": 567
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/primary_iou50/bootstrap_summary.json",
+      "sha256": "3a0b154a08e0b3a18f11e8f8608c9d2bc614aa22c8e42f4b57180f3d9ea1c9f4",
+      "bytes": 2115,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/primary_iou50/bootstrap_summary.json",
+          "sha256": "3a0b154a08e0b3a18f11e8f8608c9d2bc614aa22c8e42f4b57180f3d9ea1c9f4",
+          "bytes": 2115
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/sensitivity_iou75/summary.json",
+      "sha256": "4ce48c6ccb90ce40a2831eb8fc482ec1bac458ad99196786ad453caa312fbd21",
+      "bytes": 568,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/sensitivity_iou75/summary.json",
+          "sha256": "4ce48c6ccb90ce40a2831eb8fc482ec1bac458ad99196786ad453caa312fbd21",
+          "bytes": 568
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/sensitivity_iou75/bootstrap_summary.json",
+      "sha256": "dd399aa8662c0edaac9a153f75208700af207a66d753a0c45a95b021060f7023",
+      "bytes": 2116,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/sensitivity_iou75/bootstrap_summary.json",
+          "sha256": "dd399aa8662c0edaac9a153f75208700af207a66d753a0c45a95b021060f7023",
+          "bytes": 2116
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_final_evaluation/tables/primary_method_metrics.csv",
+      "sha256": "38ac671146a66b74638deae45576b393ee2975c58c067ea6622b7c5864c74748",
+      "bytes": 976,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_final_evaluation/primary_method_metrics.csv",
+          "sha256": "38ac671146a66b74638deae45576b393ee2975c58c067ea6622b7c5864c74748",
+          "bytes": 976
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_final_evaluation/tables/primary_pairwise_differences.csv",
+      "sha256": "62d3cc5cfd086beb86721952f491a1e4595519c92e6f8816c74e06e9493bc9ea",
+      "bytes": 954,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_final_evaluation/primary_pairwise_differences.csv",
+          "sha256": "62d3cc5cfd086beb86721952f491a1e4595519c92e6f8816c74e06e9493bc9ea",
+          "bytes": 954
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_final_evaluation/tables/sensitivity_iou75_method_metrics.csv",
+      "sha256": "a3fd59459932ddfd17e40ea28aa13e97e45509ca74b107ecdcd156a48637c230",
+      "bytes": 938,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_final_evaluation/sensitivity_iou75_method_metrics.csv",
+          "sha256": "a3fd59459932ddfd17e40ea28aa13e97e45509ca74b107ecdcd156a48637c230",
+          "bytes": 938
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_final_evaluation/tables/sensitivity_iou75_pairwise_differences.csv",
+      "sha256": "5f3cce3267cd948b37bca20da474112a6f1364020029b6e09d50246a74ce7e00",
+      "bytes": 900,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_final_evaluation/sensitivity_iou75_pairwise_differences.csv",
+          "sha256": "5f3cce3267cd948b37bca20da474112a6f1364020029b6e09d50246a74ce7e00",
+          "bytes": 900
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_final_evaluation/summaries/summary.json",
+      "sha256": "d4b4df58bd803aa01327d041e6a8cd2b498757ce50c65393f13fef4cae172cbb",
+      "bytes": 3206,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_final_evaluation/summary.json",
+          "sha256": "d4b4df58bd803aa01327d041e6a8cd2b498757ce50c65393f13fef4cae172cbb",
+          "bytes": 3206
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_final_evaluation/summaries/provenance.json",
+      "sha256": "631903aff823abaf352f2bc10677a59267f2be9edc39deb83a19b54429b39a45",
+      "bytes": 4053,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_final_evaluation/provenance.json",
+          "sha256": "631903aff823abaf352f2bc10677a59267f2be9edc39deb83a19b54429b39a45",
+          "bytes": 4053
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "data_partition/summaries/verification_report.json",
+      "sha256": "7bc327b28b8232abf92d1c79e120c9c134628129b14dfeff58b691c7d4663116",
+      "bytes": 22137,
+      "classification": "reporting_copy",
+      "recipe": "Byte-for-byte copy; canonical original evidence remains authoritative and unchanged.",
+      "sources": [
+        {
+          "path": "data/splits/rq2_train_development_split/verification_report.json",
+          "sha256": "7bc327b28b8232abf92d1c79e120c9c134628129b14dfeff58b691c7d4663116",
+          "bytes": 22137
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_evaluation/figures/method_metrics.png",
+      "sha256": "b0f5611c3c535fd3866528794714e707aa1acf89162d51b3b0395c2c726f5615",
+      "bytes": 108743,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_evaluation/method_metrics.csv",
+          "sha256": "30119c3b811a7f1916fe1a4436965207dd2efae7703e99e0fcb0136281010f2c",
+          "bytes": 1753
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_evaluation/figures/pairwise_auroc_differences.png",
+      "sha256": "42003b18aa701fe16ab18d994451ca68c67078d411a0c3992b0738609c962376",
+      "bytes": 75677,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_evaluation/pairwise_auroc_differences.csv",
+          "sha256": "16df8d6bfdf1a7218e94b7fe32c4541f111694f83c4c61062cc2f686106d9874",
+          "bytes": 840
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_sensitivity_iou75/figures/method_metrics.png",
+      "sha256": "1dc4aafba5fdd020931f6c16ca6a4bb187237fe606e885de7652e4485f1ef45a",
+      "bytes": 108554,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_sensitivity_iou75/method_metrics.csv",
+          "sha256": "43fbb1b4f266d73c427c96d27d7b8c5e058d14d76125c39e03ef620a90788a60",
+          "bytes": 2095
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_sensitivity_iou75/figures/pairwise_auroc_differences.png",
+      "sha256": "3e084832df9a621e6f945b779b97b68bdaac2dbb2d3321f066741e7f9dbaf102",
+      "bytes": 73788,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/risk_sensitivity_iou75/pairwise_auroc_differences.csv",
+          "sha256": "cc6cdeb4762d8cd92ebd493a3dfbacb084100298f5aff864ef413b5537d44ac8",
+          "bytes": 1056
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_fusion/figures/development_metrics.png",
+      "sha256": "f28440dce6bfa23cb556df37ab2b60fe0a14eebe00d0cc91b3c8d0ce0df84cc7",
+      "bytes": 62311,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_fusion/development_metrics.csv",
+          "sha256": "e84f69d176fcc8706d76d8a1a738a12a61407b016637b3ceebe4dfa04561a725",
+          "bytes": 537
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_fusion/figures/sensitivity_iou75_metrics.png",
+      "sha256": "69b6e61b26096407bc2815e63583b7a63ebd4fc1b3085325bb0c88ca3c58c614",
+      "bytes": 65616,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_fusion/sensitivity_iou75_metrics.csv",
+          "sha256": "a53a0ed9791d19f592a750ec07d47040494427eb97bcb84d65c829b48bf82cb8",
+          "bytes": 496
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/primary_iou50_method_metrics.png",
+      "sha256": "7d275157864ebfe43734233baf15c94e8b1b2017243bf691efc3a04a87dde221",
+      "bytes": 110330,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/primary_iou50/method_metrics.csv",
+          "sha256": "a21138465e213fe7adf091f4a4219ff54d62482110852d8fbe040fcf5635f397",
+          "bytes": 2087
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/sensitivity_iou75_method_metrics.png",
+      "sha256": "5916b92288db155db4d5569fef9fc4bbaad4c9176acb651ac446c6a7841d6faf",
+      "bytes": 108757,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/sensitivity_iou75/method_metrics.csv",
+          "sha256": "576458f22f54cf929eef4262e7aba22a49223304c19f7d4763f7178e2a5cec73",
+          "bytes": 2103
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/primary_iou50_pairwise_auroc_differences.png",
+      "sha256": "aab93f810ef8bb0b5bac60b0482988aaca477939fda5620c899dc006e47dff7c",
+      "bytes": 75947,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/primary_iou50/pairwise_auroc_differences.csv",
+          "sha256": "5f707dfaa7713d446a4d0c2fdaa0351da6f5e7983c916b89eb0798658b5e3938",
+          "bytes": 1046
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/sensitivity_iou75_pairwise_auroc_differences.png",
+      "sha256": "0c046fa79271c29320acbc921338782b1993d93a831967224ec408a0ed456dec",
+      "bytes": 75908,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/sensitivity_iou75/pairwise_auroc_differences.csv",
+          "sha256": "dbcbde2d062a0001a7f5ac373f796f0c55a975d531ace765519630df6ead5767",
+          "bytes": 1061
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_final_evaluation/figures/primary_method_metrics.png",
+      "sha256": "51d53b0b2d2fe582e0eb87e102decc5eb175d80eb64bb63577ee1a608a641813",
+      "bytes": 65856,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_final_evaluation/primary_method_metrics.csv",
+          "sha256": "38ac671146a66b74638deae45576b393ee2975c58c067ea6622b7c5864c74748",
+          "bytes": 976
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_final_evaluation/figures/sensitivity_iou75_method_metrics.png",
+      "sha256": "dcad694c09ee3710f3830a8a8566319a3579fd75b4ab06cdf9959813d0970caa",
+      "bytes": 65903,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_final_evaluation/sensitivity_iou75_method_metrics.csv",
+          "sha256": "a3fd59459932ddfd17e40ea28aa13e97e45509ca74b107ecdcd156a48637c230",
+          "bytes": 938
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_final_evaluation/figures/primary_pairwise_differences.png",
+      "sha256": "f83de16db35557cf4fa8fe98e2cdb586614442c359c11e5207231ccc3ab59707",
+      "bytes": 82705,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_final_evaluation/primary_pairwise_differences.csv",
+          "sha256": "62d3cc5cfd086beb86721952f491a1e4595519c92e6f8816c74e06e9493bc9ea",
+          "bytes": 954
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_final_evaluation/figures/sensitivity_iou75_pairwise_differences.png",
+      "sha256": "70118e9efbf60e17110ac7a37e84d76d5f6a42fec519e4162c17729c9a107123",
+      "bytes": 83590,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved observed values and saved interval endpoints, preserving row order and method identities; undefined entries stay undefined.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_final_evaluation/sensitivity_iou75_pairwise_differences.csv",
+          "sha256": "5f3cce3267cd948b37bca20da474112a6f1364020029b6e09d50246a74ce7e00",
+          "bytes": 900
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_fusion/figures/selected_weights.png",
+      "sha256": "3e08009e17c5685f82d03f0792ae794f447c0a6cdb138ed6271952882ce1b1d7",
+      "bytes": 40026,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Display stored integer percentages directly, without renormalizing or reselecting weights.",
+      "sources": [
+        {
+          "path": "runs/rq2/weighted_fusion/selected_weights.json",
+          "sha256": "818a53fd9867b58a6fe88001addccbcc701bc5dcce8b6f43e0e17041cc42e10b",
+          "bytes": 716
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/reliability_saved_bins.png",
+      "sha256": "34f9e2f63c7993ec301d82bb996a7828fdcc8253a8ea746ca26b315e21b405f5",
+      "bytes": 87171,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Plot stored nonempty-bin means and correctness rates. Connecting lines guide the eye, not a fitted curve.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/calibration_bins.csv",
+          "sha256": "88ebbf1aa2174a7c3547d86067acc6cfe8710783cf4654a1ca5fc5b5c70c7574",
+          "bytes": 1310
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/calibration_saved_metrics.png",
+      "sha256": "a895e24711d2cfa52dee498dc01efe8a7049acbabebac79775c540bfc8fef776",
+      "bytes": 52237,
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved Brier, NLL and ECE values from calibration_metrics.json; no recomputation.",
+      "sources": [
+        {
+          "path": "runs/rq2/final_evaluation/calibration_metrics.json",
+          "sha256": "59f236d1868de65f6b2b2dd60dac967c8f2bdce3e7935a3876773b902769b4f0",
+          "bytes": 5535
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_evaluation/summaries/README.md",
+      "sha256": "7e2e952cfd6110e5a8bd930d3f59fd54ff7c88e2e872546c4f0f5386128d6c75",
+      "bytes": 1276,
+      "classification": "authored_reporting_summary",
+      "recipe": "Navigation, scope and known local gaps; no new scientific conclusions.",
+      "sources": [
+        {
+          "path": "docs/rq2/reporting.md",
+          "sha256": "e4066cd159ad6c500f3499258551856b9df584230e2d629fac92e8600e707534",
+          "bytes": 4462
+        },
+        {
+          "path": "runs/rq2/risk_evaluation/provenance.json",
+          "sha256": "84f58c4292d60c52f51b5d2783d9628ec288153f33e8012967e1acedd4ca9205",
+          "bytes": 4841
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "risk_sensitivity_iou75/summaries/README.md",
+      "sha256": "9052bdcdbce54fcf2ca501b8315b4d91ff770b331085d208359e54a0a299caa4",
+      "bytes": 1275,
+      "classification": "authored_reporting_summary",
+      "recipe": "Navigation, scope and known local gaps; no new scientific conclusions.",
+      "sources": [
+        {
+          "path": "docs/rq2/reporting.md",
+          "sha256": "e4066cd159ad6c500f3499258551856b9df584230e2d629fac92e8600e707534",
+          "bytes": 4462
+        },
+        {
+          "path": "runs/rq2/risk_sensitivity_iou75/provenance.json",
+          "sha256": "22f7f3a2e543e47b287b546b8381de44d0e7ddea3c314c36e49451f709b782df",
+          "bytes": 4826
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_fusion/summaries/README.md",
+      "sha256": "561bc8a4da1134821d7b1f6f58ea910176d6aeea23a5d28c902ed6e0a8d05970",
+      "bytes": 1498,
+      "classification": "authored_reporting_summary",
+      "recipe": "Navigation, scope and known local gaps; no new scientific conclusions.",
+      "sources": [
+        {
+          "path": "docs/rq2/reporting.md",
+          "sha256": "e4066cd159ad6c500f3499258551856b9df584230e2d629fac92e8600e707534",
+          "bytes": 4462
+        },
+        {
+          "path": "runs/rq2/weighted_fusion/provenance.json",
+          "sha256": "6b1b66b31082733bd0ba98797ad80ca42bdb32265592e120096310f40619aedd",
+          "bytes": 4534
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/README.md",
+      "sha256": "61b3a4d5a0a316dad8d53f9653bdc9deebc93ac36a2c54ae89c0cf4c69ebc6f6",
+      "bytes": 1441,
+      "classification": "authored_reporting_summary",
+      "recipe": "Navigation, scope and known local gaps; no new scientific conclusions.",
+      "sources": [
+        {
+          "path": "docs/rq2/reporting.md",
+          "sha256": "e4066cd159ad6c500f3499258551856b9df584230e2d629fac92e8600e707534",
+          "bytes": 4462
+        },
+        {
+          "path": "runs/rq2/final_evaluation/provenance.json",
+          "sha256": "f9d5088155500cddadbe6894dde67b0eb9309a2d14efd301c7f1bd1253b756d3",
+          "bytes": 228606
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "weighted_final_evaluation/summaries/README.md",
+      "sha256": "7e6fea0f1527ebd7aef438732a0da7c661ad11831366f39fe82a8806fae263de",
+      "bytes": 1413,
+      "classification": "authored_reporting_summary",
+      "recipe": "Navigation, scope and known local gaps; no new scientific conclusions.",
+      "sources": [
+        {
+          "path": "docs/rq2/reporting.md",
+          "sha256": "e4066cd159ad6c500f3499258551856b9df584230e2d629fac92e8600e707534",
+          "bytes": 4462
+        },
+        {
+          "path": "runs/rq2/weighted_final_evaluation/provenance.json",
+          "sha256": "631903aff823abaf352f2bc10677a59267f2be9edc39deb83a19b54429b39a45",
+          "bytes": 4053
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "data_partition/summaries/README.md",
+      "sha256": "31d946c8250562286e869daa63f299c040f20ca71312279fa85a40840f076f40",
+      "bytes": 662,
+      "classification": "authored_reporting_summary",
+      "recipe": "Local partition evidence navigation.",
+      "sources": [
+        {
+          "path": "docs/rq2/reporting.md",
+          "sha256": "e4066cd159ad6c500f3499258551856b9df584230e2d629fac92e8600e707534",
+          "bytes": 4462
+        },
+        {
+          "path": "data/splits/rq2_train_development_split/verification_report.json",
+          "sha256": "7bc327b28b8232abf92d1c79e120c9c134628129b14dfeff58b691c7d4663116",
+          "bytes": 22137
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "README.md",
+      "sha256": "ebb5b0425ac0f1abbefeb04325e6c5f5f79aba52f4aa5934410c56215050cfc9",
+      "bytes": 6167,
+      "classification": "authored_reporting_summary",
+      "recipe": "RQ2 navigation and availability guide; no new results.",
+      "sources": [
+        {
+          "path": "docs/rq2/reporting.md",
+          "sha256": "e4066cd159ad6c500f3499258551856b9df584230e2d629fac92e8600e707534",
+          "bytes": 4462
+        },
+        {
+          "path": "docs/artifact_inventory.md",
+          "sha256": "c2229644801428fb27042dbdfd83a97cc4050fec3933f3add27aa6928d788f65",
+          "bytes": 6475
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "path": "runs/rq2/weighted_fusion/candidate_weights.csv",
+      "sha256": "c0f7156ae96b659daba7d7cd535ea1770411d14d119e5c550f5db481e9fa6829",
+      "bytes": 1315090
+    },
+    {
+      "path": "data/splits/rq2_train_development_split/detector_train_images.txt",
+      "sha256": "41bda42c098bea87fa2a362a6f25bbd68309e5befec99c792eaedec46ac860a1",
+      "bytes": 208141
+    },
+    {
+      "path": "data/splits/rq2_train_development_split/development_calibration_images.txt",
+      "sha256": "c1ff8812aa5b0728df14542fa5a01c155d36d4385cdea2c13b89cb14efc621dc",
+      "bytes": 23095
+    },
+    {
+      "path": "configs/datasets/dspcbsd_rq2_train_dev.yaml",
+      "sha256": "58abda1d5e6f8749f2d0eef827719dcd41b17488e160fc3e4d1d699ad5a2ff14",
+      "bytes": 326
+    }
+  ],
+  "unavailable_local": [
+    {
+      "path": "runs/rq2/detector_training",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/confidence_distribution",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/calibration_analysis",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/calibrator_comparison",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_calibrator",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/transformation_stability",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/risk_evaluation/bootstrap_metrics.csv",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/risk_sensitivity_iou75/bootstrap_metrics.csv",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/inference_audit.json",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/original_predictions.csv",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/labelled_predictions.csv",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/prediction_stability_scores.csv",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/prediction_transform_matches.csv",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/transformed_predictions.csv",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/primary_iou50/bootstrap_metrics.csv",
+      "status": "absent locally; documented dependency, external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/sensitivity_iou75/bootstrap_metrics.csv",
+      "status": "absent locally; documented dependency, external location unverified"
+    }
+  ]
+}

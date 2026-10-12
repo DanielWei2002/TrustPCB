@@ -1,5 +1,8 @@
 # Proposal-specified RQ2 weighted fusion
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 Development-only selection of the weighted composite specified by the submitted
 P1 proposal. Existing equal-weight results and all individual/partial ablations
 remain unchanged. This module never opens final-test artifacts, invokes detector

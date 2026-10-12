@@ -1,5 +1,8 @@
 # RQ2 Calibration analysis: correctness labels and raw calibration
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 This analysis analyzes existing development predictions on CPU. It does not load the
 detector, rerun inference, fit any calibrator, select a threshold/method, evaluate
 test images, or perform transformation, stability, risk or referral analysis.

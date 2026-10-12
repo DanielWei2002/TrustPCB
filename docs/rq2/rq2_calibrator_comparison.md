@@ -1,5 +1,8 @@
 # RQ2 calibrator comparison
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 This workflow prepares a development-only, out-of-fold comparison. It does not
 train a detector, access final-test data, or fit a final calibrator. Review the
 comparison before approving any later final fitting.

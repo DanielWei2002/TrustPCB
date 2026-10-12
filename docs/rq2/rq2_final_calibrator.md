@@ -1,5 +1,8 @@
 # RQ2 final Beta calibrator
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 Fit one frozen Beta mapping after review of the completed five-fold calibrator
 comparison. This operation does not repeat comparison, select another method,
 perform inference or access final-test data. Real execution belongs on DICC.

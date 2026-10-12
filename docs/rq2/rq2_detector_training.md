@@ -1,5 +1,8 @@
 # RQ2 Detector training: fresh detector and development checkpoint selection
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 This prepares one DICC training run. Do not execute training on the local Windows
 machine. No calibration, transformations, risk scoring, test inference or final
 test evaluation is part of this analysis. Do not retrain on train + development.

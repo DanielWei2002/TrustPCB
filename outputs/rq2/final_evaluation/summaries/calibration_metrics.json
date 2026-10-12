@@ -1,0 +1,184 @@
+{
+  "correctness_iou": 0.5,
+  "epsilon": 1e-15,
+  "metrics": {
+    "Beta": {
+      "brier": 0.060121055552588606,
+      "count": 17840,
+      "ece": 0.008325683787077735,
+      "nll": 0.21007578062099314,
+      "reliability_bins": [
+        {
+          "correctness_rate": 0.021684737281067557,
+          "count": 11990,
+          "lower_inclusive": 0.0,
+          "mean_confidence": 0.023309213324575376,
+          "upper": 0.1,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.128125,
+          "count": 960,
+          "lower_inclusive": 0.1,
+          "mean_confidence": 0.14116456466068816,
+          "upper": 0.2,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.2260536398467433,
+          "count": 522,
+          "lower_inclusive": 0.2,
+          "mean_confidence": 0.24646880041251223,
+          "upper": 0.3,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.3103448275862069,
+          "count": 377,
+          "lower_inclusive": 0.3,
+          "mean_confidence": 0.34787376276169785,
+          "upper": 0.4,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.42153846153846153,
+          "count": 325,
+          "lower_inclusive": 0.4,
+          "mean_confidence": 0.4517248060647811,
+          "upper": 0.5,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.5883977900552486,
+          "count": 362,
+          "lower_inclusive": 0.5,
+          "mean_confidence": 0.5532986311924817,
+          "upper": 0.6,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.6962962962962963,
+          "count": 405,
+          "lower_inclusive": 0.6,
+          "mean_confidence": 0.6531760855605935,
+          "upper": 0.7,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.7750865051903114,
+          "count": 578,
+          "lower_inclusive": 0.7,
+          "mean_confidence": 0.7517140632850725,
+          "upper": 0.8,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.8507853403141361,
+          "count": 764,
+          "lower_inclusive": 0.8,
+          "mean_confidence": 0.8526927962644134,
+          "upper": 0.9,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.9344894026974951,
+          "count": 1557,
+          "lower_inclusive": 0.9,
+          "mean_confidence": 0.9581136261750037,
+          "upper": 1.0,
+          "upper_inclusive": true
+        }
+      ]
+    },
+    "Raw": {
+      "brier": 0.06376331190045278,
+      "count": 17840,
+      "ece": 0.04094648394329607,
+      "nll": 0.2226139648715935,
+      "reliability_bins": [
+        {
+          "correctness_rate": 0.018069087688219663,
+          "count": 11290,
+          "lower_inclusive": 0.0,
+          "mean_confidence": 0.030534788815138006,
+          "upper": 0.1,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.08911614317019723,
+          "count": 1369,
+          "lower_inclusive": 0.1,
+          "mean_confidence": 0.14136222958390604,
+          "upper": 0.2,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.20863309352517986,
+          "count": 695,
+          "lower_inclusive": 0.2,
+          "mean_confidence": 0.24795334782960604,
+          "upper": 0.3,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.2962264150943396,
+          "count": 530,
+          "lower_inclusive": 0.3,
+          "mean_confidence": 0.3470086300710462,
+          "upper": 0.4,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.49242424242424243,
+          "count": 528,
+          "lower_inclusive": 0.4,
+          "mean_confidence": 0.44990705670506664,
+          "upper": 0.5,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.6941529235382309,
+          "count": 667,
+          "lower_inclusive": 0.5,
+          "mean_confidence": 0.5521643166241796,
+          "upper": 0.6,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.819047619047619,
+          "count": 840,
+          "lower_inclusive": 0.6,
+          "mean_confidence": 0.6501271084660576,
+          "upper": 0.7,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.8789592760180995,
+          "count": 884,
+          "lower_inclusive": 0.7,
+          "mean_confidence": 0.750724498570235,
+          "upper": 0.8,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 0.9460625674217907,
+          "count": 927,
+          "lower_inclusive": 0.8,
+          "mean_confidence": 0.8572696031361593,
+          "upper": 0.9,
+          "upper_inclusive": false
+        },
+        {
+          "correctness_rate": 1.0,
+          "count": 110,
+          "lower_inclusive": 0.9,
+          "mean_confidence": 0.9158078188245947,
+          "upper": 1.0,
+          "upper_inclusive": true
+        }
+      ]
+    }
+  },
+  "scope": "Independent final-test evaluation of the development-fitted Beta mapping",
+  "test_role": "held out from RQ2 training and development, previously used for RQ1 validation"
+}
