@@ -1,0 +1,9 @@
+split,metric,n_completed,n_expected,status,mean,std,std_ddof
+supplied,precision,5,5,complete,0.8142860000000001,0.005834443418184812,1
+supplied,recall,5,5,complete,0.80105,0.004720566703267719,1
+supplied,mAP@0.50,5,5,complete,0.846902,0.001776237596719536,1
+supplied,mAP@0.50:0.95,5,5,complete,0.505184,0.0010338665291032318,1
+similarity_aware,precision,5,5,complete,0.826214,0.006000335823935172,1
+similarity_aware,recall,5,5,complete,0.796088,0.00952157129889809,1
+similarity_aware,mAP@0.50,5,5,complete,0.84681,0.002693445748479085,1
+similarity_aware,mAP@0.50:0.95,5,5,complete,0.505778,0.0020054849787520357,1

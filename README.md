@@ -57,6 +57,8 @@ and verified rather than regenerated for housekeeping.
 ## Protocol documentation
 
 - [RQ1 matched repeated training](docs/rq1/rq1_workflow.md)
+- [RQ1 tables, figures and reporting provenance](outputs/rq1/README.md)
+- [RQ1 historical notebook extraction map](docs/rq1/notebook_extraction.md)
 - [RQ2 data partition](docs/rq2/rq2_data_partition.md)
 - [RQ2 detector training](docs/rq2/rq2_detector_training.md)
 - [RQ2 confidence distribution](docs/rq2/rq2_confidence_distribution.md)
