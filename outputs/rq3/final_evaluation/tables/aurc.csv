@@ -1,0 +1,6 @@
+method,aurc
+raw_confidence_risk,0.4906676628473869
+calibrated_confidence_risk,0.4906676628473869
+class_consistency_risk,0.7189399157000167
+localisation_stability_risk,0.567110592561561
+weighted_trustpcb_risk,0.4900265466354419

@@ -85,7 +85,7 @@ assert 'torch' not in sys.modules and 'ultralytics' not in sys.modules
 
     def test_legacy_cli_dispatch(self):
         with patch.object(benchmark, "main") as main:
-            runpy.run_path(str(Path(__file__).resolve().parents[1]/"src/trustpcb/rq3_computational_efficiency.py"),
+            runpy.run_path(str(Path(__file__).resolve().parents[2]/"src/trustpcb/rq3_computational_efficiency.py"),
                            run_name="__main__")
         main.assert_called_once_with()
 

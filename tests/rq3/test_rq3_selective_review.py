@@ -96,7 +96,7 @@ assert 'torch' not in sys.modules and 'ultralytics' not in sys.modules
 
     def test_legacy_execution_dispatches_canonical_main(self):
         with patch.object(review, "main") as main:
-            runpy.run_path(str(Path(__file__).resolve().parents[1] / "src/trustpcb/rq3_selective_review.py"),
+            runpy.run_path(str(Path(__file__).resolve().parents[2] / "src/trustpcb/rq3_selective_review.py"),
                            run_name="__main__")
         main.assert_called_once_with()
 

@@ -1,5 +1,8 @@
 # RQ3 development selective review
 
+For saved tables, presentation figures and relocated tests, see
+[RQ3 reporting](reporting.md).
+
 Canonical source: `src/trustpcb/rq3/selective_review.py`; module:
 `trustpcb.rq3.selective_review`. The legacy `trustpcb.rq3_selective_review` import
 aliases the same live module, and its CLI dispatches to the canonical `main()`.

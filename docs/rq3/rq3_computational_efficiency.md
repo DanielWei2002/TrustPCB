@@ -1,5 +1,8 @@
 # RQ3 computational efficiency
 
+For saved tables, presentation figures and relocated tests, see
+[RQ3 reporting](reporting.md).
+
 The canonical module is `trustpcb.rq3.computational_efficiency`.
 `trustpcb.rq3_computational_efficiency` remains a compatibility import/CLI shim;
 both import paths resolve to the same live module. RQ2 dependencies use canonical
