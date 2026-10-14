@@ -40,15 +40,15 @@ The completed pre-reorganization state is preserved by the Git tag
 
 - `src/` contains the reproducible Python implementation.
 - `tests/` contains automated verification, including CPU-safe synthetic tests.
-- `notebooks/` contains the original exploratory, dataset-audit and preliminary research notebooks. They retain their existing paths and can include expensive execution cells.
+- Historical notebooks are archived in Git; complete reconstructed Python stages live under `src/trustpcb/rq1/`. See the [conversion and recovery guide](docs/rq1/notebook_extraction.md).
 - `configs/` and `data/splits/` contain scientific configuration and frozen membership manifests. Machine-specific runtime configuration belongs in ignored `configs/local/`.
-- `outputs/` contains early dataset-audit and preliminary output evidence.
+- `outputs/rq1/`, `outputs/rq2/` and `outputs/rq3/` contain experiment reporting; original early evidence remains in `outputs/tables/`.
 - `results/rq1/` contains curated portable RQ1 evidence.
 - `runs/` contains execution records and completed RQ2/RQ3 evidence.
 - `docs/` contains experiment protocols, documentation grouped by research question and historical migration records.
 
 Completed evidence paths are intentionally preserved because provenance and
-downstream code refer to them. See the [artifact inventory](docs/artifact_inventory.md)
+downstream code refer to them. See the [pre-conversion artifact inventory](docs/artifact_inventory.md)
 for local evidence and known external dependencies. The local checkout does not
 contain the raw dataset, model checkpoints or every upstream prediction/calibration
 artifact referenced by completed provenance. Missing artifacts must be located
@@ -59,6 +59,7 @@ and verified rather than regenerated for housekeeping.
 - [RQ1 matched repeated training](docs/rq1/rq1_workflow.md)
 - [RQ1 tables, figures and reporting provenance](outputs/rq1/README.md)
 - [RQ1 historical notebook extraction map](docs/rq1/notebook_extraction.md)
+- [RQ2 tables, figures and reporting provenance](outputs/rq2/README.md)
 - [RQ2 data partition](docs/rq2/rq2_data_partition.md)
 - [RQ2 detector training](docs/rq2/rq2_detector_training.md)
 - [RQ2 confidence distribution](docs/rq2/rq2_confidence_distribution.md)
@@ -71,6 +72,7 @@ and verified rather than regenerated for housekeeping.
 - [RQ2 weighted fusion](docs/rq2/rq2_weighted_fusion.md)
 - [RQ2 original final evaluation](docs/rq2/rq2_final_evaluation.md)
 - [RQ2 weighted final evaluation](docs/rq2/rq2_weighted_final_evaluation.md)
+- [RQ3 tables, figures and reporting provenance](outputs/rq3/README.md)
 - [RQ3 development selective review](docs/rq3/rq3_selective_review.md)
 - [RQ3 computational efficiency](docs/rq3/rq3_computational_efficiency.md)
 - [RQ3 final evaluation](docs/rq3/rq3_final_evaluation.md)
@@ -86,13 +88,13 @@ their preparation-time statements are not claims that all artifacts exist locall
 Research execution uses Python 3.11, PyTorch, CUDA and Ultralytics YOLO on DICC.
 Computationally intensive training, inference, evaluation and benchmarking belong
 on DICC. Local work is limited to implementation, inspection and CPU-safe tests
-with synthetic or deliberately tiny inputs. Do not run the original notebooks
-wholesale locally.
+with synthetic or deliberately tiny inputs. The reconstructed audit, split search and preliminary training also belong on DICC.
 
 RQ1 and RQ2 package migrations are complete under `src/trustpcb/rq1/` and
 `src/trustpcb/rq2/`. RQ3 package migration is complete: `selective_review`,
 `computational_efficiency`, and `final_evaluation` are canonical under
 `trustpcb.rq3`. Legacy flat RQ2 and RQ3 paths remain compatibility shims.
-A final repository-wide audit remains before the reorganization is finished.
+The three research-artifact batches passed their final verification; the notebook
+conversion is a subsequent, separately verified change.
 Module commands use `PYTHONPATH=src`. Dataset roots are configured using
 [the local-path example](configs/paths.example.yaml).

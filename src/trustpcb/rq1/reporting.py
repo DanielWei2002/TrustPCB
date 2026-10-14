@@ -15,9 +15,18 @@ import json
 from pathlib import Path
 
 from trustpcb.dataset_config import find_project_root
+from trustpcb.rq1.archived_sources import read_source, notebook_record, read_notebook
 
 SOURCE_COMMIT = "1937995fb78d979a66e237b7ab7facbe20ca0513"
 GENERATOR = "src/trustpcb/rq1/reporting.py"
+
+
+def source_record(root, path):
+    if path.startswith('notebooks/') and path.endswith('.ipynb'):
+        record = notebook_record(root, Path(path).name)
+        read_source(root, record)
+        return record
+    return {'path': path, 'sha256': digest((Path(root) / path).read_bytes())}
 
 
 def digest(data):
@@ -29,6 +38,8 @@ def verify(root):
     root = Path(root)
     output = root / "outputs/rq1"
     manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
+    for source in manifest.get('validation_sources', []):
+        read_source(root, source)
     expected = {"manifest.json"}
     for record in manifest["artifacts"]:
         path = record["path"]
@@ -36,8 +47,7 @@ def verify(root):
         if digest((output / path).read_bytes()) != record["sha256"]:
             raise ValueError(f"Reporting artifact changed: {path}")
         for source in record["sources"]:
-            if digest((root / source["path"]).read_bytes()) != source["sha256"]:
-                raise ValueError(f"Reporting source changed: {source['path']}")
+            read_source(root, source)
     actual = {p.relative_to(output).as_posix() for p in output.rglob("*") if p.is_file()}
     if actual != expected:
         raise ValueError(f"Unlisted/missing reporting files: {actual ^ expected}")
@@ -59,7 +69,7 @@ def build(root):
         target.write_bytes(data)
         records.append({"path": path, "sha256": digest(data), "bytes": len(data),
                         "classification": kind, "recipe": recipe,
-                        "sources": [{"path": p, "sha256": digest((root / p).read_bytes())}
+                        "sources": [source_record(root, p)
                                     for p in dict.fromkeys([*sources, GENERATOR])]})
 
     def copy(source, target):
@@ -89,7 +99,7 @@ def build(root):
                  f"preliminary_baseline/figures/v1/{split}/confusion_matrix_normalized.png")
 
     source = "notebooks/01_dataset_structure_audit.ipynb"
-    notebook = json.loads((root / source).read_text(encoding="utf-8"))
+    notebook = read_notebook(root, Path(source).name)
     # One representative existing panel from each display cell. No cell executes.
     for index in (11, 13):
         for number, item in enumerate(notebook["cells"][index].get("outputs", [])):
@@ -170,11 +180,11 @@ def build(root):
 
 Tables are byte-for-byte copies of six historical audit CSVs. Figures include two
 existing notebook panels and one new rendering of saved image counts. Additional
-panels remain embedded in notebook 01. Counts describe that historical audit;
+panels remain embedded in archived notebook 01. Counts describe that historical audit;
 do not substitute later split membership counts.
 
-Original notebooks: [01 audit](../../../../notebooks/01_dataset_structure_audit.ipynb)
-and [02 split](../../../../notebooks/02_similarity_aware_split.ipynb).
+Original notebooks and all outputs are recoverable through the
+[Git archive and Python conversion guide](../../../../docs/rq1/notebook_extraction.md).
 Frozen split manifests remain in [data/splits](../../../../data/splits/).
 Raw images/labels are external. Manual review decisions are evidence, not an
 automated classifier. Extracted helper functions did not generate these records.
@@ -189,7 +199,8 @@ The smoke run is preliminary execution evidence, not a matched-training replicat
 
 Original evidence: [runs/preliminary_baseline/v1](../../../../runs/preliminary_baseline/v1/).
 Other precision/recall curves and prediction examples remain there. Execution code
-remains in [notebook 03](../../../../notebooks/03_yolo_baseline.ipynb).
+is archived in Git; the reconstructed [preliminary workflow](../../../../src/trustpcb/rq1/preliminary_baseline.py)
+is documented in the [conversion guide](../../../../docs/rq1/notebook_extraction.md).
 Checkpoints are unavailable locally. No training or metric selection was rerun.
 """, ["notebooks/03_yolo_baseline.ipynb", "outputs/tables/preliminary_baseline_comparison_v1.csv"])
     summary("matched_training", """# Matched repeated training
@@ -224,7 +235,10 @@ raw matched-training plots are external; the paired-table producer is unresolved
 
 Code: [canonical workflow](../../src/trustpcb/rq1/workflow.py),
 [report builder](../../src/trustpcb/rq1/reporting.py).
-Historical helper extractions: [dataset audit](../../src/trustpcb/rq1/dataset_audit.py)
+Complete reconstructed workflows: [audit](../../src/trustpcb/rq1/audit_workflow.py),
+[split](../../src/trustpcb/rq1/split_workflow.py), and
+[preliminary baseline](../../src/trustpcb/rq1/preliminary_baseline.py).
+Shared historical kernels: [dataset audit](../../src/trustpcb/rq1/dataset_audit.py)
 and [similarity split](../../src/trustpcb/rq1/similarity_split.py).
 They are reconstructed code, not the originally executed programs.
 See the [cell/source map and limitations](../../docs/rq1/notebook_extraction.md).
@@ -239,7 +253,9 @@ CSV/JSON copies preserve bytes, schemas and historical metadata, including paths
 Figure rendering does not recompute metrics, intervals, splits or scientific results.
 
 From the repository root with PYTHONPATH=src and existing NumPy/Matplotlib/PyYAML:
-`python -B -m trustpcb.rq1.reporting --verify-only` checks recorded bytes.
+`python -B -m trustpcb.rq1.reporting --verify-only` checks recorded bytes,
+including archived Git blobs and the recorded historical checkout transforms.
+Full Git history is required; missing history is a verification failure.
 `python -B -m trustpcb.rq1.reporting` builds/rebuilds these lightweight reports.
 Existing edited/unlisted files or changed sources block rebuilding. No raw data or
 ML environment is needed. Do not use the research extraction/training commands to
@@ -249,8 +265,11 @@ DsPCBSD+ derived visual evidence retains the dataset attribution in the
 [repository README](../../README.md) (Lv et al., 2024; CC BY 4.0).
 """.encode("utf-8"), "authored_reporting_summary", ["README.md", "docs/rq1/notebook_extraction.md"],
          "RQ1 navigation and availability guide; no scientific conclusions added.")
-    manifest = {"schema_version": 1, "source_snapshot_commit": SOURCE_COMMIT,
+    manifest = {"schema_version": 2, "source_snapshot_commit": SOURCE_COMMIT,
                 "hash_convention": "SHA-256 of exact local bytes; not a replacement for scientific LF-canonical hashes",
+                "validation_sources": [source_record(root, p) for p in
+                                       (GENERATOR, 'src/trustpcb/rq1/archived_sources.py',
+                                        'docs/rq1/notebook_archive.json')],
                 "artifacts": records}
     (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return verify(root)

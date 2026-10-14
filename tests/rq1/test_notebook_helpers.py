@@ -12,12 +12,13 @@ import numpy as np
 
 from trustpcb.rq1 import dataset_audit as audit
 from trustpcb.rq1 import similarity_split as split
+from trustpcb.rq1.archived_sources import read_notebook
 
 REPO = Path(__file__).resolve().parents[2]
 
 
 def cell(name, index):
-    notebook = json.loads((REPO / "notebooks" / name).read_text(encoding="utf-8"))
+    notebook = read_notebook(REPO, name)
     return "".join(notebook["cells"][index]["source"])
 
 

@@ -16,7 +16,10 @@ raw matched-training plots are external; the paired-table producer is unresolved
 
 Code: [canonical workflow](../../src/trustpcb/rq1/workflow.py),
 [report builder](../../src/trustpcb/rq1/reporting.py).
-Historical helper extractions: [dataset audit](../../src/trustpcb/rq1/dataset_audit.py)
+Complete reconstructed workflows: [audit](../../src/trustpcb/rq1/audit_workflow.py),
+[split](../../src/trustpcb/rq1/split_workflow.py), and
+[preliminary baseline](../../src/trustpcb/rq1/preliminary_baseline.py).
+Shared historical kernels: [dataset audit](../../src/trustpcb/rq1/dataset_audit.py)
 and [similarity split](../../src/trustpcb/rq1/similarity_split.py).
 They are reconstructed code, not the originally executed programs.
 See the [cell/source map and limitations](../../docs/rq1/notebook_extraction.md).
@@ -31,7 +34,9 @@ CSV/JSON copies preserve bytes, schemas and historical metadata, including paths
 Figure rendering does not recompute metrics, intervals, splits or scientific results.
 
 From the repository root with PYTHONPATH=src and existing NumPy/Matplotlib/PyYAML:
-`python -B -m trustpcb.rq1.reporting --verify-only` checks recorded bytes.
+`python -B -m trustpcb.rq1.reporting --verify-only` checks recorded bytes,
+including archived Git blobs and the recorded historical checkout transforms.
+Full Git history is required; missing history is a verification failure.
 `python -B -m trustpcb.rq1.reporting` builds/rebuilds these lightweight reports.
 Existing edited/unlisted files or changed sources block rebuilding. No raw data or
 ML environment is needed. Do not use the research extraction/training commands to

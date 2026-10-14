@@ -7,5 +7,6 @@ The smoke run is preliminary execution evidence, not a matched-training replicat
 
 Original evidence: [runs/preliminary_baseline/v1](../../../../runs/preliminary_baseline/v1/).
 Other precision/recall curves and prediction examples remain there. Execution code
-remains in [notebook 03](../../../../notebooks/03_yolo_baseline.ipynb).
+is archived in Git; the reconstructed [preliminary workflow](../../../../src/trustpcb/rq1/preliminary_baseline.py)
+is documented in the [conversion guide](../../../../docs/rq1/notebook_extraction.md).
 Checkpoints are unavailable locally. No training or metric selection was rerun.
