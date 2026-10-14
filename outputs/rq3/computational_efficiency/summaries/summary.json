@@ -1,0 +1,53 @@
+{
+  "percentage_increase": 10211.67130101692,
+  "pipelines": {
+    "baseline": {
+      "detector_passes_per_crop": 1,
+      "detector_passes_per_repetition": 821,
+      "mean_ms_per_crop": 9.076504438721896,
+      "mean_seconds": 7.451810144190676,
+      "standard_deviation_seconds": 0.02105022919164412,
+      "throughput_crops_per_second": 110.17457290428149,
+      "total_seconds_per_repetition": [
+        7.449026374029927,
+        7.446517821983434,
+        7.45337704999838,
+        7.484331190935336,
+        7.425798284006305
+      ]
+    },
+    "trustpcb": {
+      "detector_passes_per_crop": 12,
+      "detector_passes_per_repetition": 9852,
+      "mean_ms_per_crop": 935.9393033432126,
+      "mean_seconds": 768.4061680447776,
+      "standard_deviation_seconds": 1.7214950800630537,
+      "throughput_crops_per_second": 1.0684453536975742,
+      "total_seconds_per_repetition": [
+        766.5605374419829,
+        767.8472754160175,
+        770.9421189279528,
+        769.2612648549257,
+        767.419643583009
+      ]
+    }
+  },
+  "protocol": {
+    "batch": 1,
+    "excluded": "model loading/startup, provenance validation, file hashing, output-file writing",
+    "included": "crop loading/decode, preprocessing, detector inference, postprocessing; TrustPCB also transforms, matching, aggregation, Beta application, weighted risk",
+    "order": "repetition 1 baseline then TrustPCB, repeated for all five repetitions",
+    "population": "821 frozen development-manifest images; deterministic manifest order",
+    "reference_inclusion": "original post-NMS confidence >= 0.01; original/transformed extraction floor 0.001",
+    "standard_deviation": "sample standard deviation across five repetitions, ddof=1",
+    "timing": "wall-clock perf_counter; CUDA synchronize after warmup and immediately before/after every repetition",
+    "transformed_passes": 11,
+    "warmup": "first 20 development crops for each pipeline; untimed",
+    "weights": [
+      0.89,
+      0.01,
+      0.1
+    ]
+  },
+  "relative_overhead": 103.1167130101692
+}

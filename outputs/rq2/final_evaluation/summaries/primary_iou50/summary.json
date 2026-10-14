@@ -1,0 +1,14 @@
+{
+  "analysis_label": "Primary IoU>=0.50 final-test evaluation",
+  "auprc_reference_level": 0.7868273542600897,
+  "correct": 3803,
+  "incorrect": 14037,
+  "incorrect_prevalence": 0.7868273542600897,
+  "interpretation": "Secondary cannot replace primary; no test-driven revision of development decisions.",
+  "prediction_count": 17840,
+  "primary_composite": "trustpcb_risk",
+  "test_images": 2052,
+  "test_role": "held out from RQ2 training and development, previously used for RQ1 validation",
+  "threshold_selected": false,
+  "weights_tuned": false
+}

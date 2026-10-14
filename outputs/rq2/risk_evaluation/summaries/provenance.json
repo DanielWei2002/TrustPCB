@@ -1,0 +1,66 @@
+{
+  "bootstrap_replicates": 10000,
+  "bootstrap_seed": 24209199,
+  "completed_utc": "2026-09-22T11:40:02.546906+00:00",
+  "correctness_definition": "same-class one-to-one IoU >= 0.50",
+  "development_images": 821,
+  "experiment": "rq2_risk_evaluation",
+  "git_commit": "c04301087153b298818d0b1eb968926b2174b95a",
+  "git_dirty": false,
+  "git_input_status": "",
+  "input_path": "runs/rq2/transformation_stability/prediction_stability_scores.csv",
+  "input_sha256": {
+    "data/splits/rq2_train_development_split/development_calibration_images.txt": "1985f0d4097812462069be9c97cb672c4f6b3257ba8cf6a2d55243d3a7f3a6e1",
+    "outputs/tables/cross_split_high_confidence_near_duplicates.csv": "135b6978b91d28c96ac97d0c32baac93fe79a7d64a940d12b3439678023df749",
+    "runs/rq2/calibration_analysis/labelled_predictions.csv": "656a60f326363a0b558d02915a05fc508bf2d4fc4a2c4bfa11e31803d1d8e099",
+    "runs/rq2/calibration_analysis/provenance.json": "a0b01af07b35b13a4395523a1b8ea524f6a468ea67a5ea88f85fb983a7c7d765",
+    "runs/rq2/calibration_analysis/summary.json": "11c2e2c660b60d4f3feca83fd6a9d0926231d2600f2fb92b201f792600abec9f",
+    "runs/rq2/calibrator_comparison/method_metrics.csv": "4055600fd1c27474bf7bdb028d93dcdb8e5f8064bc8f523e7df7faf9039580a5",
+    "runs/rq2/calibrator_comparison/provenance.json": "d80d49bddc40b55d6d16c7d960ff4b4e8c87c87cd68c4139a6a1fc1fbdaf2f1e",
+    "runs/rq2/calibrator_comparison/selection_summary.json": "3cd0bf31e86f32a928da4ad675260e1dc277ca8a2eee3cb75ab9b30fc1ffa9c8",
+    "runs/rq2/final_calibrator/calibrated_development_predictions.csv": "d12680762f2f6665543f2962bc8a02a180bf8c603e6b0c93a4932756da6b25fe",
+    "runs/rq2/final_calibrator/final_calibrator.json": "60b8c9e93559e4297649ee97d2ffe2b9ceff28c80b305f8f932fe7a58f3c2a95",
+    "runs/rq2/final_calibrator/fit_summary.json": "163960394ebabc8b38b6ed60489af1605e17b80a469dd9f5449bc4c05bb2b91a",
+    "runs/rq2/final_calibrator/provenance.json": "0d8414c69ea769281e7be26c0ff66ce640c86951a8a9ce552c240fa46c26e141",
+    "runs/rq2/transformation_stability/prediction_stability_scores.csv": "63284c0f0175a79e37a62a0dfa08161adb11e6b4cff76bbd376073906e6552d5",
+    "runs/rq2/transformation_stability/provenance.json": "1a5a33feda591bf231ac36c263301b47fb2079e2f92b3c3f3a6477c1042c2c72"
+  },
+  "metric_definitions": {
+    "auprc": "non-interpolated average precision: sum(delta_recall * precision) at distinct descending score groups",
+    "auroc": "P(risk_incorrect > risk_correct) + 0.5 * P(tied risks); prediction-weighted",
+    "descriptives": "population standard deviation ddof=0; median/Q1/Q3 use linear quantiles",
+    "interval": "paired image-cluster bootstrap; percentile 2.5/97.5 with linear interpolation; omit undefined replicates without redrawing",
+    "spearman": "Pearson correlation of average tied ranks; undefined for a constant signal or fewer than two predictions",
+    "target": "incorrect_prediction = 1 - correct_iou50",
+    "undefined": "AUROC undefined without both target classes; AUPRC undefined without positives; empty population undefined for both"
+  },
+  "output_sha256": {
+    "bootstrap_metrics.csv": "33639bc5692b46bbae7e5b86d2a184111422767e5d999dfe833802125f524245",
+    "bootstrap_summary.json": "85a65c10489eb238697a6261bf2d5125d0bf8e6f2c9c00c2b02a871627a7b009",
+    "method_metrics.csv": "30119c3b811a7f1916fe1a4436965207dd2efae7703e99e0fcb0136281010f2c",
+    "pairwise_auroc_differences.csv": "16df8d6bfdf1a7218e94b7fe32c4541f111694f83c4c61062cc2f686106d9874",
+    "per_class_diagnostics.csv": "217eff406a8f304366bed2d447047611a0c5a8735bcaca9911a81d7692016dc0",
+    "signal_correlations.csv": "ed569509498e8557a52026818c72802da85b6c44885fd6fd8a0013b18038f4ae",
+    "signal_descriptives.csv": "4e04b5b7d208686f789062b473b1eb3e23994c743604e3b56b986998456c3fca",
+    "summary.json": "4781d4efadc7d4991bbdcda1a753a34b4bf6e7d704ed1d022faf45cba3651602"
+  },
+  "prediction_count": 7131,
+  "python": "3.11.13",
+  "risk_formulas": {
+    "calibrated_confidence_risk": "1 - calibrated_confidence",
+    "calibrated_plus_class_risk": "(calibrated_confidence_risk + class_consistency_risk) / 2",
+    "calibrated_plus_localisation_risk": "(calibrated_confidence_risk + localisation_risk) / 2",
+    "class_consistency_risk": "1 - class_consistency",
+    "class_plus_localisation_risk": "(class_consistency_risk + localisation_risk) / 2",
+    "localisation_risk": "1 - localisation_stability",
+    "raw_confidence_risk": "1 - raw_confidence",
+    "trustpcb_risk": "(calibrated_confidence_risk + class_consistency_risk + localisation_risk) / 3"
+  },
+  "scope": "development ranking diagnostics; no threshold/model/weight selection",
+  "started_utc": "2026-09-22T11:39:34.107562+00:00",
+  "status": "complete",
+  "versions": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1"
+  }
+}

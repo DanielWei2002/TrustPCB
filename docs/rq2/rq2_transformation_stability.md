@@ -1,5 +1,8 @@
 # RQ2 transformation stability
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 Development-only preparation for class consistency and localisation stability.
 No retraining, calibration fitting, risk weighting or referral selection is part
 of this workflow. Execute real image processing only on DICC.

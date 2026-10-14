@@ -1,5 +1,8 @@
 # RQ2 development risk-ranking evaluation
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 Evaluate the eight frozen baselines/ablations using existing development results.
 This operation does not fit a detector/calibrator, generate transformations,
 optimise risk weights, select a referral threshold or choose a composite formula.

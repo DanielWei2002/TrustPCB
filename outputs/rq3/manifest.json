@@ -1,0 +1,1478 @@
+{
+  "schema_version": 1,
+  "base_commit": "f92b69baef91a1ed54cf893b1e659cf65368cffd",
+  "hash_convention": "SHA-256 of exact local bytes including line endings",
+  "rendering": {
+    "python": "3.11.13",
+    "matplotlib": "3.11.2",
+    "backend": "Agg",
+    "dpi": 160
+  },
+  "artifacts": [
+    {
+      "path": "development_selective_review/tables/aurc.csv",
+      "sha256": "e8a1bcde5d48482cae9b2d1bd78b12dfe8c2bf030801e521b51c61dfb1582d37",
+      "bytes": 237,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/aurc.csv",
+          "sha256": "e8a1bcde5d48482cae9b2d1bd78b12dfe8c2bf030801e521b51c61dfb1582d37",
+          "bytes": 237
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/tables/bootstrap_intervals.csv",
+      "sha256": "b4d8a4c89bef04c8a93d94df467e864106c4bf975c252fbb3b3146e495eed5de",
+      "bytes": 5669,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/bootstrap_intervals.csv",
+          "sha256": "b4d8a4c89bef04c8a93d94df467e864106c4bf975c252fbb3b3146e495eed5de",
+          "bytes": 5669
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/tables/crop_referral_metrics.csv",
+      "sha256": "2fcde59130ecf6eee97cb2b46bc9e904dc85e665ddecfb8f702b6c8eabced69a",
+      "bytes": 3341,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/crop_referral_metrics.csv",
+          "sha256": "2fcde59130ecf6eee97cb2b46bc9e904dc85e665ddecfb8f702b6c8eabced69a",
+          "bytes": 3341
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/summaries/development_thresholds.json",
+      "sha256": "b3aec0330bc6a7aac9307e28cc0b4cb624a6d1e6e8834cb56908a3973f573905",
+      "bytes": 4715,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/development_thresholds.json",
+          "sha256": "b3aec0330bc6a7aac9307e28cc0b4cb624a6d1e6e8834cb56908a3973f573905",
+          "bytes": 4715
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/summaries/summary.json",
+      "sha256": "0fd2a6c847650a34e7cc23938d6d88abb7dc27b73e28318141c30ebf4526a2a1",
+      "bytes": 1535,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/summary.json",
+          "sha256": "0fd2a6c847650a34e7cc23938d6d88abb7dc27b73e28318141c30ebf4526a2a1",
+          "bytes": 1535
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/summaries/bootstrap_summary.json",
+      "sha256": "4ab606111ca19cf52d060803f06c81233c81ca933f8bb31d0b64aa28df4de4eb",
+      "bytes": 277,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/bootstrap_summary.json",
+          "sha256": "4ab606111ca19cf52d060803f06c81233c81ca933f8bb31d0b64aa28df4de4eb",
+          "bytes": 277
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/summaries/provenance.json",
+      "sha256": "4e47eb0a60bb2882acf1bc8d941bcdb13a0e58e9019800bc76cf24608a0f8a9c",
+      "bytes": 5102,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/provenance.json",
+          "sha256": "4e47eb0a60bb2882acf1bc8d941bcdb13a0e58e9019800bc76cf24608a0f8a9c",
+          "bytes": 5102
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/summaries/rq3_dicc_run_info.txt",
+      "sha256": "f6edc09f2e997fb7ab5e0ec08eb8a4dba9d5f49d40c5e1d91acc0ca8bcaaa922",
+      "bytes": 231,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/rq3_dicc_run_info.txt",
+          "sha256": "f6edc09f2e997fb7ab5e0ec08eb8a4dba9d5f49d40c5e1d91acc0ca8bcaaa922",
+          "bytes": 231
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/reporting_extension/tables/crop_referral_metrics.csv",
+      "sha256": "c3e556a91f78d9eb490c1f657c7d4c5d5dd9cc31929273fd6a3b21f42c484d01",
+      "bytes": 4553,
+      "experiment_identity": "rq3_development_reporting_extension",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/crop_referral_metrics.csv",
+          "sha256": "c3e556a91f78d9eb490c1f657c7d4c5d5dd9cc31929273fd6a3b21f42c484d01",
+          "bytes": 4553
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/reporting_extension/tables/bootstrap_intervals.csv",
+      "sha256": "ec2f76d7b60df8e8992d9375ad264c2f9ff58b98dcaac0f374c0455134afe4fa",
+      "bytes": 11886,
+      "experiment_identity": "rq3_development_reporting_extension",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/bootstrap_intervals.csv",
+          "sha256": "ec2f76d7b60df8e8992d9375ad264c2f9ff58b98dcaac0f374c0455134afe4fa",
+          "bytes": 11886
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/reporting_extension/tables/paired_bootstrap_differences.csv",
+      "sha256": "7217df4154dd5228468e3fcbdd332aa454ec87529e293483077bf2de3e42b700",
+      "bytes": 2427,
+      "experiment_identity": "rq3_development_reporting_extension",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/paired_bootstrap_differences.csv",
+          "sha256": "7217df4154dd5228468e3fcbdd332aa454ec87529e293483077bf2de3e42b700",
+          "bytes": 2427
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/reporting_extension/summaries/bootstrap_summary.json",
+      "sha256": "5f6b356592c921dd0c7be10f031479f6f0c557821a88e1138d7f83141002c195",
+      "bytes": 6226,
+      "experiment_identity": "rq3_development_reporting_extension",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/bootstrap_summary.json",
+          "sha256": "5f6b356592c921dd0c7be10f031479f6f0c557821a88e1138d7f83141002c195",
+          "bytes": 6226
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/reporting_extension/summaries/provenance.json",
+      "sha256": "cd44e1b7a73589a4c5cc8928304ed4a6d6f129ee897c94d2236b51a1b5086883",
+      "bytes": 5815,
+      "experiment_identity": "rq3_development_reporting_extension",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/provenance.json",
+          "sha256": "cd44e1b7a73589a4c5cc8928304ed4a6d6f129ee897c94d2236b51a1b5086883",
+          "bytes": 5815
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "computational_efficiency/tables/repetition_timings.csv",
+      "sha256": "640f092f65149c79da8233beb062a850aa1adbdee37696f0bcab1edc93314085",
+      "bytes": 850,
+      "experiment_identity": "rq3_computational_efficiency",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/computational_efficiency/repetition_timings.csv",
+          "sha256": "640f092f65149c79da8233beb062a850aa1adbdee37696f0bcab1edc93314085",
+          "bytes": 850
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "computational_efficiency/summaries/summary.json",
+      "sha256": "18c7bb70c068e3aecdbb2ad6d65e64e69b3cea1705801664aa94a8c7dae545c1",
+      "bytes": 2100,
+      "experiment_identity": "rq3_computational_efficiency",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/computational_efficiency/summary.json",
+          "sha256": "18c7bb70c068e3aecdbb2ad6d65e64e69b3cea1705801664aa94a8c7dae545c1",
+          "bytes": 2100
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "computational_efficiency/summaries/provenance.json",
+      "sha256": "a48cd9c7d68ddd9e317f2cc8c2761678365270514b0bbcbfe8c301ea881c74d1",
+      "bytes": 121768,
+      "experiment_identity": "rq3_computational_efficiency",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/computational_efficiency/provenance.json",
+          "sha256": "a48cd9c7d68ddd9e317f2cc8c2761678365270514b0bbcbfe8c301ea881c74d1",
+          "bytes": 121768
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/tables/aurc.csv",
+      "sha256": "e1070a77d1987272565312d36047fa24db54e1d6a94a9d1c11e2a23a8a4054fb",
+      "bytes": 233,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/aurc.csv",
+          "sha256": "e1070a77d1987272565312d36047fa24db54e1d6a94a9d1c11e2a23a8a4054fb",
+          "bytes": 233
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/tables/bootstrap_intervals.csv",
+      "sha256": "1f786eddfc7c81d39be63e1b1216ed2a404bf2fc358ed5bfdf924b20a893405f",
+      "bytes": 11938,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/bootstrap_intervals.csv",
+          "sha256": "1f786eddfc7c81d39be63e1b1216ed2a404bf2fc358ed5bfdf924b20a893405f",
+          "bytes": 11938
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/tables/crop_referral_metrics.csv",
+      "sha256": "cd4cc7a03dd7addb3d45fbb0849c77de7d222e8ba6d9978194dfdd6a40af1b8a",
+      "bytes": 4657,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/crop_referral_metrics.csv",
+          "sha256": "cd4cc7a03dd7addb3d45fbb0849c77de7d222e8ba6d9978194dfdd6a40af1b8a",
+          "bytes": 4657
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/tables/paired_bootstrap_differences.csv",
+      "sha256": "f11704183a7111bd8152610437cdd88a4c4aff83793af67a9b3fe6119d9abf85",
+      "bytes": 2433,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/paired_bootstrap_differences.csv",
+          "sha256": "f11704183a7111bd8152610437cdd88a4c4aff83793af67a9b3fe6119d9abf85",
+          "bytes": 2433
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/summary.json",
+      "sha256": "074770c4f82ad973279282d64e3bcaece41237fc6a93e59485e30d06108a43f7",
+      "bytes": 2195,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/summary.json",
+          "sha256": "074770c4f82ad973279282d64e3bcaece41237fc6a93e59485e30d06108a43f7",
+          "bytes": 2195
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/bootstrap_summary.json",
+      "sha256": "e91bb2108a02c2f20ab1ca433b16954d507607d5574987b2ed8216f46e0ea08e",
+      "bytes": 6225,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/bootstrap_summary.json",
+          "sha256": "e91bb2108a02c2f20ab1ca433b16954d507607d5574987b2ed8216f46e0ea08e",
+          "bytes": 6225
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/provenance.json",
+      "sha256": "665b2bcabc78975db3c56ebd0a8124962e4adcee2b753ca09ca5264fbe2d37da",
+      "bytes": 8853,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "reporting_copy",
+      "recipe": "Byte-identical copy; original evidence, metadata, identity and schema retained.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/provenance.json",
+          "sha256": "665b2bcabc78975db3c56ebd0a8124962e4adcee2b753ca09ca5264fbe2d37da",
+          "bytes": 8853
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/figures/achieved_referral.png",
+      "sha256": "1c2039ec80f5bb1b5370f43025e8ad78eed7f8cc927d2ad80f74d6152a6e9711",
+      "bytes": 124955,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Display saved achieved workload versus saved error capture for each nominal development-budget group; marginal interval endpoints unchanged.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/crop_referral_metrics.csv",
+          "sha256": "2fcde59130ecf6eee97cb2b46bc9e904dc85e665ddecfb8f702b6c8eabced69a",
+          "bytes": 3341
+        },
+        {
+          "path": "runs/rq3/development_selective_review/bootstrap_intervals.csv",
+          "sha256": "b4d8a4c89bef04c8a93d94df467e864106c4bf975c252fbb3b3146e495eed5de",
+          "bytes": 5669
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/figures/prediction_risk_coverage.png",
+      "sha256": "f9408493db9660be35a4f2cf898f8b1cb96feb85ccbbc8e00cef40ea6a51ce23",
+      "bytes": 86255,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Plot all saved boundaries as right-endpoint steps (where=pre); zero-coverage risk remains undefined; no new curve or AURC calculation.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/prediction_risk_coverage.csv",
+          "sha256": "8da491f3b8bcc12ebe061ba5e12020d376c65daff17aab917b969203cf4ea7fa",
+          "bytes": 2752415
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/figures/saved_aurc.png",
+      "sha256": "6d20a9525ea5d750232cfa5032c1df4d27c3037db77d6881d6f5597832f85d8e",
+      "bytes": 53338,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render stored AURC and exact stored 95% interval endpoints; no integration or resampling.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/aurc.csv",
+          "sha256": "e8a1bcde5d48482cae9b2d1bd78b12dfe8c2bf030801e521b51c61dfb1582d37",
+          "bytes": 237
+        },
+        {
+          "path": "runs/rq3/development_selective_review/bootstrap_intervals.csv",
+          "sha256": "b4d8a4c89bef04c8a93d94df467e864106c4bf975c252fbb3b3146e495eed5de",
+          "bytes": 5669
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/reporting_extension/figures/achieved_referral.png",
+      "sha256": "0ba8391b0e19d1b9f0b445c1f807b4689b1e0fa363354227401210f6ca89b2ff",
+      "bytes": 125243,
+      "experiment_identity": "rq3_development_reporting_extension",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Display saved achieved workload versus saved error capture for each nominal development-budget group; marginal interval endpoints unchanged.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/crop_referral_metrics.csv",
+          "sha256": "c3e556a91f78d9eb490c1f657c7d4c5d5dd9cc31929273fd6a3b21f42c484d01",
+          "bytes": 4553
+        },
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/bootstrap_intervals.csv",
+          "sha256": "ec2f76d7b60df8e8992d9375ad264c2f9ff58b98dcaac0f374c0455134afe4fa",
+          "bytes": 11886
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/reporting_extension/figures/remaining_automatic_error.png",
+      "sha256": "a883acb5ff50a62a2ad7cbfd3230eca53c9a44cf5aebaee4c4b4f310d98a2b44",
+      "bytes": 68204,
+      "experiment_identity": "rq3_development_reporting_extension",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved remaining automatic-error rates and intervals by nominal development-budget category; offsets are display-only.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/crop_referral_metrics.csv",
+          "sha256": "c3e556a91f78d9eb490c1f657c7d4c5d5dd9cc31929273fd6a3b21f42c484d01",
+          "bytes": 4553
+        },
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/bootstrap_intervals.csv",
+          "sha256": "ec2f76d7b60df8e8992d9375ad264c2f9ff58b98dcaac0f374c0455134afe4fa",
+          "bytes": 11886
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/reporting_extension/figures/paired_aurc.png",
+      "sha256": "6d3b049022032ddd9b2f46016203e9e10092d6f1f729da3f1edd8b2a4a7a8ccd",
+      "bytes": 51567,
+      "experiment_identity": "rq3_development_reporting_extension",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Display saved observed method-A-minus-method-B differences and saved paired interval endpoints; no subtraction of CI bounds, bootstrap or hypothesis test.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/paired_bootstrap_differences.csv",
+          "sha256": "7217df4154dd5228468e3fcbdd332aa454ec87529e293483077bf2de3e42b700",
+          "bytes": 2427
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/reporting_extension/figures/paired_error_capture.png",
+      "sha256": "13a84f80bfd6218cd4b77f0da5163cb357ed1a671e3ed13dce65cefd08df487f",
+      "bytes": 102371,
+      "experiment_identity": "rq3_development_reporting_extension",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Display saved observed method-A-minus-method-B differences and saved paired interval endpoints; no subtraction of CI bounds, bootstrap or hypothesis test.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/paired_bootstrap_differences.csv",
+          "sha256": "7217df4154dd5228468e3fcbdd332aa454ec87529e293483077bf2de3e42b700",
+          "bytes": 2427
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/reporting_extension/figures/paired_remaining_automatic_error_rate.png",
+      "sha256": "075f76509c117ce868b84d402c1fe32c2f7bbce0b90bd379c5f4e197b80ee198",
+      "bytes": 102113,
+      "experiment_identity": "rq3_development_reporting_extension",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Display saved observed method-A-minus-method-B differences and saved paired interval endpoints; no subtraction of CI bounds, bootstrap or hypothesis test.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/paired_bootstrap_differences.csv",
+          "sha256": "7217df4154dd5228468e3fcbdd332aa454ec87529e293483077bf2de3e42b700",
+          "bytes": 2427
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "computational_efficiency/figures/saved_runtime.png",
+      "sha256": "fe385c88bec7fa256d56ffed9ee3a7b80e386b0beae5f70cc93e2e2deb67f970",
+      "bytes": 76140,
+      "experiment_identity": "rq3_computational_efficiency",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved means/sample SD and saved repeat timings, without recomputing statistics or benchmarking.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/computational_efficiency/summary.json",
+          "sha256": "18c7bb70c068e3aecdbb2ad6d65e64e69b3cea1705801664aa94a8c7dae545c1",
+          "bytes": 2100
+        },
+        {
+          "path": "runs/rq3/computational_efficiency/repetition_timings.csv",
+          "sha256": "640f092f65149c79da8233beb062a850aa1adbdee37696f0bcab1edc93314085",
+          "bytes": 850
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/achieved_referral.png",
+      "sha256": "ed5abb9af5dbb70f2dcc586c664c55e989814f2256bc0f4a976ca059e8b1fad8",
+      "bytes": 127109,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Display saved achieved workload versus saved error capture for each nominal development-budget group; marginal interval endpoints unchanged.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/crop_referral_metrics.csv",
+          "sha256": "cd4cc7a03dd7addb3d45fbb0849c77de7d222e8ba6d9978194dfdd6a40af1b8a",
+          "bytes": 4657
+        },
+        {
+          "path": "runs/rq3/final_evaluation/bootstrap_intervals.csv",
+          "sha256": "1f786eddfc7c81d39be63e1b1216ed2a404bf2fc358ed5bfdf924b20a893405f",
+          "bytes": 11938
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/prediction_risk_coverage.png",
+      "sha256": "0cdee59700b563cc0f723703cb984b12f1c47f56cc781a7650ad1c3422db784d",
+      "bytes": 81110,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Plot all saved boundaries as right-endpoint steps (where=pre); zero-coverage risk remains undefined; no new curve or AURC calculation.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/prediction_risk_coverage.csv",
+          "sha256": "687129236aada7c21eb1a1f9bc487ace6ab8a011f58bc3d23f9de08a64a3d7d8",
+          "bytes": 6946346
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/saved_aurc.png",
+      "sha256": "b99849a0b165a10f8b36788b2a462576efe2c719c23241fd6c330c9ff9b9180f",
+      "bytes": 51991,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render stored AURC and exact stored 95% interval endpoints; no integration or resampling.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/aurc.csv",
+          "sha256": "e1070a77d1987272565312d36047fa24db54e1d6a94a9d1c11e2a23a8a4054fb",
+          "bytes": 233
+        },
+        {
+          "path": "runs/rq3/final_evaluation/bootstrap_intervals.csv",
+          "sha256": "1f786eddfc7c81d39be63e1b1216ed2a404bf2fc358ed5bfdf924b20a893405f",
+          "bytes": 11938
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/remaining_automatic_error.png",
+      "sha256": "9758c81e80fb99df0462db1130c817b36269bea3f9d55675e66ab0c3ee259a88",
+      "bytes": 65906,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Render saved remaining automatic-error rates and intervals by nominal development-budget category; offsets are display-only.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/crop_referral_metrics.csv",
+          "sha256": "cd4cc7a03dd7addb3d45fbb0849c77de7d222e8ba6d9978194dfdd6a40af1b8a",
+          "bytes": 4657
+        },
+        {
+          "path": "runs/rq3/final_evaluation/bootstrap_intervals.csv",
+          "sha256": "1f786eddfc7c81d39be63e1b1216ed2a404bf2fc358ed5bfdf924b20a893405f",
+          "bytes": 11938
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/paired_aurc.png",
+      "sha256": "a65a80647d29889458f875dd6248bea927dd6723b5ca7ac62d2479905fdb8eba",
+      "bytes": 50756,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Display saved observed method-A-minus-method-B differences and saved paired interval endpoints; no subtraction of CI bounds, bootstrap or hypothesis test.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/paired_bootstrap_differences.csv",
+          "sha256": "f11704183a7111bd8152610437cdd88a4c4aff83793af67a9b3fe6119d9abf85",
+          "bytes": 2433
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/paired_error_capture.png",
+      "sha256": "9a59ede0096c4269918ccc995c5693548b85de8fb3698e3e7d31207e4d9354ed",
+      "bytes": 103018,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Display saved observed method-A-minus-method-B differences and saved paired interval endpoints; no subtraction of CI bounds, bootstrap or hypothesis test.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/paired_bootstrap_differences.csv",
+          "sha256": "f11704183a7111bd8152610437cdd88a4c4aff83793af67a9b3fe6119d9abf85",
+          "bytes": 2433
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/figures/paired_remaining_automatic_error_rate.png",
+      "sha256": "a07cbbd2f014305fa3cfceb09517e01d9a3dd0aa435081fcc1eceed00eb024e3",
+      "bytes": 101649,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "newly_rendered_visualization",
+      "recipe": "Display saved observed method-A-minus-method-B differences and saved paired interval endpoints; no subtraction of CI bounds, bootstrap or hypothesis test.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "runs/rq3/final_evaluation/paired_bootstrap_differences.csv",
+          "sha256": "f11704183a7111bd8152610437cdd88a4c4aff83793af67a9b3fe6119d9abf85",
+          "bytes": 2433
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/summaries/README.md",
+      "sha256": "2e44a3a451f00caae668fc2731abf2bcc7ac8f629abc6f181478058396805e5f",
+      "bytes": 1678,
+      "experiment_identity": "rq3_development_selective_review",
+      "availability": "local",
+      "classification": "authored_reporting_summary",
+      "recipe": "Scope, provenance and navigation; no new scientific conclusions.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "docs/rq3/reporting.md",
+          "sha256": "a80e9ecc8c9346452243a3c67f0c23ec08257a305cf81bfb42894e3fc66905ea",
+          "bytes": 5461
+        },
+        {
+          "path": "runs/rq3/development_selective_review/provenance.json",
+          "sha256": "4e47eb0a60bb2882acf1bc8d941bcdb13a0e58e9019800bc76cf24608a0f8a9c",
+          "bytes": 5102
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "development_selective_review/reporting_extension/summaries/README.md",
+      "sha256": "e4fa6eff673380c2d9719d3bc3e30c7a0970e4ad0fee38c28b23975a351e1cb0",
+      "bytes": 1330,
+      "experiment_identity": "rq3_development_reporting_extension",
+      "availability": "local",
+      "classification": "authored_reporting_summary",
+      "recipe": "Scope, provenance and navigation; no new scientific conclusions.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "docs/rq3/reporting.md",
+          "sha256": "a80e9ecc8c9346452243a3c67f0c23ec08257a305cf81bfb42894e3fc66905ea",
+          "bytes": 5461
+        },
+        {
+          "path": "runs/rq3/development_selective_review/reporting_extension/provenance.json",
+          "sha256": "cd44e1b7a73589a4c5cc8928304ed4a6d6f129ee897c94d2236b51a1b5086883",
+          "bytes": 5815
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "computational_efficiency/summaries/README.md",
+      "sha256": "88b95326ff0a01ea82816f1c5c5c99e112c305f8a91b6f1ca884e32635c22318",
+      "bytes": 1382,
+      "experiment_identity": "rq3_computational_efficiency",
+      "availability": "local",
+      "classification": "authored_reporting_summary",
+      "recipe": "Scope, provenance and navigation; no new scientific conclusions.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "docs/rq3/reporting.md",
+          "sha256": "a80e9ecc8c9346452243a3c67f0c23ec08257a305cf81bfb42894e3fc66905ea",
+          "bytes": 5461
+        },
+        {
+          "path": "runs/rq3/computational_efficiency/provenance.json",
+          "sha256": "a48cd9c7d68ddd9e317f2cc8c2761678365270514b0bbcbfe8c301ea881c74d1",
+          "bytes": 121768
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "final_evaluation/summaries/README.md",
+      "sha256": "93af2726cc1d2008345bbb321162c8c2551734003ca3911f45d3ad8096d4d3e4",
+      "bytes": 1560,
+      "experiment_identity": "rq3_final_evaluation",
+      "availability": "local",
+      "classification": "authored_reporting_summary",
+      "recipe": "Scope, provenance and navigation; no new scientific conclusions.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "docs/rq3/reporting.md",
+          "sha256": "a80e9ecc8c9346452243a3c67f0c23ec08257a305cf81bfb42894e3fc66905ea",
+          "bytes": 5461
+        },
+        {
+          "path": "runs/rq3/final_evaluation/provenance.json",
+          "sha256": "665b2bcabc78975db3c56ebd0a8124962e4adcee2b753ca09ca5264fbe2d37da",
+          "bytes": 8853
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    },
+    {
+      "path": "README.md",
+      "sha256": "1fb7383e99374b4c547ae9be0e8cba98d84f67d488e426f1a1c472ab9f6b450a",
+      "bytes": 5330,
+      "experiment_identity": "rq3_reporting_index",
+      "availability": "local",
+      "classification": "authored_reporting_summary",
+      "recipe": "RQ3 navigation and limits; no new results.",
+      "derivation_scripts": [
+        "src/trustpcb/rq3/reporting.py",
+        "src/trustpcb/rq2/reporting.py"
+      ],
+      "sources": [
+        {
+          "path": "docs/rq3/reporting.md",
+          "sha256": "a80e9ecc8c9346452243a3c67f0c23ec08257a305cf81bfb42894e3fc66905ea",
+          "bytes": 5461
+        },
+        {
+          "path": "docs/artifact_inventory.md",
+          "sha256": "c2229644801428fb27042dbdfd83a97cc4050fec3933f3add27aa6928d788f65",
+          "bytes": 6475
+        },
+        {
+          "path": "src/trustpcb/rq3/reporting.py",
+          "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+          "bytes": 26703
+        },
+        {
+          "path": "src/trustpcb/rq2/reporting.py",
+          "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+          "bytes": 25392
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "path": "runs/rq3/development_selective_review/prediction_risk_coverage.csv",
+      "sha256": "8da491f3b8bcc12ebe061ba5e12020d376c65daff17aab917b969203cf4ea7fa",
+      "bytes": 2752415,
+      "availability": "local_original_only",
+      "experiment_identity": "rq3_development_selective_review",
+      "reason": "Avoid redundant full curve/crop-risk copies"
+    },
+    {
+      "path": "runs/rq3/development_selective_review/crop_risks.csv",
+      "sha256": "902621d13f4d4a812f51668c89a323896cb2ef1cf5cc83052e5639beb21dd493",
+      "bytes": 326015,
+      "availability": "local_original_only",
+      "experiment_identity": "rq3_development_selective_review",
+      "reason": "Avoid redundant full curve/crop-risk copies"
+    },
+    {
+      "path": "runs/rq3/final_evaluation/prediction_risk_coverage.csv",
+      "sha256": "687129236aada7c21eb1a1f9bc487ace6ab8a011f58bc3d23f9de08a64a3d7d8",
+      "bytes": 6946346,
+      "availability": "local_original_only",
+      "experiment_identity": "rq3_final_evaluation",
+      "reason": "Avoid redundant full curve/crop-risk copies"
+    },
+    {
+      "path": "runs/rq3/final_evaluation/crop_risks.csv",
+      "sha256": "18ee2e5b39f1fac795e67fef09eddc4a1cbd3451336eaf14c0c13be7318554c7",
+      "bytes": 796250,
+      "availability": "local_original_only",
+      "experiment_identity": "rq3_final_evaluation",
+      "reason": "Avoid redundant full curve/crop-risk copies"
+    }
+  ],
+  "unavailable_local": [
+    {
+      "path": "runs/rq2/detector_training",
+      "availability": "absent locally; external location unverified"
+    },
+    {
+      "path": "runs/rq2/confidence_distribution",
+      "availability": "absent locally; external location unverified"
+    },
+    {
+      "path": "runs/rq2/calibration_analysis",
+      "availability": "absent locally; external location unverified"
+    },
+    {
+      "path": "runs/rq2/calibrator_comparison",
+      "availability": "absent locally; external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_calibrator",
+      "availability": "absent locally; external location unverified"
+    },
+    {
+      "path": "runs/rq2/transformation_stability",
+      "availability": "absent locally; external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/original_predictions.csv",
+      "availability": "absent locally; external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/labelled_predictions.csv",
+      "availability": "absent locally; external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/prediction_stability_scores.csv",
+      "availability": "absent locally; external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/prediction_transform_matches.csv",
+      "availability": "absent locally; external location unverified"
+    },
+    {
+      "path": "runs/rq2/final_evaluation/transformed_predictions.csv",
+      "availability": "absent locally; external location unverified"
+    }
+  ]
+}

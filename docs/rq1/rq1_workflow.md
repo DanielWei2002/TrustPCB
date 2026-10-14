@@ -1,5 +1,13 @@
 # Final RQ1: five matched seeds, two split conditions
 
+Browse [RQ1 tables, figures and summaries](../../outputs/rq1/README.md) for
+reporting copies and explicitly labelled new presentation figures. Original
+evidence remains in place. See the [notebook extraction record](notebook_extraction.md)
+for reconstructed helpers and limitations; `workflow.py` remains canonical.
+RQ1 tests now live in `tests/rq1/`; the repository-wide discovery command below
+still includes them. Targeted discovery uses `python -B -m unittest discover -s tests/rq1 -v`
+with `PYTHONPATH=src` and the existing CPU test dependencies.
+
 RQ1 asks how detector performance differs between the supplied DsPCBSD+ split
 and the similarity-aware split. This workflow creates ten **new** controlled
 runs. Historical preliminary runs are never targeted or reused.

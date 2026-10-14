@@ -1,5 +1,8 @@
 # RQ2 Data partition: detector-training/development membership
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 Data partition partitions only the 8,207-image similarity-aware training pool, with
 seed **24209199** and a target of 821 development/calibration images (7,386
 detector-training images). Existing similarity-aware validation membership

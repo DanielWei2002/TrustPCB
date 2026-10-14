@@ -1,0 +1,5 @@
+metric,n_pairs,mean_delta,sample_sd,standard_error,ci95_lower,ci95_upper,delta_definition
+precision,5,0.011928,0.011371,0.005085,-0.002191,0.026047,similarity_aware - supplied
+recall,5,-0.004962,0.010587,0.004735,-0.018108,0.008184,similarity_aware - supplied
+mAP@0.50,5,-0.000092,0.002391,0.001070,-0.003061,0.002877,similarity_aware - supplied
+mAP@0.50:0.95,5,0.000594,0.001860,0.000832,-0.001716,0.002904,similarity_aware - supplied

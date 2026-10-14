@@ -1,5 +1,8 @@
 # Frozen weighted RQ2 final evaluation
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 Canonical source: `src/trustpcb/rq2/weighted_final_evaluation.py`; module:
 `trustpcb.rq2.weighted_final_evaluation`. The legacy
 `trustpcb.rq2_weighted_final_evaluation` import resolves to the same live module

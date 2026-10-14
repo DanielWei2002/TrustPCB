@@ -1,5 +1,8 @@
 # Frozen RQ3 final evaluation
 
+For saved tables, presentation figures and relocated tests, see
+[RQ3 reporting](reporting.md).
+
 The completed workflow is canonical at `trustpcb.rq3.final_evaluation`.
 `trustpcb.rq3_final_evaluation` remains a compatibility import/CLI shim; both
 imports resolve to the same live module. The `review` and `frozen` aliases refer

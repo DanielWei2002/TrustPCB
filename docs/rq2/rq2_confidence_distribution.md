@@ -1,5 +1,8 @@
 # RQ2 Confidence distribution: raw development confidence
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 Preparation only; execute the real 821-image extraction on DICC. No calibration,
 correctness matching, test evaluation, threshold recommendation, transformations,
 stability/risk scoring or referral analysis is implemented here.

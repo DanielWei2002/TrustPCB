@@ -1,0 +1,36 @@
+metric,value
+Official dataset,DsPCBSD+
+Total images,10259
+Training images,8208
+Validation images,2051
+Unreadable images,0
+226x226 images,10148
+108x108 images,111
+Total label files,10259
+Images without labels,0
+Labels without images,0
+Total annotations,20276
+Structurally valid annotations,20276
+Other annotation issues,0
+Nominal boundary-overflow boxes,277
+Maximum boundary overflow px,0.0113
+Number of classes,9
+Smallest class boxes,915
+Largest class boxes,4584
+Largest/smallest class ratio,5.01
+Boxes below 1% crop area,11082
+Boxes below 1% crop area percentage,54.66
+Boxes below 0.25% crop area,3265
+Boxes below 0.25% crop area percentage,16.1
+Exact pixel duplicate groups,0
+Cross-split exact duplicate groups,0
+pHash screening candidates <=10,3993
+Tier-C high-similarity candidates,113
+Final manual-review candidates,24
+High-confidence near-duplicate pairs,19
+Related but non-confirmed pairs,5
+Affected training images,19
+Affected training percentage,0.231
+Affected validation images,19
+Affected validation percentage,0.926
+Total affected unique images,38

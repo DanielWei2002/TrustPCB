@@ -1,5 +1,8 @@
 # Secondary IoU>=0.75 sensitivity analysis
 
+For organized tables, figures, provenance and relocated tests, see
+[RQ2 reporting](reporting.md).
+
 This development-only analysis checks robustness to the existing stricter
 correctness criterion. **IoU >= 0.50 remains the primary research target.** Do not
 replace its results, choose whichever IoU threshold looks better, or use this
