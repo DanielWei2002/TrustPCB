@@ -1,9 +1,9 @@
 # RQ2 reporting and test organization
 
-Browse [RQ2 tables, figures and summaries](../../outputs/rq2/README.md). This is
+Browse [RQ2 tables, figures and summaries](../../docs/rq2/RQ2_Research_Journal.docx). This is
 an additive presentation layer over completed evidence, not a research rerun.
 The 13 existing canonical RQ2 modules, compatibility shims, writer paths and
-scientific protocols are unchanged. No RQ1 or RQ3 files are changed.
+scientific protocols are unchanged. The original RQ2 organization batch did not change RQ1 or RQ3 scientific files.
 
 ## Local material and gaps
 
@@ -60,8 +60,9 @@ classification, derivation recipes and rendering versions. These byte hashes do
 not replace scientific LF-canonical identities. Original provenance and its
 embedded paths remain unchanged; new visualization metadata is separate.
 
-The root README is deliberately unchanged: committed RQ1 reporting records its
-exact hash. Existing RQ2 protocol pages link here for navigation instead.
+The original RQ1 reporting manifest binds a historical root README hash.
+Documentation consolidation preserves that identity through the Git archive index;
+current navigation now points to the consolidated research journals.
 
 ## CPU-safe tests
 

@@ -1,6 +1,6 @@
 # Final RQ1: five matched seeds, two split conditions
 
-Browse [RQ1 tables, figures and summaries](../../outputs/rq1/README.md) for
+Browse [RQ1 tables, figures and summaries](../../docs/rq1/RQ1_Research_Journal.docx) for
 reporting copies and explicitly labelled new presentation figures. Original
 evidence remains in place. See the [notebook extraction record](notebook_extraction.md)
 for reconstructed helpers and limitations; `workflow.py` remains canonical.

@@ -1,0 +1,464 @@
+{
+  "schema_version": 1,
+  "base_commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+  "purpose": "Explicit retired documentation and historical source resolution; original reporting manifests are unchanged.",
+  "archived_sources": [
+    {
+      "path": "outputs/rq1/README.md",
+      "sha256": "5744c695a8cb47970fcf524b662adebd0bba9efeb36c6eb982794cc6bcefd3ff",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "0b6cfa76610359b3db4c442f367bd59671f3ce7d",
+      "blob_sha256": "b57032d9b465dcc64ac46f54f68a553435f05cb7187bd7f5c5d169e55c30e05a",
+      "checkout_transform": {
+        "mode": "lf_to_crlf_except",
+        "lf_lines": []
+      }
+    },
+    {
+      "path": "outputs/rq1/dataset_audit/summaries/README.md",
+      "sha256": "d0fbc2b2d0e01ccbf980ab4d02b5799a9e31db23468c27f84191a05749e7c188",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "bf24ae14568c12a33af8c5eb8b774a7d31b76601",
+      "blob_sha256": "8007c82ff5629a97d52c58d42adee26990d244275253221c456938a649cad9eb",
+      "checkout_transform": {
+        "mode": "lf_to_crlf_except",
+        "lf_lines": []
+      }
+    },
+    {
+      "path": "outputs/rq1/preliminary_baseline/summaries/README.md",
+      "sha256": "554b6777333709190f5c7286210293b9c0a36d984c677c211f554a30601b862c",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "64c3c578df338a089c0536b40c965169b9b06eca",
+      "blob_sha256": "efb93463e534bc69a9faa7e689072c1abe16ec65828d7e41ff791d98e0f93f5b",
+      "checkout_transform": {
+        "mode": "lf_to_crlf_except",
+        "lf_lines": []
+      }
+    },
+    {
+      "path": "outputs/rq1/matched_training/summaries/README.md",
+      "sha256": "179984832437541cf002e509aa4a566503675ff482c8dcdf1976bbf29ed35200",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "0020d35d6df8aef933d8f1dd535ce7296595af6f",
+      "blob_sha256": "179984832437541cf002e509aa4a566503675ff482c8dcdf1976bbf29ed35200",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "results/rq1/README.md",
+      "sha256": "f98857728f021b8511b00be4e882fa966e3a728e026efa671e215969bf63315f",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "2b0045dd7119a5906b411db4e042f6ed953c58e3",
+      "blob_sha256": "b30010e0a24e8213b137060b55460b5356f04cd83e67ea564d5f3bf7e7d70fb6",
+      "checkout_transform": {
+        "mode": "lf_to_crlf_except",
+        "lf_lines": []
+      }
+    },
+    {
+      "path": "outputs/rq2/README.md",
+      "sha256": "ebb5b0425ac0f1abbefeb04325e6c5f5f79aba52f4aa5934410c56215050cfc9",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "ee555a0b2b1618b7a1db8cfaf848d61b3feb32ca",
+      "blob_sha256": "ebb5b0425ac0f1abbefeb04325e6c5f5f79aba52f4aa5934410c56215050cfc9",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "outputs/rq2/data_partition/summaries/README.md",
+      "sha256": "31d946c8250562286e869daa63f299c040f20ca71312279fa85a40840f076f40",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "330a7c419db782364fd719d179d722b35384f264",
+      "blob_sha256": "31d946c8250562286e869daa63f299c040f20ca71312279fa85a40840f076f40",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "outputs/rq2/risk_evaluation/summaries/README.md",
+      "sha256": "7e2e952cfd6110e5a8bd930d3f59fd54ff7c88e2e872546c4f0f5386128d6c75",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "5016e0565fa89b0cb63aca2aa0ec0d04b20a20da",
+      "blob_sha256": "7e2e952cfd6110e5a8bd930d3f59fd54ff7c88e2e872546c4f0f5386128d6c75",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "outputs/rq2/risk_sensitivity_iou75/summaries/README.md",
+      "sha256": "9052bdcdbce54fcf2ca501b8315b4d91ff770b331085d208359e54a0a299caa4",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "d2eca339b5f059da8276441f89d5403d3f15b43a",
+      "blob_sha256": "9052bdcdbce54fcf2ca501b8315b4d91ff770b331085d208359e54a0a299caa4",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "outputs/rq2/weighted_fusion/summaries/README.md",
+      "sha256": "561bc8a4da1134821d7b1f6f58ea910176d6aeea23a5d28c902ed6e0a8d05970",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "f4af706643e17921eb425a607bcd7ea1d82f6e94",
+      "blob_sha256": "561bc8a4da1134821d7b1f6f58ea910176d6aeea23a5d28c902ed6e0a8d05970",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "outputs/rq2/final_evaluation/summaries/README.md",
+      "sha256": "61b3a4d5a0a316dad8d53f9653bdc9deebc93ac36a2c54ae89c0cf4c69ebc6f6",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "87c54e8e7151d06cb280352ab192bd06e3af0872",
+      "blob_sha256": "61b3a4d5a0a316dad8d53f9653bdc9deebc93ac36a2c54ae89c0cf4c69ebc6f6",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "outputs/rq2/weighted_final_evaluation/summaries/README.md",
+      "sha256": "7e6fea0f1527ebd7aef438732a0da7c661ad11831366f39fe82a8806fae263de",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "c94bd476d3b7fd2ab536d5ad613da1bbc8fcdefc",
+      "blob_sha256": "7e6fea0f1527ebd7aef438732a0da7c661ad11831366f39fe82a8806fae263de",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "outputs/rq3/README.md",
+      "sha256": "1fb7383e99374b4c547ae9be0e8cba98d84f67d488e426f1a1c472ab9f6b450a",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "da7b6a749ef5b580a3f00de8fc33fb300d9f6cd3",
+      "blob_sha256": "1fb7383e99374b4c547ae9be0e8cba98d84f67d488e426f1a1c472ab9f6b450a",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "outputs/rq3/development_selective_review/summaries/README.md",
+      "sha256": "2e44a3a451f00caae668fc2731abf2bcc7ac8f629abc6f181478058396805e5f",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "37358b4fb296c571c7bc6a76e0e57248e62e7600",
+      "blob_sha256": "2e44a3a451f00caae668fc2731abf2bcc7ac8f629abc6f181478058396805e5f",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "outputs/rq3/development_selective_review/reporting_extension/summaries/README.md",
+      "sha256": "e4fa6eff673380c2d9719d3bc3e30c7a0970e4ad0fee38c28b23975a351e1cb0",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "8ffdf9994386621d9e7a098a7b707001333be7b8",
+      "blob_sha256": "e4fa6eff673380c2d9719d3bc3e30c7a0970e4ad0fee38c28b23975a351e1cb0",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "outputs/rq3/computational_efficiency/summaries/README.md",
+      "sha256": "88b95326ff0a01ea82816f1c5c5c99e112c305f8a91b6f1ca884e32635c22318",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "9540ac33cace9ce9767ef59442aee4ea8039aa17",
+      "blob_sha256": "88b95326ff0a01ea82816f1c5c5c99e112c305f8a91b6f1ca884e32635c22318",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "outputs/rq3/final_evaluation/summaries/README.md",
+      "sha256": "93af2726cc1d2008345bbb321162c8c2551734003ca3911f45d3ad8096d4d3e4",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "bdfe57e89de97d9af9638725cdf1dbef099a2eb3",
+      "blob_sha256": "93af2726cc1d2008345bbb321162c8c2551734003ca3911f45d3ad8096d4d3e4",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "README.md",
+      "sha256": "b32b4f177af47339dd3148c557bbe3a4d5814e4bad79b271d2c53dae1cc69ae9",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "5bd757cf583122a5b627d95f7ed15edbe499ae18",
+      "blob_sha256": "85ed96b7db2f9172dad266ad9b0efde3e6685fced6bb4b89d25efcba3a388df7",
+      "checkout_transform": {
+        "mode": "lf_to_crlf_except",
+        "lf_lines": []
+      }
+    },
+    {
+      "path": "docs/rq1/rq1_workflow.md",
+      "sha256": "2aa82b3610b8958f4665e7b5da23c49b2ebc1b415af67f66b0619d3ed54ce600",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "166597e9da3561ec4819c7d3a26e51dee3c72b6f",
+      "blob_sha256": "2cbe9219f3c9c9a27898c97c25a733e4115c231d2e077e60d974a18f9a76f4c0",
+      "checkout_transform": {
+        "mode": "lf_to_crlf_except",
+        "lf_lines": []
+      }
+    },
+    {
+      "path": "docs/rq1/notebook_extraction.md",
+      "sha256": "74c8c66f449ae9e09307f66244ded0cf3a35c43380a8b4da8ec1b0d777e8311d",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "f6d5894252617df4bcd21ef2cc97352c3b6ca7d9",
+      "blob_sha256": "70ff6f8472cb9e18782331d151fab15388d3218ad8971c446f141eae79e5f8dd",
+      "checkout_transform": {
+        "mode": "lf_to_crlf_except",
+        "lf_lines": []
+      }
+    },
+    {
+      "path": "docs/rq2/reporting.md",
+      "sha256": "e4066cd159ad6c500f3499258551856b9df584230e2d629fac92e8600e707534",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "1f3ada8d20d6b831e6aa1d9dec95ef8534809472",
+      "blob_sha256": "e4066cd159ad6c500f3499258551856b9df584230e2d629fac92e8600e707534",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "docs/rq3/reporting.md",
+      "sha256": "a80e9ecc8c9346452243a3c67f0c23ec08257a305cf81bfb42894e3fc66905ea",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "a0cdbf166bcd19aae7cd4c3816c0b0162f0cf895",
+      "blob_sha256": "a80e9ecc8c9346452243a3c67f0c23ec08257a305cf81bfb42894e3fc66905ea",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "src/trustpcb/rq1/reporting.py",
+      "sha256": "ee644ee0fcd62b390fc29f7e5b647f459229181cae993dabd2732949c12dcdf1",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "7c8d070ac11375d27653e8e67c0900dbc12f826b",
+      "blob_sha256": "f4554e3c550c30e5ecd7a70ed07a0273e0ddee075ca52617098d8bb3b8b7ed17",
+      "checkout_transform": {
+        "mode": "lf_to_crlf_except",
+        "lf_lines": []
+      }
+    },
+    {
+      "path": "src/trustpcb/rq2/reporting.py",
+      "sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "a6fa92cf2d68b92b31ae28bd5868a45c36692344",
+      "blob_sha256": "477f78a0650903cd642752ef9bba8a2a0d419bffe4f60f50efef83cd7e1f8eae",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    },
+    {
+      "path": "src/trustpcb/rq3/reporting.py",
+      "sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+      "kind": "git_blob",
+      "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+      "blob_oid": "727059ccbe42e95c1bcda44d78608d1424f9bb68",
+      "blob_sha256": "2b0c282ee5306d1ba4ebc94acc8afdb23938c3a523a5c18151a3a4e805f21f9a",
+      "checkout_transform": {
+        "mode": "identity"
+      }
+    }
+  ],
+  "retired_documents": [
+    {
+      "path": "outputs/rq1/README.md",
+      "sha256": "5744c695a8cb47970fcf524b662adebd0bba9efeb36c6eb982794cc6bcefd3ff",
+      "destination": "docs/rq1/RQ1_Research_Journal.docx",
+      "section": "source_0"
+    },
+    {
+      "path": "outputs/rq1/dataset_audit/summaries/README.md",
+      "sha256": "d0fbc2b2d0e01ccbf980ab4d02b5799a9e31db23468c27f84191a05749e7c188",
+      "destination": "docs/rq1/RQ1_Research_Journal.docx",
+      "section": "source_1"
+    },
+    {
+      "path": "outputs/rq1/preliminary_baseline/summaries/README.md",
+      "sha256": "554b6777333709190f5c7286210293b9c0a36d984c677c211f554a30601b862c",
+      "destination": "docs/rq1/RQ1_Research_Journal.docx",
+      "section": "source_3"
+    },
+    {
+      "path": "outputs/rq1/matched_training/summaries/README.md",
+      "sha256": "179984832437541cf002e509aa4a566503675ff482c8dcdf1976bbf29ed35200",
+      "destination": "docs/rq1/RQ1_Research_Journal.docx",
+      "section": "source_2"
+    },
+    {
+      "path": "results/rq1/README.md",
+      "sha256": "f98857728f021b8511b00be4e882fa966e3a728e026efa671e215969bf63315f",
+      "destination": "docs/rq1/RQ1_Research_Journal.docx",
+      "section": "source_16"
+    },
+    {
+      "path": "outputs/rq2/README.md",
+      "sha256": "ebb5b0425ac0f1abbefeb04325e6c5f5f79aba52f4aa5934410c56215050cfc9",
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_4"
+    },
+    {
+      "path": "outputs/rq2/data_partition/summaries/README.md",
+      "sha256": "31d946c8250562286e869daa63f299c040f20ca71312279fa85a40840f076f40",
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_5"
+    },
+    {
+      "path": "outputs/rq2/risk_evaluation/summaries/README.md",
+      "sha256": "7e2e952cfd6110e5a8bd930d3f59fd54ff7c88e2e872546c4f0f5386128d6c75",
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_7"
+    },
+    {
+      "path": "outputs/rq2/risk_sensitivity_iou75/summaries/README.md",
+      "sha256": "9052bdcdbce54fcf2ca501b8315b4d91ff770b331085d208359e54a0a299caa4",
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_8"
+    },
+    {
+      "path": "outputs/rq2/weighted_fusion/summaries/README.md",
+      "sha256": "561bc8a4da1134821d7b1f6f58ea910176d6aeea23a5d28c902ed6e0a8d05970",
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_10"
+    },
+    {
+      "path": "outputs/rq2/final_evaluation/summaries/README.md",
+      "sha256": "61b3a4d5a0a316dad8d53f9653bdc9deebc93ac36a2c54ae89c0cf4c69ebc6f6",
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_6"
+    },
+    {
+      "path": "outputs/rq2/weighted_final_evaluation/summaries/README.md",
+      "sha256": "7e6fea0f1527ebd7aef438732a0da7c661ad11831366f39fe82a8806fae263de",
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_9"
+    },
+    {
+      "path": "outputs/rq3/README.md",
+      "sha256": "1fb7383e99374b4c547ae9be0e8cba98d84f67d488e426f1a1c472ab9f6b450a",
+      "destination": "docs/rq3/RQ3_Research_Journal.docx",
+      "section": "source_11"
+    },
+    {
+      "path": "outputs/rq3/development_selective_review/summaries/README.md",
+      "sha256": "2e44a3a451f00caae668fc2731abf2bcc7ac8f629abc6f181478058396805e5f",
+      "destination": "docs/rq3/RQ3_Research_Journal.docx",
+      "section": "source_14"
+    },
+    {
+      "path": "outputs/rq3/development_selective_review/reporting_extension/summaries/README.md",
+      "sha256": "e4fa6eff673380c2d9719d3bc3e30c7a0970e4ad0fee38c28b23975a351e1cb0",
+      "destination": "docs/rq3/RQ3_Research_Journal.docx",
+      "section": "source_13"
+    },
+    {
+      "path": "outputs/rq3/computational_efficiency/summaries/README.md",
+      "sha256": "88b95326ff0a01ea82816f1c5c5c99e112c305f8a91b6f1ca884e32635c22318",
+      "destination": "docs/rq3/RQ3_Research_Journal.docx",
+      "section": "source_12"
+    },
+    {
+      "path": "outputs/rq3/final_evaluation/summaries/README.md",
+      "sha256": "93af2726cc1d2008345bbb321162c8c2551734003ca3911f45d3ad8096d4d3e4",
+      "destination": "docs/rq3/RQ3_Research_Journal.docx",
+      "section": "source_15"
+    }
+  ],
+  "current_files": [
+    {
+      "path": "README.md",
+      "sha256": "47aa5389bc6d25a8ba1280bbd05e2613cf0619fd705ae5daab0150878457fd8f"
+    },
+    {
+      "path": "docs/rq1/rq1_workflow.md",
+      "sha256": "e849db6870dc0d54b1f6cedda56efdf73f3407cb90829b426b305471943b2f28"
+    },
+    {
+      "path": "docs/rq1/notebook_extraction.md",
+      "sha256": "7d90af68d68a4b863c76b38d8d10f2ed4ea085d048da7b358e5429097710e1dd"
+    },
+    {
+      "path": "docs/rq2/reporting.md",
+      "sha256": "1aa7d3e14a3f9cbdebe6d38e336e437ab11293e68165ae76c297d6941cfdcb77"
+    },
+    {
+      "path": "docs/rq3/reporting.md",
+      "sha256": "981d2cfb83fc9bce03382d5314559d6ff4c85c2ff718abd81498416a813066f9"
+    },
+    {
+      "path": "docs/documentation_inventory.json",
+      "sha256": "a823e9ade5c3b7c176517146ba5ab54082c09412c0a70e876ded71446e76e76a"
+    },
+    {
+      "path": "docs/documentation_consolidation.md",
+      "sha256": "ff5021e2f28aab2652086a1af944026615a2f018508b171b3ebfbd0761960612"
+    },
+    {
+      "path": "src/trustpcb/documentation_archive.py",
+      "sha256": "6230717e003ed297a30c246c3fe7ed391097dbc88330f4386009e6b4c83830a0"
+    },
+    {
+      "path": "tests/test_documentation_archive.py",
+      "sha256": "0c50f424f0c053ab97b41ef103b9edabecb4d059d5f4505d5486182dfbbba62a"
+    },
+    {
+      "path": "src/trustpcb/rq1/reporting.py",
+      "sha256": "3cb4a9cd4cac104d153128d078171c874cc8d0902822ab90a03ff8cffc4a736f"
+    },
+    {
+      "path": "src/trustpcb/rq2/reporting.py",
+      "sha256": "1b48b4625af38bf215fed3e3e6f9c12abea23f109ec7c1c0ee2b24a870e6ed37"
+    },
+    {
+      "path": "src/trustpcb/rq3/reporting.py",
+      "sha256": "add32d20737740e243ec131df7496c00fdb3cba01afcc43abab215959da9dc1a"
+    },
+    {
+      "path": "docs/rq1/RQ1_Research_Journal.docx",
+      "sha256": "f19014ebf53d75e73f5d56d4ff12f433b378ddfea076a331037bb26fe4db495d"
+    },
+    {
+      "path": "docs/rq2/RQ2_Research_Journal.docx",
+      "sha256": "750e0b8bcf67408ee558f5c2b9ac0322386c0a19bdaea849f13e133862da8fd0"
+    },
+    {
+      "path": "docs/rq3/RQ3_Research_Journal.docx",
+      "sha256": "dd99dc4da3f63ed7516d6466d5fc82e215d8ea9de344a50c5c0c819f2e49ac32"
+    },
+    {
+      "path": "src/trustpcb/rq1/archived_sources.py",
+      "sha256": "d473ac006d3d8534104530da6564055fc2cd9c47171759817c0725122aef5639"
+    },
+    {
+      "path": "docs/research_journal_evidence.json",
+      "sha256": "225aa31c70f1244d70ee4efc5288bbf3ca288366d747cea805ccaeb57d96cd93"
+    }
+  ]
+}
