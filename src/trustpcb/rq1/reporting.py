@@ -7,6 +7,7 @@ Writes are confined to outputs/rq1; unrecognized or edited files block rebuildin
 """
 
 import argparse
+from trustpcb.documentation_archive import verify_reporting_manifest, retired_summary
 import base64
 import csv
 import hashlib
@@ -36,22 +37,8 @@ def digest(data):
 def verify(root):
     """Check all recorded output/source bytes and reject unlisted report files."""
     root = Path(root)
-    output = root / "outputs/rq1"
-    manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
-    for source in manifest.get('validation_sources', []):
-        read_source(root, source)
-    expected = {"manifest.json"}
-    for record in manifest["artifacts"]:
-        path = record["path"]
-        expected.add(path)
-        if digest((output / path).read_bytes()) != record["sha256"]:
-            raise ValueError(f"Reporting artifact changed: {path}")
-        for source in record["sources"]:
-            read_source(root, source)
-    actual = {p.relative_to(output).as_posix() for p in output.rglob("*") if p.is_file()}
-    if actual != expected:
-        raise ValueError(f"Unlisted/missing reporting files: {actual ^ expected}")
-    return len(manifest["artifacts"])
+    manifest = json.loads((root / "outputs/rq1/manifest.json").read_text(encoding="utf-8"))
+    return verify_reporting_manifest(root, "outputs/rq1", manifest)
 
 
 def build(root):
@@ -64,6 +51,10 @@ def build(root):
     records = []
 
     def emit(path, data, kind, sources, recipe):
+        archived = retired_summary(root, "outputs/rq1", path)
+        if archived is not None:
+            records.append(archived)
+            return
         target = output / path
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(data)

@@ -1,0 +1,421 @@
+{
+  "base_commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+  "readme_count": 17,
+  "documents": [
+    {
+      "original": {
+        "path": "outputs/rq1/README.md",
+        "sha256": "5744c695a8cb47970fcf524b662adebd0bba9efeb36c6eb982794cc6bcefd3ff",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "0b6cfa76610359b3db4c442f367bd59671f3ce7d",
+        "blob_sha256": "b57032d9b465dcc64ac46f54f68a553435f05cb7187bd7f5c5d169e55c30e05a",
+        "checkout_transform": {
+          "mode": "lf_to_crlf_except",
+          "lf_lines": []
+        }
+      },
+      "destination": "docs/rq1/RQ1_Research_Journal.docx",
+      "section": "source_0",
+      "subject": "RQ1 research reporting",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [
+        "README.md",
+        "docs/rq1/notebook_extraction.md",
+        "docs/rq1/rq1_workflow.md",
+        "outputs/rq1/manifest.json"
+      ],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq1/manifest.json :: README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq1/dataset_audit/summaries/README.md",
+        "sha256": "d0fbc2b2d0e01ccbf980ab4d02b5799a9e31db23468c27f84191a05749e7c188",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "bf24ae14568c12a33af8c5eb8b774a7d31b76601",
+        "blob_sha256": "8007c82ff5629a97d52c58d42adee26990d244275253221c456938a649cad9eb",
+        "checkout_transform": {
+          "mode": "lf_to_crlf_except",
+          "lf_lines": []
+        }
+      },
+      "destination": "docs/rq1/RQ1_Research_Journal.docx",
+      "section": "source_1",
+      "subject": "Dataset audit and similarity-aware split",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [
+        "outputs/rq1/manifest.json"
+      ],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq1/manifest.json :: dataset_audit/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq1/preliminary_baseline/summaries/README.md",
+        "sha256": "554b6777333709190f5c7286210293b9c0a36d984c677c211f554a30601b862c",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "64c3c578df338a089c0536b40c965169b9b06eca",
+        "blob_sha256": "efb93463e534bc69a9faa7e689072c1abe16ec65828d7e41ff791d98e0f93f5b",
+        "checkout_transform": {
+          "mode": "lf_to_crlf_except",
+          "lf_lines": []
+        }
+      },
+      "destination": "docs/rq1/RQ1_Research_Journal.docx",
+      "section": "source_3",
+      "subject": "Preliminary baseline v1",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [
+        "outputs/rq1/manifest.json"
+      ],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq1/manifest.json :: preliminary_baseline/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq1/matched_training/summaries/README.md",
+        "sha256": "179984832437541cf002e509aa4a566503675ff482c8dcdf1976bbf29ed35200",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "0020d35d6df8aef933d8f1dd535ce7296595af6f",
+        "blob_sha256": "179984832437541cf002e509aa4a566503675ff482c8dcdf1976bbf29ed35200",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq1/RQ1_Research_Journal.docx",
+      "section": "source_2",
+      "subject": "Matched repeated training",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq1/manifest.json :: matched_training/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "results/rq1/README.md",
+        "sha256": "f98857728f021b8511b00be4e882fa966e3a728e026efa671e215969bf63315f",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "2b0045dd7119a5906b411db4e042f6ed953c58e3",
+        "blob_sha256": "b30010e0a24e8213b137060b55460b5356f04cd83e67ea564d5f3bf7e7d70fb6",
+        "checkout_transform": {
+          "mode": "lf_to_crlf_except",
+          "lf_lines": []
+        }
+      },
+      "destination": "docs/rq1/RQ1_Research_Journal.docx",
+      "section": "source_16",
+      "subject": "RQ1 Results",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [
+        "docs/artifact_inventory.md",
+        "outputs/rq1/manifest.json",
+        "src/trustpcb/rq1/reporting.py"
+      ],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq1/manifest.json :: matched_training/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq2/README.md",
+        "sha256": "ebb5b0425ac0f1abbefeb04325e6c5f5f79aba52f4aa5934410c56215050cfc9",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "ee555a0b2b1618b7a1db8cfaf848d61b3feb32ca",
+        "blob_sha256": "ebb5b0425ac0f1abbefeb04325e6c5f5f79aba52f4aa5934410c56215050cfc9",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_4",
+      "subject": "RQ2 research reporting",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [
+        "README.md",
+        "docs/rq2/reporting.md",
+        "docs/rq3/reporting.md"
+      ],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq2/manifest.json :: README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq2/data_partition/summaries/README.md",
+        "sha256": "31d946c8250562286e869daa63f299c040f20ca71312279fa85a40840f076f40",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "330a7c419db782364fd719d179d722b35384f264",
+        "blob_sha256": "31d946c8250562286e869daa63f299c040f20ca71312279fa85a40840f076f40",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_5",
+      "subject": "RQ2 data partition",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq2/manifest.json :: data_partition/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq2/risk_evaluation/summaries/README.md",
+        "sha256": "7e2e952cfd6110e5a8bd930d3f59fd54ff7c88e2e872546c4f0f5386128d6c75",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "5016e0565fa89b0cb63aca2aa0ec0d04b20a20da",
+        "blob_sha256": "7e2e952cfd6110e5a8bd930d3f59fd54ff7c88e2e872546c4f0f5386128d6c75",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_7",
+      "subject": "Development risk evaluation · IoU ≥ 0.50",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq2/manifest.json :: risk_evaluation/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq2/risk_sensitivity_iou75/summaries/README.md",
+        "sha256": "9052bdcdbce54fcf2ca501b8315b4d91ff770b331085d208359e54a0a299caa4",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "d2eca339b5f059da8276441f89d5403d3f15b43a",
+        "blob_sha256": "9052bdcdbce54fcf2ca501b8315b4d91ff770b331085d208359e54a0a299caa4",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_8",
+      "subject": "Development sensitivity · IoU ≥ 0.75",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq2/manifest.json :: risk_sensitivity_iou75/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq2/weighted_fusion/summaries/README.md",
+        "sha256": "561bc8a4da1134821d7b1f6f58ea910176d6aeea23a5d28c902ed6e0a8d05970",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "f4af706643e17921eb425a607bcd7ea1d82f6e94",
+        "blob_sha256": "561bc8a4da1134821d7b1f6f58ea910176d6aeea23a5d28c902ed6e0a8d05970",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_10",
+      "subject": "Weighted fusion · development selection",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq2/manifest.json :: weighted_fusion/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq2/final_evaluation/summaries/README.md",
+        "sha256": "61b3a4d5a0a316dad8d53f9653bdc9deebc93ac36a2c54ae89c0cf4c69ebc6f6",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "87c54e8e7151d06cb280352ab192bd06e3af0872",
+        "blob_sha256": "61b3a4d5a0a316dad8d53f9653bdc9deebc93ac36a2c54ae89c0cf4c69ebc6f6",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_6",
+      "subject": "Original final evaluation",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq2/manifest.json :: final_evaluation/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq2/weighted_final_evaluation/summaries/README.md",
+        "sha256": "7e6fea0f1527ebd7aef438732a0da7c661ad11831366f39fe82a8806fae263de",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "c94bd476d3b7fd2ab536d5ad613da1bbc8fcdefc",
+        "blob_sha256": "7e6fea0f1527ebd7aef438732a0da7c661ad11831366f39fe82a8806fae263de",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq2/RQ2_Research_Journal.docx",
+      "section": "source_9",
+      "subject": "Frozen weighted final evaluation",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq2/manifest.json :: weighted_final_evaluation/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq3/README.md",
+        "sha256": "1fb7383e99374b4c547ae9be0e8cba98d84f67d488e426f1a1c472ab9f6b450a",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "da7b6a749ef5b580a3f00de8fc33fb300d9f6cd3",
+        "blob_sha256": "1fb7383e99374b4c547ae9be0e8cba98d84f67d488e426f1a1c472ab9f6b450a",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq3/RQ3_Research_Journal.docx",
+      "section": "source_11",
+      "subject": "RQ3 research reporting",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [
+        "README.md",
+        "docs/rq3/reporting.md"
+      ],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq3/manifest.json :: README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq3/development_selective_review/summaries/README.md",
+        "sha256": "2e44a3a451f00caae668fc2731abf2bcc7ac8f629abc6f181478058396805e5f",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "37358b4fb296c571c7bc6a76e0e57248e62e7600",
+        "blob_sha256": "2e44a3a451f00caae668fc2731abf2bcc7ac8f629abc6f181478058396805e5f",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq3/RQ3_Research_Journal.docx",
+      "section": "source_14",
+      "subject": "Original development selective review",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq3/manifest.json :: development_selective_review/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq3/development_selective_review/reporting_extension/summaries/README.md",
+        "sha256": "e4fa6eff673380c2d9719d3bc3e30c7a0970e4ad0fee38c28b23975a351e1cb0",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "8ffdf9994386621d9e7a098a7b707001333be7b8",
+        "blob_sha256": "e4fa6eff673380c2d9719d3bc3e30c7a0970e4ad0fee38c28b23975a351e1cb0",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq3/RQ3_Research_Journal.docx",
+      "section": "source_13",
+      "subject": "Development reporting extension",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq3/manifest.json :: development_selective_review/reporting_extension/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq3/computational_efficiency/summaries/README.md",
+        "sha256": "88b95326ff0a01ea82816f1c5c5c99e112c305f8a91b6f1ca884e32635c22318",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "9540ac33cace9ce9767ef59442aee4ea8039aa17",
+        "blob_sha256": "88b95326ff0a01ea82816f1c5c5c99e112c305f8a91b6f1ca884e32635c22318",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq3/RQ3_Research_Journal.docx",
+      "section": "source_12",
+      "subject": "DICC computational efficiency",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq3/manifest.json :: computational_efficiency/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    },
+    {
+      "original": {
+        "path": "outputs/rq3/final_evaluation/summaries/README.md",
+        "sha256": "93af2726cc1d2008345bbb321162c8c2551734003ca3911f45d3ad8096d4d3e4",
+        "kind": "git_blob",
+        "commit": "6ffecf2309519b92cbbb54293cc3aa63fe9fc868",
+        "blob_oid": "bdfe57e89de97d9af9638725cdf1dbef099a2eb3",
+        "blob_sha256": "93af2726cc1d2008345bbb321162c8c2551734003ca3911f45d3ad8096d4d3e4",
+        "checkout_transform": {
+          "mode": "identity"
+        }
+      },
+      "destination": "docs/rq3/RQ3_Research_Journal.docx",
+      "section": "source_15",
+      "subject": "Frozen-threshold final evaluation",
+      "overlap": "Useful navigation and evidence boundaries integrated into the research journal; historical source identity retained.",
+      "references": [],
+      "historical_reporting_identity": true,
+      "frozen_manifest_references": [
+        "outputs/rq3/manifest.json :: final_evaluation/summaries/README.md"
+      ],
+      "reference_scope": "Original historical references retained; source_N bookmarks identify the retired source in the journal navigation section."
+    }
+  ]
+}

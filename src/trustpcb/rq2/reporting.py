@@ -7,6 +7,7 @@ All writes are confined to outputs/rq2. Existing reports must verify before rebu
 """
 
 import argparse
+from trustpcb.documentation_archive import verify_reporting_manifest, retired_summary
 import csv
 import hashlib
 import io
@@ -102,25 +103,8 @@ def source_record(root, path):
 def verify(root):
     """Verify exact local bytes; this does not verify the scientific input chain."""
     root = Path(root)
-    output = inside(root, OUTPUT)
-    manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
-    expected = {"manifest.json"}
-    for record in manifest["artifacts"]:
-        if record["path"] in expected:
-            raise ValueError("Duplicate reporting path")
-        expected.add(record["path"])
-        if digest(inside(output, record["path"]).read_bytes()) != record["sha256"]:
-            raise ValueError(f"Reporting artifact changed: {record['path']}")
-        for source in record["sources"]:
-            if digest(inside(root, source["path"]).read_bytes()) != source["sha256"]:
-                raise ValueError(f"Reporting source changed: {source['path']}")
-    for reference in manifest["references"]:
-        if digest(inside(root, reference["path"]).read_bytes()) != reference["sha256"]:
-            raise ValueError(f"Referenced evidence changed: {reference['path']}")
-    actual = {p.relative_to(output).as_posix() for p in output.rglob("*") if p.is_file()}
-    if actual != expected:
-        raise ValueError(f"Unlisted/missing reporting files: {actual ^ expected}")
-    return len(manifest["artifacts"])
+    manifest = json.loads((root / "outputs/rq2/manifest.json").read_text(encoding="utf-8"))
+    return verify_reporting_manifest(root, "outputs/rq2", manifest)
 
 
 def number(value):
@@ -228,6 +212,10 @@ def build(root):
     records = []
 
     def emit(path, data, kind, sources, recipe):
+        archived = retired_summary(root, "outputs/rq2", path)
+        if archived is not None:
+            records.append(archived)
+            return
         target = inside(output, path)
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(data)

@@ -54,12 +54,12 @@ contain the raw dataset, model checkpoints or every upstream prediction/calibrat
 artifact referenced by completed provenance. Missing artifacts must be located
 and verified rather than regenerated for housekeeping.
 
-## Protocol documentation
+## Research journals and protocols
 
 - [RQ1 matched repeated training](docs/rq1/rq1_workflow.md)
-- [RQ1 tables, figures and reporting provenance](outputs/rq1/README.md)
+- [RQ1 research journal](docs/rq1/RQ1_Research_Journal.docx)
 - [RQ1 historical notebook extraction map](docs/rq1/notebook_extraction.md)
-- [RQ2 tables, figures and reporting provenance](outputs/rq2/README.md)
+- [RQ2 research journal](docs/rq2/RQ2_Research_Journal.docx)
 - [RQ2 data partition](docs/rq2/rq2_data_partition.md)
 - [RQ2 detector training](docs/rq2/rq2_detector_training.md)
 - [RQ2 confidence distribution](docs/rq2/rq2_confidence_distribution.md)
@@ -72,7 +72,7 @@ and verified rather than regenerated for housekeeping.
 - [RQ2 weighted fusion](docs/rq2/rq2_weighted_fusion.md)
 - [RQ2 original final evaluation](docs/rq2/rq2_final_evaluation.md)
 - [RQ2 weighted final evaluation](docs/rq2/rq2_weighted_final_evaluation.md)
-- [RQ3 tables, figures and reporting provenance](outputs/rq3/README.md)
+- [RQ3 research journal](docs/rq3/RQ3_Research_Journal.docx)
 - [RQ3 development selective review](docs/rq3/rq3_selective_review.md)
 - [RQ3 computational efficiency](docs/rq3/rq3_computational_efficiency.md)
 - [RQ3 final evaluation](docs/rq3/rq3_final_evaluation.md)
@@ -98,3 +98,8 @@ The three research-artifact batches passed their final verification; the noteboo
 conversion is a subsequent, separately verified change.
 Module commands use `PYTHONPATH=src`. Dataset roots are configured using
 [the local-path example](configs/paths.example.yaml).
+
+Documentation is consolidated into the three research journals linked above.
+The [source inventory](docs/documentation_inventory.json) maps every retired README
+to its journal; [archive verification](docs/documentation_consolidation.md) explains
+historical hashes and current reporting validation. Only this root README remains.

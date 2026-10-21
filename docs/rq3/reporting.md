@@ -1,6 +1,6 @@
 # RQ3 reporting organization
 
-Browse [RQ3 tables, figures and summaries](../../outputs/rq3/README.md). This is
+Browse [RQ3 tables, figures and summaries](../../docs/rq3/RQ3_Research_Journal.docx). This is
 an additive presentation layer over saved `runs/rq3/` evidence, not scientific
 execution. The three existing RQ3 modules, compatibility shims, thresholds,
 weights, identities, schemas and overwrite guards remain unchanged.
@@ -60,7 +60,7 @@ prediction/transform-match artifacts are unavailable locally. External locations
 must be confirmed and original identities verified on retrieval; missing local
 artifacts must not be regenerated for housekeeping. See
 [the artifact inventory](../artifact_inventory.md) and
-[RQ2 reporting availability](../../outputs/rq2/README.md).
+[RQ2 reporting availability](../../docs/rq2/RQ2_Research_Journal.docx).
 
 Each reporting artifact records classification, original source paths/hashes,
 reporting path/hash, original experiment identity, local availability, derivation
@@ -90,5 +90,6 @@ depth repairs. Assertions, mock targets and compatibility checks are preserved.
 New reporting tests use tiny synthetic values and temporary files. Check pytest
 collection only when pytest already exists in the environment.
 
-RQ1/RQ2 reporting and the root README remain unchanged; the RQ1 manifest binds
-the README's hash. RQ3 protocol pages link here for navigation instead.
+The original RQ3 organization batch left RQ1/RQ2 reporting unchanged.
+Documentation consolidation now resolves retired READMEs and historical generator
+hashes through the Git archive index without rewriting the reporting manifests.

@@ -67,7 +67,7 @@ audit stops with blank decision fields. Review input must identify every exact
 filename pair; the historical 24 row-number labels are never reapplied to a new
 ordering. Original decisions, all inline PNGs, printed outputs and execution counts
 remain recoverable in Git. Two representative existing PNGs are already available
-in [RQ1 reporting](../../outputs/rq1/README.md); additional panels are not regenerated.
+in [RQ1 reporting](../../docs/rq1/RQ1_Research_Journal.docx); additional panels are not regenerated.
 The fixed cell-15 summary and its prose conclusion are historical records, not an
 algorithm that may declare a new dataset valid. Explicitly reviewed summary rows
 can be serialized without inventing a replacement aggregation or conclusion.
